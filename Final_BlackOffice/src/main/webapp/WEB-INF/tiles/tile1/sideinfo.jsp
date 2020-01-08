@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-    
+<% String ctxPath = request.getContextPath(); %>     
   <div id="wrapper">
 
 	<!-- 사이드바 내용은 요기에 추가 2020/01/03 kkh -->
@@ -29,11 +29,22 @@
           <span>전자결재</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="">전자결재 작성</a>
-          <a class="dropdown-item" href="">내 결재함</a>
-          <a class="dropdown-item" href="">미 결재함</a>
+          <h6 class="dropdown-header">결재</h6>
+          <a class="dropdown-item" href="<%= ctxPath%>/draft.action">일반결재서 작성</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/expenditure.action">지출결재서 작성</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/leave.action">휴가 결재서 작성</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/vacation.action">휴직 결재서 작성</a>
+          
+          <h6 class="dropdown-header">결재함</h6>
+          <a class="dropdown-item" href="">미결재 문서함</a>
+          <a class="dropdown-item" href="">결재완료 문서함</a>
+          
+          <h6 class="dropdown-header">문서함</h6>
+          <a class="dropdown-item" href="">내문서함</a>
+          <a class="dropdown-item" href="">부서문서함</a>
           <div class="dropdown-divider"></div>
         </div>
+       
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -41,9 +52,9 @@
           <span>보고</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="">보고서 작성</a>
-          <a class="dropdown-item" href="">내 보고서함</a>
-          <a class="dropdown-item" href="">미 결재함</a>
+          <h6 class="dropdown-header">보고</h6>
+          <a class="dropdown-item" href="<%= ctxPath%>/report.action">보고서 작성</a>
+          <a class="dropdown-item" href="">보고서함</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>
