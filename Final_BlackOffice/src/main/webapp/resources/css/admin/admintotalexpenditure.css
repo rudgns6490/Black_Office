@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+	fieldset {
+		text-align: left;
+	}
+	
+	legend {
+		font-size: 24pt;
+	}
+	
+	.search_btn{
+		float: left;
+		margin-right: 10px;
+	}
+
+	

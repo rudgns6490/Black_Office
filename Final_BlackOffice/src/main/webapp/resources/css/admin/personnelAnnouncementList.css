@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+	fieldset {
+		text-align: left;
+	}
+	
+	legend {
+		font-size: 24pt;
+	}
+		
