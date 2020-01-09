@@ -43,6 +43,7 @@
           <a class="dropdown-item" href="<%= ctxPath%>/mydocument_archive_normal.action">내문서함</a>
           <a class="dropdown-item" href="<%= ctxPath%>/deptdocument_archive_normal.action">부서문서함</a>
           <div class="dropdown-divider"></div>
+
         </div>
        
       </li>
@@ -55,19 +56,11 @@
           <h6 class="dropdown-header">보고</h6>
           <a class="dropdown-item" href="<%= ctxPath%>/report.action">보고서 작성</a>
           <a class="dropdown-item" href="<%= ctxPath%>/report_archive.action">보고서함</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/temp_archive_normal.action">보고서 임시저장함</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>임시저장함</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="<%= ctxPath%>/temp_archive_normal.action">문서 임시저장함</a>
-          <div class="dropdown-divider"></div>
-        </div>
-      </li>
+     
 	  <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-folder"></i>
