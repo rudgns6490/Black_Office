@@ -52,17 +52,17 @@
 	/*----------------------------------------------------------------------------------------------  */
 	
 	.title {
-		background: #FFFFFF url(<%= request.getContextPath() %>/resources/image/체크이미지.png) no-repeat 3px center; 
+		background: url(<%= request.getContextPath() %>/resources/images/체크이미지.png) no-repeat 3px center; 
 		padding-left: 20px; 
 	}
 	
 	.people2 {
-		background: #FFFFFF url("<%= request.getContextPath() %>/resources/image/체크이미지.png") no-repeat 3px center; 
+		background: url("<%= request.getContextPath() %>/resources/images/체크이미지.png") no-repeat 3px center; 
 		padding-left: 20px; 
 	}
 	
 	.report {
-		background: #FFFFFF url("<%= request.getContextPath() %>/resources/image/체크이미지.png") no-repeat 3px center; 
+		background: url("<%= request.getContextPath() %>/resources/images/체크이미지.png") no-repeat 3px center; 
 		padding-left: 20px; 
 	}
 	
@@ -174,7 +174,7 @@
 <body>
 	<div id="draftContainer"> 
 		<div class="container-fluid dfcontainer">	
-			<img src="<%= request.getContextPath() %>/resources/image/문서.png">&nbsp;<span style="font-size: 18pt; color: #595959;  position: relative; top: 4.0px;">결재문서 작성</span><br/><br/>
+			<img src="<%= request.getContextPath() %>/resources/images/문서.png">&nbsp;<span style="font-size: 18pt; color: #595959;  position: relative; top: 4.0px;">결재문서 작성</span><br/><br/>
 
 		<div class="row" align="center">
 	    	
@@ -303,7 +303,7 @@
 		 				<tr>
 		 					<td class="title2Td1">제목</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="text" name="title" class="title" style="width: 99%;" />
+		 						&nbsp;<input type="text" name="title" class="title" style="width: 99%;" autocomplete="off" />
 		 					</td>
 		 				</tr>
 		 			 	
@@ -314,6 +314,27 @@
 	    						</div>
 	    					</td>	
 		 				</tr> 
+		 				
+		 				<tr>
+		 					<td class="title2Td1">수령인</td>
+		 					<td class="title2Td">
+		 						&nbsp;<input type="text" name="receiver" class="title" style="width: 99%;" autocomplete="off" />
+		 					</td>
+		 				</tr>
+		 				
+		 				<tr>
+		 					<td class="title2Td1">금액</td>
+		 					<td class="title2Td">
+		 						&nbsp;<input type="text" name="bsMoney" class="title" style="width: 99%;" autocomplete="off" />
+		 					</td>
+		 				</tr>
+		 				
+		 				<tr>
+		 					<td class="title2Td1">입금계좌</td>
+		 					<td class="title2Td">
+		 						&nbsp;<input type="text" name="bank" class="title" style="width: 99%;" autocomplete="off" />
+		 					</td>
+		 				</tr>
 				 		
 				 		<tr>
 		 					<td class="title2Td1">부서공유</td>

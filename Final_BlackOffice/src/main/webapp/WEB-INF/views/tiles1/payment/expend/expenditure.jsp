@@ -120,7 +120,7 @@
 <body>
 	<div id="draftContainer"> 
 		<div class="container-fluid dfcontainer">	
-			<img src="<%= request.getContextPath() %>/resources/image/문서.png">&nbsp;<span style="font-size: 18pt; color: #595959;  position: relative; top: 4.0px;">결재문서 작성</span><br/><br/>
+			<img src="<%= request.getContextPath() %>/resources/images/문서.png">&nbsp;<span style="font-size: 18pt; color: #595959;  position: relative; top: 4.0px;">결재문서 작성</span><br/><br/>
 
 		<div class="row" align="center">
 	    	<div class="col-md-12 ">

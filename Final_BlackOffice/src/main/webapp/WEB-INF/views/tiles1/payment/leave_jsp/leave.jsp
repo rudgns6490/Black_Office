@@ -51,13 +51,13 @@
    
    
 	.title {
-		background: url(<%= request.getContextPath() %>/resources/image/체크이미지.png) no-repeat 3px center; 
+		background: url(<%= request.getContextPath() %>/resources/images/체크이미지.png) no-repeat 3px center; 
 		padding-left: 20px; 
 	} 
 	
 	
 	.reason {
-		background: url(<%= request.getContextPath() %>/resources/image/체크이미지.png) no-repeat 3px center; 
+		background: url(<%= request.getContextPath() %>/resources/images/체크이미지.png) no-repeat 3px center; 
 		padding-left: 20px;  
 	}   
    
@@ -250,7 +250,7 @@ $(document).ready(function(){
 <body>
 	<div id="draftContainer">
 		<div class="container-fluid dfcontainer">
-			<img src="<%= request.getContextPath() %>/resources/image/문서.png">&nbsp;<span style="font-size: 18pt; color: #595959;  position: relative; top: 4.0px;">결재문서 작성</span><br/><br/>
+			<img src="<%= request.getContextPath() %>/resources/images/문서.png">&nbsp;<span style="font-size: 18pt; color: #595959;  position: relative; top: 4.0px;">결재문서 작성</span><br/><br/>
 			
 			<div class="row" align="center">
 			
