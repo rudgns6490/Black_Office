@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-<% String ctxPath = request.getContextPath(); %>    
+<% String ctxPath = request.getContextPath(); %>  
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>  
     
 <!DOCTYPE html>
 <html>
@@ -328,11 +331,15 @@ $(document).ready(function(){
 	  		  		<div class="col-sm-8" style=""></div>	
 		 		</div>
 		 		
+		 		
+		 		<!-- 현재년도 -->
+				<c:set var="now" value="<%=new java.util.Date()%>" />
+				<c:set var="sysYear"><fmt:formatDate value="${now}" pattern="yyyy-MM-dd" /></c:set>
 		 		<table class="title2">
 		 			<tbody>
 		 				<tr>
 		 					<td class="title2Td1">제출일자</td>
-		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" /></td>
+		 					<td class="title2Td">&nbsp;<input id="" name="" readonly style="border: none;" value="${sysYear}" /></td>
 		 				</tr>
 		 				
 		 				<tr>
