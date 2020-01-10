@@ -2,6 +2,9 @@
     pageEncoding="UTF-8"%>
     
 <% String ctxPath = request.getContextPath(); %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
     
 <!DOCTYPE html>
 <html>
@@ -50,7 +53,7 @@
 	
 	
 	.title {
-		background: url('<%= request.getContextPath() %>/resources/image/체크이미지.png') no-repeat 3px center;
+		background: url('<%= request.getContextPath() %>/resources/images/체크이미지.png') no-repeat 3px center;
 		padding-left: 20px;	  
 	}
 	
@@ -196,23 +199,29 @@
 	     				+"</style></head><body>";
 	     				
 	     
-	     var popContent=document.getElementById("print").innerHTML + "<br/>";
+	  var popContent=document.getElementById("print").innerHTML + "<br/>";
 	     //innerHTML을 이용하여 Div로 묶어준 부분을 가져온다.
+	  
+	   var popFooter="</body></html>";
 	     
-	     var popFooter="</body></html>";
-	     
-	     popContent=popHeader + popContent + popFooter; 
+		 popContent=popHeader + popContent + popFooter; 
 	      
 	     var popWin=window.open("","print","width=" + popw +",height="+ poph +",top=" + ypos + ",left="+ xpos +",status=yes,scrollbars=yes"); 
 	     // 일단 내용이 없는 팝업윈도창을 만든다.
 	    
 	     popWin.document.open(); // 팝업윈도창에 내용을 넣을 수 있도록 오픈한다.
 	     popWin.document.write(popContent); // 새롭게 만든 html소스를 팝업윈도창에 문서에 쓴다.
-	    // popWin.document.close(); // 팝업윈도창 문서를 클로즈
-	    // popWin.print(); // 팝업윈도창에 대한 인쇄 창 띄우고
-	    // popWin.close(); // 인쇄를 하던가 또는 취소를 누르면 팝업윈도창을 닫는다.
+	     
+	     popWin.document.write($(".title").val()); 
+	     popWin.document.write("메모 : "+$("#memo").val()+"<br/>");
+	     
+	     popWin.document.write("</body></html>");
+	     
+	//     popWin.document.close(); // 팝업윈도창 문서를 클로즈
+	 //    popWin.print(); // 팝업윈도창에 대한 인쇄 창 띄우고
+	 //    popWin.close(); // 인쇄를 하던가 또는 취소를 누르면 팝업윈도창을 닫는다.
 	    
-	    //window.print();
+	    //window.print(); 
 	        
 	} 
 	
@@ -225,7 +234,7 @@
 <body>
 	<div id="draftContainer"> 
 		<div class="container-fluid dfcontainer" >	 
-			<img src="<%= request.getContextPath() %>/resources/image/문서.png">&nbsp;<span style="font-size: 18pt; color: #595959;  position: relative; top: 4.0px;">결재문서 작성</span><br/><br/>
+			<img src="<%= request.getContextPath() %>/resources/images/문서.png">&nbsp;<span style="font-size: 18pt; color: #595959;  position: relative; top: 4.0px;">결재문서 작성</span><br/><br/>
 
 		<div class="row" align="center" id="print">
 	    	
@@ -262,16 +271,20 @@
 	  		  		<div class="col-sm-8" style=""></div>	
 		 		</div>
 		 		
+		 		<!-- 현재년도 -->
+				<c:set var="now" value="<%=new java.util.Date()%>" />
+				<c:set var="sysYear"><fmt:formatDate value="${now}" pattern="yyyy-MM-dd" /></c:set>
 		 		<table class="title2">
 		 			<tbody>
 		 				<tr>
 		 					<td class="title2Td1">제출일자</td>
-		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" /></td>
+		 					<td class="title2Td">&nbsp;<input id="" name="" readonly style="border: none;" value="${sysYear}" /></td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">제출자</td>
-		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" /></td>
+		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" value="${sessionScope.loginuser.name}" />
+		 					<input type="hidden" id="" name="fk_userid" readonly style="border: none;" value="${sessionScope.loginuser.userid}" /></td>
 		 				</tr>
 		 				
 		 				<tr>
@@ -309,7 +322,7 @@
 		 				<tr>
 		 					<td class="title2Td1">메모</td>
 		 					<td class="title2Td" align="center">&nbsp;&nbsp;
-		 						<textarea id="" name="" style="width: 95%; height: 90%; position: relative; top: 3.0px; right: 7px;"></textarea> 
+		 						<textarea id="memo" name="" style="width: 95%; height: 90%; position: relative; top: 3.0px; right: 7px;"></textarea> 
 		 					</td>
 		 				</tr>
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	 				 
