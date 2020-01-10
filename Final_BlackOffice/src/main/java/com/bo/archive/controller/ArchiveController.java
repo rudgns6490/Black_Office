@@ -108,7 +108,7 @@ public class ArchiveController {
 	public String mydocument_archive_leave() {
 		return "archive/mydocument/leave.tiles1";
 	}
-	
+	/////////////////////////////////////////////
 	
 		
 	
