@@ -39,11 +39,18 @@
 		border-collapse: collapse;  
 	} 
 	
+	#ptLineAdd th,td{
+		border: solid 1px #639c9c;
+		border-collapse: collapse;  
+	} 
+	
 	.headertable th { background-color: #e0ebeb;}	
 	.hdth { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
 	.headertable {float: right; margin-top:20px;}
 	
-	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:150px; height: 35px; font-size: 15pt;}
+	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:150px; height: 35px; font-size: 15pt; }
+	.approval th{ background-color: #e0ebeb; font-size: 13pt; font-weight: bold; }
+	
 	
 	.titleLine { clear: both; border: solid 0px #639c9c; height: 35px; }  /* 야매로 줄바꿈 해주기위한것 */
 	.title2, .title3 { clear: both; border: solid 1px #639c9c; border-bottom: none;  width: 100%;}
@@ -315,14 +322,29 @@
 	    			
 	    		</table>
 	    		
-	    		
+
 	    		<div id="ptLineAdd">
-	    			<button type="button" style="color: #333333; border-radius: 5px;">결재라인 추가</button>
+	    			<div><button type="button" style="color: #333333; border-radius: 5px;">결재라인 추가</button></div><br/>
+	    			<table class="approval">
+	    				<tr>
+	    					<th rowspan="2" class="hdth">결재란</th>  
+	    					<th class="hdth">결재</th>
+	    				</tr>
+	    				
+	    				<tr>
+	    					<td class="hdth"></td> 
+	    				</tr>
+	    			</table>
 	    		</div>
+	    		<br/><br/>
 	    		
 	    		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
-			  		<div class="col-sm-4" style=""></div>
-	  		  		<div class="col-sm-8" style=""></div>	
+		 		</div>
+		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
+		 		</div>
+		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
+		 		</div>
+		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
 		 		</div>
 		 		
 		 		
