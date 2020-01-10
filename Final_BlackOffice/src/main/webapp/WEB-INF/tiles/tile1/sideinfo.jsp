@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 
 <% String ctxPath = request.getContextPath(); %>     
-  <div id="wrapper">
+  <div id="wrapper"> 
 
 	<!-- 사이드바 내용은 요기에 추가 2020/01/03 kkh -->
     <!-- Sidebar -->
