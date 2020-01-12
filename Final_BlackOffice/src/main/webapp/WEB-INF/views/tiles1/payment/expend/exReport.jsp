@@ -46,6 +46,8 @@
 	
 	.headertable th { background-color: #e0ebeb;}	
 	.hdth { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
+	.hdtd { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
+	.approvalImg { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
 	.headertable {float: right; margin-top:20px;}
 	
 	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:150px; height: 35px; font-size: 15pt; }
@@ -120,17 +122,25 @@
 		
 		// 결재란 td 클릭시 이미지 넣어주기
 		$(".approvalImg").click(function(){
-			var hiddenVal = $("input:hidden[name=approvalHidden]").val();
 			
-			if(hiddenVal == "1") {
-				$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/뭐.png'>"); 
-				$("input:hidden[name=approvalHidden]").val("2");
-			}
-			else {
-				$(this).html("");
-				$("input:hidden[name=approvalHidden]").val("1");
-			}
+			var appr_length = $("input:hidden[name = approvalHidden]").length;
+			for(var i=0; i<appr_length; i++) {
+				
+				var hiddenVal = $("input:hidden[class=approvalHidden"+i+"]").val();
 			
+				if(hiddenVal == "0") {
+					$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/체크이미지.png'>"); 
+					$("input:hidden[class=approvalHidden"+i+"]").val("1");
+				}
+				else {
+					$(this).html("");
+					$("input:hidden[class=approvalHidden"+i+"]").val("0");
+				}
+			}
+			var hdtdLength = $(".hdtd").text().length;
+			var imgLength = $(".approvalImg").text().length;
+		//	alert(imgLength);
+		
 		});
 		
 		
@@ -240,44 +250,42 @@
 	    			
 	    				<tr>
 	    					<th rowspan="2" class="hdth">결재</th> 
-	    					<th class="hdth">작성자</th>
+	    					<th class="hdth">결재자</th>
 	    					<th class="hdth"></th>
 	    					<th class="hdth"></th>
 	    					<th class="hdth"></th>
 	    				</tr>	
 	    			
 	    				<tr>
-	    					<td class="hdth"></td> 
-	    					<td class="hdth"></td> 
-	    					<td class="hdth"></td>
-	    					<td class="hdth"></td>
+	    					<td class="hdtd">a</td> 
+	    					<td class="hdtd">b</td> 
+	    					<td class="hdtd"></td>
+	    					<td class="hdtd"></td>
 	    				</tr>
 	    			
+	    				<tr>
+	    					<th rowspan="2" class="hdth">결재란</th>  
+	    				</tr>
+	    				
+	    				<tr>
+	    					<td class="approvalImg">	    						
+	    					</td>
+	    					<td class="approvalImg">	    						
+	    					</td>
+	    					<td class="approvalImg">	    						
+	    					</td>
+	    					<td class="approvalImg">	    						
+	    					</td>
+	    				</tr>
 	    		</table>
 	    		
 	    		
 	    		<div id="ptLineAdd">
 	    			<div><button type="button" style="color: #333333; border-radius: 5px;">결재라인 추가</button></div><br/>
-	    			<table class="approval">
-	    				<tr>
-	    					<th rowspan="2" class="hdth">결재란</th>  
-	    					<th class="hdth">결재</th>
-	    				</tr>
-	    				
-	    				<tr>
-	    					<td class="hdth approvalImg"><input type="hidden" class="appr_check" name="appr_check" value="0" /></td>
-	    				</tr>
-	    			</table>
 	    		</div>
 	    		<br/><br/>
 	    		
 	    		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
-		 		</div>
-		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
-		 		</div>
-		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
-		 		</div>
-		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
 		 		</div>
 		 		
 		 		<!-- 현재년도 -->
@@ -373,7 +381,10 @@
 	
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	
 			<br/><br/><br/> 
-		<div><input type="hidden" name="approvalHidden" class="approvalHidden" value="1" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
+		<div><input type="hidden" name="approvalHidden" class="approvalHidden0" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
+		<div><input type="hidden" name="approvalHidden" class="approvalHidden1" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
+		<div><input type="hidden" name="approvalHidden" class="approvalHidden2" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
+		<div><input type="hidden" name="approvalHidden" class="approvalHidden3" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
 	</div>
 </body>
 </html>

@@ -43,12 +43,13 @@
 	
 	.headertable th { background-color: #e0ebeb;}	
 	.hdth { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
+	.app_td { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
+	.approvalImg { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
 	.headertable {float: right; margin-top:20px;}
-	
-	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:150px; height: 35px; font-size: 15pt; }
-	.approval th{ background-color: #e0ebeb; font-size: 13pt; font-weight: bold; }
 	.approvalImg:hover { cursor: pointer; }
 	
+	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:150px; height: 35px; font-size: 15pt; }
+	 
 	.titleLine { clear: both; border: solid 0px #639c9c; height: 35px; }  /* 야매로 줄바꿈 해주기위한것 */
 	.title2, .title3 { clear: both; border: solid 1px #639c9c; border-bottom: none;  width: 100%;}
 	.title2 th,td { border: solid 1px #639c9c; border-collapse: collapse; height: 40px; }
@@ -82,58 +83,19 @@
 		$(".title").focus();
 		$("input:radio[id=tableRadio]").prop("checked",true);
 		
-		var radioVal ="${radioVal}";
-		for(var i=1; i<4; i++){
-			var useRadio = $("input:radio[id=use"+i+"]").val();
-			if(radioVal == useRadio) {
-				$("input:radio[id=use"+i+"]").prop("checked",true);
-			}
-		}
-		
-		$("input:radio[name=radio]").click(function(){
-			
-			$("input:radio[name=radio]").each(function(){
-				var bool = $(this).is(":checked");
-				if(bool) {
-					var result = $(this).val();
-					
-					switch (result) {
-					
-					case "1":
-						goexReport();
-						break;
-					
-					case "2":
-						goBusinessTrip();
-						break;	
-						
-					case "3":
-						goBusinessReturn();
-						break;	
-						 
-				}// end of switch()----------------*
-				}
-			});
-		});// end of $("input:radio[name=radio]").click(function(){})----------
 		
 		
 		// 결재란 td 클릭시 이미지 넣어주기
 		$(".approvalImg").click(function(){
 			var hiddenVal = $("input:hidden[name=approvalHidden]").val();
 			
-			if(hiddenVal == "1") {
-				$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/뭐.png'>"); 
-				$("input:hidden[name=approvalHidden]").val("2");
-			//	var tt = $("input:hidden[name=appr_check]").val();
-			//	var tt = $(this).children().val();
-			
-			    
-				
-				alert(tt); 
+			if(hiddenVal == "0") {
+				$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/체크이미지.png'>"); 
+				$("input:hidden[name=approvalHidden]").val("1");
 			}
 			else {
 				$(this).html("");
-				$("input:hidden[name=approvalHidden]").val("1");
+				$("input:hidden[name=approvalHidden]").val("0");
 			}
 			
 		});
@@ -143,49 +105,9 @@
 	});// end of $(document).ready(function(){})------------------------------------
 	
 	
-	// 지출결의서 보고서
-	function goexReport() {
-		
-		var radioVal = $("input:radio[id=use1]").val();
-
-		var frm = document.radioChoice;
-		frm.radioVal.value = radioVal;
-		frm.method = "POST";
-		frm.action = "<%= ctxPath%>/exReport.action";
-		frm.submit();
-		
-		<%-- window.location.href = "<%= ctxPath%>/exReport.action" --%>
-	}
 	
-	// 출장 신청서
-	function goBusinessTrip() {
-		
-		var radioVal = $("input:radio[id=use2]").val();
-
-		var frm = document.radioChoice;
-		frm.radioVal.value = radioVal;
-		frm.method = "POST";
-		frm.action = "<%= ctxPath%>/business_trip.action";
-		frm.submit();
-		
-		<%-- window.location.href = "<%= ctxPath%>/business_trip.action" --%>
-	}
 	
-	// 출장 복명서
-	function goBusinessReturn() {
-		
-		var radioVal = $("input:radio[id=use3]").val();
-
-		var frm = document.radioChoice;
-		frm.radioVal.value = radioVal;
-		frm.method = "POST";
-		frm.action = "<%= ctxPath%>/business_return.action";
-		frm.submit();
-		
-		<%-- window.location.href = "<%= ctxPath%>/business_return.action" --%>
-	}
-	
-	// 제출하기 버튼의 onclick
+	// 저장 버튼의 onclick
 	function save() {
 		var frm = document.submitFrm;
 		frm.method = "POST";
@@ -203,6 +125,13 @@
 	
 	// 미리보기 버튼의 onclick
 	function preview(report) {
+		
+		var frm = document.submitFrm;
+		 frm.title.value = $("input:text[class=title]").val();
+		 frm.action = "<%= ctxPath%>/report.action";
+		 frm.method = "POST";
+		 frm.submit();
+		 
 		 
 		var sw=screen.width;	// 모니터 화면의 가로 길이 
 	     var sh=screen.height;	// 모니터 화면의 높이
@@ -244,8 +173,12 @@
 	     popWin.document.open(); // 팝업윈도창에 내용을 넣을 수 있도록 오픈한다.
 	     popWin.document.write(popContent); // 새롭게 만든 html소스를 팝업윈도창에 문서에 쓴다.
 	     
-	     popWin.document.write($(".title").val()); 
-	     popWin.document.write("메모 : "+$("#memo").val()+"<br/>");
+	  /*    popWin.document.write("<tr>"); 
+	     popWin.document.write("<td class='title2Td1'>제목</td>");
+	     popWin.document.write("<td class='title2Td'>");
+	     popWin.document.write("&nbsp;<input type='text' name='title' class='title' style='width: 99%;' autocomplete='off' value='"+$(".title").val()+"'/>");
+	     popWin.document.write("</td>"); */
+		
 	     
 	     popWin.document.write("</body></html>");
 	     
@@ -253,10 +186,14 @@
 	 //    popWin.print(); // 팝업윈도창에 대한 인쇄 창 띄우고
 	 //    popWin.close(); // 인쇄를 하던가 또는 취소를 누르면 팝업윈도창을 닫는다.
 	    
-	    //window.print(); 
+	//    window.print(); 
+	 
+	 
+	 
 	        
 	} 
-	
+
+
 
 </script>
 
@@ -278,51 +215,44 @@
 	    			
 	    				<tr>
 	    					<th rowspan="2" class="hdth">결재</th> 
-	    					<th class="hdth">작성자</th>
+	    					<th class="hdth">결재자</th>
 	    					<th class="hdth"></th>
 	    					<th class="hdth"></th>
 	    					<th class="hdth"></th>
 	    				</tr>	
 	    			
 	    				<tr>
-	    					<td class="hdth"></td> 
-	    					<td class="hdth"></td> 
-	    					<td class="hdth"></td>
-	    					<td class="hdth"></td>
+	    					<td class="app_td"></td> 
+	    					<td class="app_td"></td> 
+	    					<td class="app_td"></td>
+	    					<td class="app_td"></td>
 	    				</tr>
-	    			
+	    				
+	    				<tr>
+	    					<th rowspan="2" class="hdth">결재란</th>  
+	    				</tr>
+	    				
+	    				<tr>
+	    					<td class="approvalImg">	    						
+	    					</td>
+	    					<td class="approvalImg">	    						
+	    					</td>
+	    					<td class="approvalImg">	    						
+	    					</td>
+	    					<td class="approvalImg">	    						
+	    					</td>
+	    				</tr>
 	    		</table>
 	    		
 	    		
 	    		<div id="ptLineAdd">
 	    			<div><button type="button" style="color: #333333; border-radius: 5px;">결재라인 추가</button></div><br/>
-	    			<table class="approval">
-	    				<tr>
-	    					<th rowspan="2" class="hdth">결재란</th>  
-	    					<th class="hdth">결재</th>
-	    				</tr>
-	    				
-	    				<tr>
-	    					<td class="hdth approvalImg">
-	    						<input type="text" class="appr_check" name="appr_check" id="abc" value="abc" />
-	    						
-	    					</td>
-	    				</tr>
-	    			</table>
-	    			<div>
-	    				<input type="text" class="appr_check" name="appr_check" id="abc" value="abc" />
-	    			</div>
 	    		</div>
 	    		<br/><br/>
 	    		
 	    		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
 		 		</div>
-		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
-		 		</div>
-		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
-		 		</div>
-		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
-		 		</div>
+		 		
 		 		
 		 		<!-- 현재년도 -->
 				<c:set var="now" value="<%=new java.util.Date()%>" />
@@ -360,7 +290,7 @@
 		 				<tr>
 		 					<td class="title2Td1">제목</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="text" name="title" class="title" style="width: 99%;" autocomplete="off"/>
+		 						&nbsp;<input type="text" name="title" class="title" style="width: 99%;" autocomplete="off" value="${title}"/>
 		 					</td>
 		 				</tr>
 		 			 	
@@ -408,7 +338,7 @@
 	
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	
 			<br/><br/><br/> 
-		<div><input type="hidden" name="approvalHidden" class="approvalHidden" value="1" /></div> <!-- 결재란 이미지위해 숨긴 div  -->
+		<div><input type="hidden" name="approvalHidden" class="approvalHidden" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->
 	</div>
 </body>
 </html>

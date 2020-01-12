@@ -159,7 +159,11 @@ public class Payment_Report_Controller {
 	
 	// 보고서 작성
 	@RequestMapping(value="report.action")
-	public String report() {
+	public String report(HttpServletRequest request) {
+		
+		String title = request.getParameter("title");
+		
+		request.setAttribute("title", title);
 		return "report/report_jsp/reportWrite.tiles1";
 	}
 	
