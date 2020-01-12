@@ -307,7 +307,7 @@ $(document).ready(function(){
 	    			
 	    				<tr>
 	    					<th rowspan="2" class="hdth">결재</th> 
-	    					<th class="hdth">작성자</th>
+	    					<th class="hdth">결재자</th>
 	    					<th class="hdth"></th>
 	    					<th class="hdth"></th>
 	    					<th class="hdth"></th>
@@ -320,31 +320,29 @@ $(document).ready(function(){
 	    					<td class="hdth"></td>
 	    				</tr>
 	    			
+	    		<tr>
+	    					<th rowspan="2" class="hdth">결재란</th>  
+	    				</tr>
+	    				
+	    				<tr>
+	    					<td class="hdth approvalImg">	    						
+	    					</td>
+	    					<td class="hdth approvalImg">	    						
+	    					</td>
+	    					<td class="hdth approvalImg">	    						
+	    					</td>
+	    					<td class="hdth approvalImg">	    						
+	    					</td>
+	    				</tr>
 	    		</table>
 	    		
 	    		
 	    		<div id="ptLineAdd">
 	    			<div><button type="button" style="color: #333333; border-radius: 5px;">결재라인 추가</button></div><br/>
-	    			<table class="approval">
-	    				<tr>
-	    					<th rowspan="2" class="hdth">결재란</th>  
-	    					<th class="hdth">결재</th>
-	    				</tr>
-	    				
-	    				<tr>
-	    					<td class="hdth"></td> 
-	    				</tr>
-	    			</table>
 	    		</div>
 	    		<br/><br/>
 	    		
 	    		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
-		 		</div>
-		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
-		 		</div>
-		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
-		 		</div>
-		 		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
 		 		</div>
 		 		
 		 		
