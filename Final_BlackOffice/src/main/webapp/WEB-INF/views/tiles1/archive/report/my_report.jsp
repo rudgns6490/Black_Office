@@ -112,7 +112,7 @@
 <script type="text/javascript">
 
 	$(document).ready(function() {
-		document.title='보고서 보관함';		
+		document.title='내 보고서 보관함';		
 	});
 
 </script>
@@ -122,7 +122,7 @@
 	<%--	맨 위 부분	 --%>
 	<div class="archiveheader">
 		<img class="headercon" src="resources/images/archive/titleicon.png">
-		<h5 class="headercon" style="display: inline-block; margin-top: 2px;">보고서 목록</h5>
+		<h5 class="headercon" style="display: inline-block; margin-top: 2px;">내가 쓴 보고서 목록</h5>
 	</div>
 	<%--	맨 위 부분 끝	--%>
 

@@ -151,7 +151,7 @@
 <script type="text/javascript">
 
 	$(document).ready(function() {
-		document.title='임시저장함';		
+		document.title='결재 문서함';		
 	});
 
 </script>
@@ -161,7 +161,7 @@
 	<%--	맨 위 부분	 --%>
 	<div class="archiveheader">
 		<img class="headercon" src="resources/images/archive/titleicon.png">
-		<h5 class="headercon" style="display: inline-block; margin-top: 2px;">임시저장</h5>
+		<h5 class="headercon" style="display: inline-block; margin-top: 2px;">결재관련 문서 목록</h5>
 	</div>
 	<%--	맨 위 부분 끝	--%>
 	
@@ -169,9 +169,8 @@
 	
 	<%--	문서종류 선택	 --%>
 	<div class="documentchoice_box">
-		<a href="<%=ctxPath %>/temp_archive_normal.action" class="documentchoice documentchoice_active">일반 결재 문서</a>
-		<a href="<%=ctxPath %>/temp_archive_expenses.action" class="documentchoice">지출 결재 문서</a>
-		<a href="<%=ctxPath %>/temp_archive_leave.action" class="documentchoice">휴가/휴직 결재 문서</a>
+		<a href="<%=ctxPath %>/incomplete_payment_archive.action" class="documentchoice documentchoice_active">미결재 문서</a>
+		<a href="<%=ctxPath %>/complete_payment_archive.action" class="documentchoice">결재완료 문서</a>
 	</div>
 	<%--	문서종류 선택 끝	 --%>
 	
