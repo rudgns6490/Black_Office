@@ -3,10 +3,6 @@
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%
-	String ctxPath = request.getContextPath();
-%>
-
 <style type="text/css">
 	
 	.archiveContainer {background: #f7f7f7;	width: 100%;}
@@ -16,43 +12,6 @@
 	.headercon {vertical-align: top;}
 	h5 {font-family: 'Malgun Gothic', '맑은 고딕', 'Dotum', '돋움', sans-serif; font-weight: bold;}	
 /* 	맨 위 부분 끝	 */
-
-
-
-/* 	문서종류 선택	 */
-	.documentchoice_box {
-		width: 97%;
-		margin-bottom: 10px;
-		background: #f7f7f7;
-		border-bottom: solid 1px #4bc5c3;
-	}
-	
-	.documentchoice {
-	    display: inline-block;
-	    padding: 7px 15px 9px;
-	    border: 1px solid #d1d1d1;
-	    background: #ebebeb;
-	    font-size: 14px;
-	    line-height: 18px;
-	    color: #555;
-	}
-	
-	.documentchoice_active {
-		background: #4bc5c3;
-		color: white;
-		font-weight: bold;
-	}
-	
-	.documentchoice_active:hover {color: white;}
-	
-	a:hover {color:inherit; text-decoration: none;}
-	a:link {text-decoration: none;}
-	a:visited {text-decoration: none;}
-	
-			
-/* 	문서종류 선택 끝	 */
-
-
 
 /* 	검색 부분	 */
 	.reportsearch {background: white; border: 1px solid #e6e6e6; width: 97%; margin-bottom: 20px;}
@@ -95,15 +54,9 @@
 	    box-sizing: border-box;
 	    background: #0083e7;
 	    color: #fff;
-	}
-	
-	.document_choice {
-		margin-right: 15px;
-	}
+	}	
 /* 	검색 부분 끝	 */
 	
-
-
 /* 	글 목록	 */
 	.reportList {background: white;	border: 1px solid #e6e6e6; width: 97%;}
 	.reportList_title {
@@ -148,15 +101,18 @@
 	    line-height: 25px;
 	    color: #fff;
 	}
-/* 	페이징 끝	 */
+/* 	페이징	 */
 /* 	글 목록 끝	 */
-
+	
+	
+	
 </style>
+
 
 <script type="text/javascript">
 
 	$(document).ready(function() {
-		document.title='임시저장함';		
+		document.title='결재문서 수신함';		
 	});
 
 </script>
@@ -166,28 +122,17 @@
 	<%--	맨 위 부분	 --%>
 	<div class="archiveheader">
 		<img class="headercon" src="resources/images/archive/titleicon.png">
-		<h5 class="headercon" style="display: inline-block; margin-top: 2px;">임시저장</h5>
+		<h5 class="headercon" style="display: inline-block; margin-top: 2px;">결재해야 할 문서 목록</h5>
 	</div>
 	<%--	맨 위 부분 끝	--%>
-	
+
 	<div class="col-md-12 archivebody" style="margin-left: 25px;">
-	
-	<%--	문서종류 선택	 --%>
-	<div class="documentchoice_box">
-		<a href="<%=ctxPath %>/temp_archive_normal.action" class="documentchoice">일반 결재 문서</a>
-		<a href="<%=ctxPath %>/temp_archive_expenses.action" class="documentchoice documentchoice_active">지출 결재 문서</a>
-		<a href="<%=ctxPath %>/temp_archive_leave.action" class="documentchoice">휴가/휴직 결재 문서</a>
-	</div>
-	<%--	문서종류 선택 끝	 --%>
-	
-	<%--	검색 부분	 --%>
+		<%--	검색 부분	 --%>
 		<div class="reportsearch">
-			
-			
 			<form action="">
 				<table style="width: 100%;">
 					<tr>
-						<th>작성일자</th>
+						<th>보고서 작성일</th>
 						<td>
 							<span class="search_Condition">당일</span>
 							<span class="search_Condition">1주일</span>
@@ -199,7 +144,7 @@
 						</td>
 					</tr>
 					<tr>
-						<th>문서 검색</th>
+						<th>보고서 검색</th>
 						<td>
 							<span class="search_Condition">전체보기</span>
 							<select class="search_select">
@@ -210,38 +155,20 @@
 							<button type="button" class="report_search_btn">검색</button>
 						</td>
 					</tr>
-					<tr>
-						<th>문서종류</th>
-						<td>
-							<input type="checkbox" name="expenditure" id="expenditure" style="margin-left: 5px;"/>
-							<label class="document_choice" for="expenditure">지출결의서</label>
-							
-							<input type="checkbox" name="business_trip" id="business_trip" />
-							<label class="document_choice"for="business_trip">출장 신청서</label>
-							
-							<input type="checkbox" name="business_return" id="business_return" />
-							<label class="document_choice"for="business_return">출장 복명서</label>
-						</td>
-					</tr>
-					
 				</table>
 			</form>
 		</div>
 		<%--	검색 부분 끝	 --%>
-	
 		
-	<%--	글 목록	 --%>
+		<%--	글 목록	 --%>
 		<div class="reportList">
 			<table style="width: 100%;">
 				<thead>
 					<tr class="reportList_title">
-						<th style="width: 5%;">No.</th>
+						<th style="width: 7%;">No.</th>
 						<th style="width: 7%;">문서번호</th>
-						<th style="width: 10%;">문서분류</th>
+						<th style="width: 15%;">문서분류</th>
 						<th>제목</th>
-						<th style="width: 10%;">상태</th>
-						<th style="width: 10%;">부서</th>
-						<th style="width: 10%;">기안자</th>
 						<th style="width: 20%;">작성일</th>
 					</tr>
 				</thead>
@@ -251,10 +178,7 @@
 						<td>테스트1</td>
 						<td>문서번호1</td>
 						<td>문서분류1</td>
-						<td style="text-align: left; color: #2276BB; padding-left: 10px;">제목1</td>
-						<td>상태1</td>
-						<td>부서1</td>
-						<td>기안자1</td>
+						<td style="text-align: left; color: #2276BB;">제목1</td>
 						<td>작성일1</td>
 					</tr>
 				</tbody>
@@ -270,14 +194,32 @@
 		<%--	페이징처리 끝	 --%>
 		</div>
 		<%--	글 목록 끝	 --%>
-	
 	</div>
 	
 	
-	
-	
-	
+
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 
 <% String ctxPath = request.getContextPath(); %>     
-  <div id="wrapper">
+  <div id="wrapper"> 
 
 	<!-- 사이드바 내용은 요기에 추가 2020/01/03 kkh -->
     <!-- Sidebar -->
@@ -10,7 +10,7 @@
       <li class="nav-item active">
         <a class="nav-link" href="template.jsp">
           <span>HOME</span>
-        </a>
+        </a> 
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -35,13 +35,9 @@
           <a class="dropdown-item" href="<%= ctxPath%>/leave.action">휴가 결재서 작성</a>
           <a class="dropdown-item" href="<%= ctxPath%>/vacation.action">휴직 결재서 작성</a>
           
-          <h6 class="dropdown-header">결재함</h6>
-          <a class="dropdown-item" href="<%= ctxPath%>/incomplete_archive_normal.action">미결재 문서함</a>
-          <a class="dropdown-item" href="<%= ctxPath%>/complete_archive_normal.action">결재완료 문서함</a>
-          
-          <h6 class="dropdown-header">문서함</h6>
-          <a class="dropdown-item" href="<%= ctxPath%>/mydocument_archive_normal.action">내문서함</a>
-          <a class="dropdown-item" href="<%= ctxPath%>/deptdocument_archive_normal.action">부서문서함</a>
+          <h6 class="dropdown-header">결재보관함</h6>
+          <a class="dropdown-item" href="<%= ctxPath%>/incomplete_payment_archive.action">결재완료/미결재 문서</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/receive_payment_archive.action">결재문서 수신함</a>
           <div class="dropdown-divider"></div>
 
         </div>
@@ -55,8 +51,8 @@
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <h6 class="dropdown-header">보고</h6>
           <a class="dropdown-item" href="<%= ctxPath%>/report.action">보고서 작성</a>
-          <a class="dropdown-item" href="<%= ctxPath%>/report_archive.action">보고서함</a>
-          <a class="dropdown-item" href="<%= ctxPath%>/temp_archive_normal.action">보고서 임시저장함</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/my_report_archive.action">보고서함</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/receive_report_archive.action">보고서 수신함</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>

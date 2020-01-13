@@ -6,7 +6,7 @@
 	String ctxPath = request.getContextPath();
 %>
 	
-  <link href="<%= ctxPath %>/resources/css/noticeBoard.css" rel="stylesheet">
+  <link href="<%= ctxPath %>/resources/css/Board.css" rel="stylesheet">
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -108,8 +108,8 @@
 		
 		<div align="right" style="margin-right: 50px;" >
 			<button type="button" class="btn btn_write btn-primary" id="btn_write" style="width: 10%; display: inline-block;">쓰기</button>
-			<button type="button" class="btn btn_modify btn-primary" id="btn_modify" style="width: 10%; display: inline-block;">수정</button>
-			<button type="button" class="btn btn_delete btn-primary" id="btn_delete" style="width: 10%; display: inline-block;">삭제</button>
+			<!-- <button type="button" class="btn btn_modify btn-primary" id="btn_modify" style="width: 10%; display: inline-block;">수정</button>
+			<button type="button" class="btn btn_delete btn-primary" id="btn_delete" style="width: 10%; display: inline-block;">삭제</button> -->
 		</div>
 		
 		</div>
