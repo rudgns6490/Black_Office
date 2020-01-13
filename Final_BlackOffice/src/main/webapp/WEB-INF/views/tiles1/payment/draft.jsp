@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%> 
     
-<% String ctxPath = request.getContextPath(); %>    
+<% String ctxPath = request.getContextPath(); %> 
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>   
     
 <!DOCTYPE html>
 <html>
@@ -29,11 +32,18 @@
 		border-collapse: collapse;  
 	} 
 	
+	#ptLineAdd th,td{
+		border: solid 1px #639c9c;
+		border-collapse: collapse;  
+	} 
+	
 	.headertable th { background-color: #e0ebeb;}	
 	.hdth { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959; }
-	.headertable {float: right; margin-top:20px;}
+	.headertable  {float: right; margin-top:20px;}
 	
-	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:150px; height: 35px; font-size: 15pt;}
+	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:150px; height: 35px; font-size: 15pt; }
+	.approval th{ background-color: #e0ebeb; font-size: 13pt; font-weight: bold; }
+	.approvalImg:hover { cursor: pointer; }
 	
 	.titleLine { clear: both; border: solid 0px #639c9c; height: 35px; }  /* 야매로 줄바꿈 해주기위한것 */
 	.title2, .title3 { clear: both; border: solid 1px #639c9c; border-bottom: none;  width: 100%;}
@@ -59,6 +69,21 @@
 	
 	$(document).ready(function(){
 		$(".title").focus();
+		
+		// 결재란 td 클릭시 이미지 넣어주기
+		$(".approvalImg").click(function(){
+			var hiddenVal = $("input:hidden[name=approvalHidden]").val();
+			
+			if(hiddenVal == "0") {
+				$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/뭐.png'>"); 
+				$("input:hidden[name=approvalHidden]").val("1");
+			}
+			else {
+				$(this).html("");
+				$("input:hidden[name=approvalHidden]").val("0");
+			}
+		});
+		
 	}); // end of $(document).ready(function(){})----------------------
 	
 	// 제출하기 버튼의 onclick
@@ -87,7 +112,7 @@
 	    			
 	    				<tr>
 	    					<th rowspan="2" class="hdth">결재</th> 
-	    					<th class="hdth">작성자</th>
+	    					<th class="hdth">결재자</th>
 	    					<th class="hdth"></th>
 	    					<th class="hdth"></th>
 	    					<th class="hdth"></th>
@@ -99,24 +124,40 @@
 	    					<td class="hdth"></td>
 	    					<td class="hdth"></td>
 	    				</tr>
-	    			
+	    		
+	    				<tr>
+	    					<th rowspan="2" class="hdth">결재란</th>  
+	    				</tr>
+	    				
+	    				<tr>
+	    					<td class="hdth approvalImg">	    						
+	    					</td>
+	    					<td class="hdth approvalImg">	    						
+	    					</td>
+	    					<td class="hdth approvalImg">	    						
+	    					</td>
+	    					<td class="hdth approvalImg">	    						
+	    					</td>
+	    				</tr>
 	    		</table>
 	    		
 	    		
 	    		<div id="ptLineAdd">
-	    			<button type="button" style="color: #333333; border-radius: 5px;">결재라인 추가</button>
+	    			<div><button type="button" style="color: #333333; border-radius: 5px;">결재라인 추가</button></div><br/>
 	    		</div>
+	    		<br/><br/>
 	    		
 	    		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
-			  		<div class="col-sm-4" style=""></div>
-	  		  		<div class="col-sm-8" style=""></div>	
 		 		</div>
 		 		
+		 		<!-- 현재년도 -->
+				<c:set var="now" value="<%=new java.util.Date()%>" />
+				<c:set var="sysYear"><fmt:formatDate value="${now}" pattern="yyyy-MM-dd" /></c:set>
 		 		<table class="title2">
 		 			<tbody>
 		 				<tr>
 		 					<td class="title2Td1">기안일자</td>
-		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" /></td>
+		 					<td class="title2Td">&nbsp;<input id="" name="" readonly style="border: none;" value="${sysYear}" /></td>
 		 				</tr>
 		 				
 		 				<tr>
@@ -183,7 +224,7 @@
 	
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	
 			<br/><br/><br/> 
-		<div></div>	
+		<div><input type="hidden" name="approvalHidden" class="approvalHidden" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
 	</div>
 </body>
 </html>
