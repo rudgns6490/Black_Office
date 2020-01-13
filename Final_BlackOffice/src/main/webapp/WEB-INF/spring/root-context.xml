@@ -18,7 +18,7 @@
 	<!-- ====  myBatis(JDBC)설정 mapper 파일 위치 지정하기  ==== -->
 	<!-- mapper 파일이란 sql 문을 가지고 있는 xml 파일을 말한다. -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="mapperLocations" value="classpath*:com/test/startspring/mapper/*.xml" />
+		<property name="mapperLocations" value="classpath*:com/bo/common/mapper/*.xml" />
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 		
@@ -27,28 +27,25 @@
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 	
-	
-	
-	
 	<!-- ====  myBatis(JDBC)설정 연결문자열 설정하기  ==== -->
-	<bean id="payment_report_Source" class="org.apache.commons.dbcp.BasicDataSource">
+	<bean id="dataSource2" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:xe" />
-		<property name="username" value="myorauser" />
-		<property name="password" value="eclass" /> 
-	</bean> 
+		<property name="url" value="jdbc:oracle:thin:@192.168.50.65:1521:xe" />
+		<property name="username" value="blackoffice" />
+		<property name="password" value="eclass" />
+	</bean>
 	
-	<!-- ====  myBatis(JDBC)설정 결재, 보고 관련 mapper  ==== -->
+	<!-- ====  myBatis(JDBC)설정 mapper 파일 위치 지정하기  ==== -->
 	<!-- mapper 파일이란 sql 문을 가지고 있는 xml 파일을 말한다. -->
-	<bean id="sqlpayment_reportSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="mapperLocations" value="classpath*:com/bo/payment_report/mapper/*.xml" />
-		<property name="dataSource" ref="payment_report_Source"/>
+	<bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="mapperLocations" value="classpath*:com/bo/common/mapper/*.xml" />
+		<property name="dataSource" ref="dataSource2"/>
 	</bean>
 		
-	<!-- ====  myBatis(JDBC)설정 sqlpayment_reportSessionFactory 의존 객체 설정 ==== -->
-	<bean id="sqlpayment_report" class="org.mybatis.spring.SqlSessionTemplate"> 
-		<constructor-arg index="0" ref="sqlpayment_reportSessionFactory" />
-	</bean>
+	<!-- ====  myBatis(JDBC)설정 sqlSessionTemplate 의존 객체 설정 ==== -->
+	<bean id="sqlsession2" class="org.mybatis.spring.SqlSessionTemplate"> 
+		<constructor-arg index="0" ref="sqlSessionFactory2" />
+	</bean>	
 		
 		
 </beans>
