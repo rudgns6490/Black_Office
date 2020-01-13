@@ -8,7 +8,7 @@
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="template.jsp">
+        <a class="nav-link" href="<%= ctxPath%>/main.action">
           <span>HOME</span>
         </a>
       </li>
@@ -101,7 +101,7 @@
           <span>통계</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="">지출통계</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/admintotalexpenditure.action">지출통계</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>
@@ -112,11 +112,11 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <h5 style="font-weight: bold;" class="dropdown-header">조직관리</h5>
-          <a class="dropdown-item" href="">직위관리</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/positionmanagement.action">직위관리</a>
           <h5 style="font-weight: blod;" class="dropdown-header">인사관리</h5>
-          <a class="dropdown-item" href="">입사처리</a>
-          <a class="dropdown-item" href="">인사이동</a>
-          <a class="dropdown-item" href="">인사관리내역</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/joinSawon.action">입사처리</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/personnelAnnouncement.action">인사이동</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/personnelAnnouncementList.action">인사관리내역</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>
