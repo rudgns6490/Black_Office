@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+/* 제목, 검색조건, 검색버튼   */
+	fieldset {
+		text-align: left;
+	}
+	
+	legend {
+		font-size: 24pt;
+	}		
+	
+	/* 쓰기버튼 */
+	#btn_write{
+		text-align: center;
+	}
