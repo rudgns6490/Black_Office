@@ -90,7 +90,7 @@
 			var hiddenVal = $("input:hidden[name=approvalHidden]").val();
 			
 			if(hiddenVal == "0") {
-				$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/체크이미지.png'>"); 
+				$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/뭐.png'>"); 
 				$("input:hidden[name=approvalHidden]").val("1");
 			}
 			else {
@@ -211,7 +211,7 @@
 	    		<h2 class ="printAlign" style="border-bottom: solid 1px blue; color:#3399ff; padding: 18px; 0px;">보고서</h2>
 	    		
 	    		<form name="submitFrm">	
-	    		<table class="headertable">
+	    		<!-- <table class="headertable">
 	    			
 	    				<tr>
 	    					<th rowspan="2" class="hdth">결재</th> 
@@ -242,14 +242,14 @@
 	    					<td class="approvalImg">	    						
 	    					</td>
 	    				</tr>
-	    		</table>
+	    		</table>  
 	    		
 	    		
 	    		<div id="ptLineAdd">
 	    			<div><button type="button" style="color: #333333; border-radius: 5px;">결재라인 추가</button></div><br/>
 	    		</div>
 	    		<br/><br/>
-	    		
+	    		--> 
 	    		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
 		 		</div>
 		 		
@@ -273,6 +273,14 @@
 		 				<tr>
 		 					<td class="title2Td1">소속</td>
 		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" /></td>
+		 				</tr>
+		 				
+		 				<tr>
+		 					<td class="title2Td1">수신직원</td>
+		 					<td class="title2Td">
+		 						&nbsp;&nbsp;<button type="button" name="" style="border-radius:3px; background-color: #0099cc; color: #fff; border: solid 1px #0099cc;">수신자 추가</button> 
+		 						&nbsp;&nbsp;<input type="text" class="" name="" value="" readonly style="border: none;"/> 
+		 					</td>
 		 				</tr>
 		 				
 		 				<tr>
@@ -330,8 +338,7 @@
 		</div>	
 			<br/> <!-- 아래여백을 주기위함  -->
 		<div class="save">
-			<button type="button" class="saveBtn" onclick="save()">저장</button>&nbsp;
-			<button type="button" class="saveBtn2" onclick="temporary()">임시저장</button>&nbsp;
+			<button type="button" class="saveBtn" onclick="save()">저장</button>&nbsp; 
 			<button type="button" class="saveBtn" onclick="preview('보고서')">미리보기</button>&nbsp;
 			<button type="button" class="saveBtn2" onclick="javascript:history.go(0);">취소</button>
 		</div>

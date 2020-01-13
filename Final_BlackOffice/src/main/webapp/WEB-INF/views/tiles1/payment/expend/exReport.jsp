@@ -46,7 +46,7 @@
 	
 	.headertable th { background-color: #e0ebeb;}	
 	.hdth { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
-	.hdtd { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
+	.hdtd , .hdtd0 , .hdtd1 , .hdtd2 , .hdtd3 { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
 	.approvalImg { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
 	.headertable {float: right; margin-top:20px;}
 	
@@ -80,8 +80,9 @@
 
 <script type="text/javascript">
 
+
 	$(document).ready(function(){
-		
+
 		$(".title").focus();
 		$("input:radio[id=tableRadio]").prop("checked",true);
 		
@@ -122,29 +123,56 @@
 		
 		// 결재란 td 클릭시 이미지 넣어주기
 		$(".approvalImg").click(function(){
+			var clickIndex = $(this).index();
 			
-			var appr_length = $("input:hidden[name = approvalHidden]").length;
-			for(var i=0; i<appr_length; i++) {
+			if($(".hdtd"+clickIndex+"").text().length > 1) { 
+				var appr_length = $("input:hidden[name = approvalHidden]").length;
 				
-				var hiddenVal = $("input:hidden[class=approvalHidden"+i+"]").val();
+					var hiddenVal = $("input:hidden[class=approvalHidden"+clickIndex+"]").val();
+					
+					if(hiddenVal == "0") {
+						$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/뭐.png'>"); 
+						$("input:hidden[class=approvalHidden"+clickIndex+"]").val("1");	
+					}
+					else {
+						$(this).html("");
+						$("input:hidden[class=approvalHidden"+clickIndex+"]").val("0");
+					}
+					
+				//	alert($("input:hidden[class=approvalHidden"+clickIndex+"]").val());
+				
+					/* 결재상태 status */
+					/* var bool = !$("input:hidden[class=approvalHidden"+clickIndex+"]").val().empty;
+					var imgVal = $("input:hidden[class=approvalHidden"+clickIndex+"]").val(); */
+					
+				//	console.log($("td.approvalImg")[0] || $("td.approvalImg")[1] )
+				//	console.log($(".approvalHidden")[0].val());
+				
+				//	var flag= false;
+					
+					
+				// 4 
+			/* 		 for(var i=0; i<appr_length-1; i++) {
+						 var flag = false;
+						 if($("#approvalImg"+i+"").val() != "1") {
+							flag = false;
+							return false;		// break				
+						}
+					}
+				
+				if(flag == true) {
+					$(".statusHidFrm").val("1");
+				}	
+				
+				console.log($(".statusHidFrm").val());
+				
+				} */
+		}
 			
-				if(hiddenVal == "0") {
-					$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/체크이미지.png'>"); 
-					$("input:hidden[class=approvalHidden"+i+"]").val("1");
-				}
-				else {
-					$(this).html("");
-					$("input:hidden[class=approvalHidden"+i+"]").val("0");
-				}
+			else {
+				alert("결재자가 비어 있습니다.");
 			}
-			var hdtdLength = $(".hdtd").text().length;
-			var imgLength = $(".approvalImg").text().length;
-		//	alert(imgLength);
-		
 		});
-		
-		
-		
 		
 	});// end of $(document).ready(function(){})------------------------------------
 	
@@ -193,6 +221,15 @@
 	
 	// 제출하기 버튼의 onclick
 	function save() {
+		
+		for(var i=0; i<n; i++) {
+			if($("#approvalImg"+ i+"").val() == "0") {
+				alert("결제자를 확인해주세여"); 
+				return false; 
+			} 
+		}
+		
+		
 		var frm = document.submitFrm;
 		frm.method = "POST";
 		frm.action = "<%= ctxPath%>/maintest.action";
@@ -247,36 +284,41 @@
 	    		
 	    		<form name="submitFrm">
 	    		<table class="headertable">
-	    			
+	    				<thead>
+	    				
 	    				<tr>
 	    					<th rowspan="2" class="hdth">결재</th> 
 	    					<th class="hdth">결재자</th>
 	    					<th class="hdth"></th>
 	    					<th class="hdth"></th>
 	    					<th class="hdth"></th>
-	    				</tr>	
-	    			
+	    					
+	    				</tr> 
+	    				
 	    				<tr>
-	    					<td class="hdtd">a</td> 
-	    					<td class="hdtd">b</td> 
-	    					<td class="hdtd"></td>
-	    					<td class="hdtd"></td>
-	    				</tr>
-	    			
+	    					<td class="hdtd hdtd0">김차장</td>  
+	    					<td class="hdtd hdtd1">박차장</td> 
+	    					<td class="hdtd hdtd2"></td> 
+	    					<td class="hdtd hdtd3"></td>
+	    				</tr>	
+	    				</thead>
+
+	    				<tbody>
 	    				<tr>
 	    					<th rowspan="2" class="hdth">결재란</th>  
 	    				</tr>
 	    				
-	    				<tr>
+	    				<tr id="test">
 	    					<td class="approvalImg">	    						
 	    					</td>
 	    					<td class="approvalImg">	    						
 	    					</td>
-	    					<td class="approvalImg">	    						
+	    					<td class="approvalImg">  						
 	    					</td>
-	    					<td class="approvalImg">	    						
+	    					<td class="approvalImg">    						
 	    					</td>
 	    				</tr>
+	    				</tbody>
 	    		</table>
 	    		
 	    		
@@ -376,7 +418,7 @@
 			<br/> <!-- 아래여백을 주기위함  -->
 		<div class="save">
 			<button type="button" class="saveBtn" onclick="save()">제출하기</button>&nbsp;
-			<button type="button" class="saveBtn2" onclick="temporary()">저장하기</button>&nbsp;
+			<button type="button" class="saveBtn2" onclick="javascript:history.go(0);">취소</button>&nbsp;
 		</div>
 	
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	
@@ -384,7 +426,8 @@
 		<div><input type="hidden" name="approvalHidden" class="approvalHidden0" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
 		<div><input type="hidden" name="approvalHidden" class="approvalHidden1" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
 		<div><input type="hidden" name="approvalHidden" class="approvalHidden2" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
-		<div><input type="hidden" name="approvalHidden" class="approvalHidden3" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
+		<div><input type="hidden" name="approvalHidden" class="approvalHidden3" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->
+		<div><input type="hidden" name="statusHidFrm" class="statusHidFrm" value="0" /></div> <!-- 결재상태 value  -->	
 	</div>
 </body>
 </html>
