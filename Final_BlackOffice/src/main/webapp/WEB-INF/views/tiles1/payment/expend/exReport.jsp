@@ -558,6 +558,91 @@
 		<div><input type="hidden" name="approvalHidden" class="approvalHidden3" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->
 		<div><input type="hidden" name="statusHidFrm" class="statusHidFrm" value="0" /></div> <!-- 결재상태 value  -->	
 	</div>
+<<<<<<< HEAD
+	
+
+<!-- 	결재라인추가 modal 시작		 -->
+
+<div class="container" >
+
+	<!-- Trigger the modal with a button -->
+	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"
+	style="width: 170px; height: 30px;">결재라인 추가</button>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button><%--	x로 닫기 버튼   --%>
+				<h6 class="modal-title">결재자추가</h6>
+			</div>
+			<div class="modal-body" style="background-color: #e6e6e6;">
+			
+				<div class="add_search">
+					<form action="">
+						<table class="add_search_table">
+							<tr>
+								<th>부서</th>
+								<td>
+									<select>
+										<option value="">부서 1</option>
+										<option value="">부서 2</option>
+										<option value="">부서 3</option>
+										<option value="">부서 4</option>
+										<option value="">부서 5</option>
+									</select>
+								</td>
+							</tr>
+							
+							<tr>
+								<th>성명</th>
+								<td>
+									<input type="text" name="" class="" />
+									<button type="button" class="add_search_btn">검색</button>
+									<input type="text" style="display: none;" />
+									
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				
+				<div class="add_result_List">
+					<table style="width: 100%;">
+						<thead>
+							<tr class="add_result_List_title">
+								<th>부서</th>
+								<th>성명</th>
+								<th>직위</th>
+							</tr>
+						</thead>
+						<tbody class="add_result_List_contents">
+							<tr>
+								<td>부서부서</td>
+								<td>너의 이름은?</td>
+								<td>레벨</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		  
+		</div>
+	</div>
+  
+</div>
+<!-- 	결재라인추가 modal 끝		 -->
+	
+	
+=======
+>>>>>>> branch 'master' of https://github.com/rudgns6490/Final_BlackOffice.git
 </body>
 </html>
 
