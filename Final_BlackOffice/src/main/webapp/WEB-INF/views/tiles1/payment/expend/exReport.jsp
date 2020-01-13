@@ -50,7 +50,7 @@
 	.approvalImg { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
 	.headertable {float: right; margin-top:20px;}
 	
-	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:150px; height: 35px; font-size: 15pt; }
+	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:300px; height: 35px; font-size: 15pt; }
 	.approval th{ background-color: #e0ebeb; font-size: 13pt; font-weight: bold; }
 	.approvalImg:hover { cursor: pointer; }
 	
@@ -76,6 +76,56 @@
 	.save { float: right; margin-right: 90px; }
 	.saveBtn { border: solid 1px #0099cc; border-radius:3px; padding: 5px 20px; background-color: #0099cc; color: #fff; }
 	.saveBtn2 {padding: 5px 20px; border: solid 1px #bfbfbf; border-radius:3px;}  
+	
+	
+	<!-- 	결재라인추가 modal css		 --> 
+	.add_search {background: white; border: 1px solid #e6e6e6; width: 100%;}
+	
+	.add_search > th {
+		font-family: 'Malgun Gothic', '맑은 고딕', 'Dotum', '돋움', sans-serif;
+		background: #007bff;
+	    min-width: 50px;
+	    width: 100px;
+	    padding: 10px;
+	    font-size: 13px;
+	    line-height: 17px;
+	    color: #fff;
+	    vertical-align: middle;
+	}
+	
+	.add_search > td {padding: 10px 10px 5px 10px;}
+	
+	.add_search_btn {
+		width: 80px;
+		height: 30px;
+		border: solid 1px #007bda;
+	    border-radius: 3px;
+	    box-sizing: border-box;
+	    background: #0083e7;
+	    color: #fff;
+	}
+	
+	.add_result_List {background: white;	border: 1px solid #e6e6e6; width: 97%;}
+	.add_result_List_title {
+		border-bottom: 1px solid #e6e6e6;
+	    background: #1c5691;
+	    font-weight: bold;
+	    font-size: 15px;
+	    line-height: 15px;
+	    color: #fff;
+	    text-align: center;
+	}
+	.add_result_List th {padding: 15px 0;}
+	.add_result_List_contents td {
+		padding: 7px 0;
+	    border-bottom: 1px solid #e6e6e6;
+	    background: #fff;
+	    font-size: 14px;
+	    line-height: 17px;
+	    color: #777777;
+	    text-align: center;
+	}
+	
 </style>
 
 <script type="text/javascript">
@@ -237,6 +287,7 @@
 	}
 	
 
+
 </script>
 
 
@@ -322,9 +373,86 @@
 	    		</table>
 	    		
 	    		
-	    		<div id="ptLineAdd">
+	    		<!-- <div id="ptLineAdd">
 	    			<div><button type="button" style="color: #333333; border-radius: 5px;">결재라인 추가</button></div><br/>
-	    		</div>
+	    		</div> -->
+	    		
+	 <!------ 	결재라인추가 modal 시작	-------------------------------	 -->
+		
+				<div class="container" id="ptLineAdd"> 
+					<!-- Trigger the modal with a button -->
+					<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" style="background-color: #0099cc;">결재라인 추가버튼</button>
+					
+					<!-- Modal -->
+					<div class="modal fade" id="myModal" role="dialog">
+						<div class="modal-dialog">
+						
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button><%--	x로 닫기 버튼   --%>
+								<h6 class="modal-title">결재자추가</h6>
+							</div>
+							<div class="modal-body" style="background-color: #e6e6e6;">
+							
+								<div class="add_search">
+									<form action="">
+										<table class="add_search_table">
+											<tr>
+												<th>부서</th>
+												<td>
+													<select>
+														<option value="">부서 1</option>
+														<option value="">부서 2</option>
+														<option value="">부서 3</option>
+														<option value="">부서 4</option>
+														<option value="">부서 5</option>
+													</select>
+												</td>
+											</tr>
+											
+											<tr>
+												<th>성명</th>
+												<td>
+													<input type="text" name="" class="" />
+													<button type="button" class="add_search_btn">검색</button>
+													<input type="text" style="display: none;" />
+													
+												</td>
+											</tr>
+										</table>
+									</form>
+								</div>
+								
+								<div class="add_result_List">
+									<table style="width: 100%;">
+										<thead>
+											<tr class="add_result_List_title">
+												<th>부서</th>
+												<th>성명</th>
+												<th>직위</th>
+											</tr>
+										</thead>
+										<tbody class="add_result_List_contents">
+											<tr>
+												<td>부서부서</td>
+												<td>너의 이름은?</td>
+												<td>레벨</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+						  
+						</div>
+					</div>
+				  
+				</div>
+				<!-- -----------	결재라인추가 modal 끝	------------------------------------------------------------	 -->
 	    		<br/><br/>
 	    		
 	    		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
@@ -338,7 +466,7 @@
 		 			<tbody>
 		 				<tr>
 		 					<td class="title2Td1">제출일자</td>
-		 					<td class="title2Td">&nbsp;<input id="" name="" readonly style="border: none;" value="${sysYear}" /></td>
+		 					<td class="title2Td">&nbsp;<input id="" name="ex_sysdt" readonly style="border: none;" value="${sysYear}" /></td>
 		 				</tr>
 		 				
 		 				<tr>
@@ -354,10 +482,10 @@
 		 				<tr>
 		 					<td class="title2Td1">지출 선택</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="radio" name="tableRadio" id="tableRadio" />&nbsp;
+		 						&nbsp;<input type="radio" name="ex_expend_ch" id="tableRadio" />&nbsp;
 		 						<span><label for="tableRadio" class="radioSpan">개인지출 경비</label></span>&nbsp;&nbsp;
 		 						
-		 						<input type="radio" name="tableRadio" id="tableRadio1" />&nbsp;
+		 						<input type="radio" name="ex_expend_ch" id="tableRadio1" />&nbsp;
 		 						<span><label for="tableRadio1" class="radioSpan">법인지출 경비</label></span>
 		 					</td>
 		 				</tr>
@@ -365,21 +493,21 @@
 		 				<tr>
 		 					<td class="title2Td1">지출일자</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="date" name="" />
+		 						&nbsp;<input type="date" name="ex_exp_dt" />
 		 					</td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">제목</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="text" name="title" class="title" style="width: 99%;" />
+		 						&nbsp;<input type="text" name="ex_title" class="title" style="width: 99%;" />
 		 					</td>
 		 				</tr>
 		 			 	
 		 				<tr>
 		 					<td colspan="2">
 		 						<div >
-	    							<iframe class="iframeDiv" ></iframe>
+	    							<iframe class="iframeDiv" name="ex_content" ></iframe>
 	    						</div>
 	    					</td>	
 		 				</tr> 
@@ -387,7 +515,7 @@
 		 				<tr>
 		 					<td class="title2Td1">부서공유</td>
 		 					<td class="title2Td">&nbsp;&nbsp;
-		 						<input type="checkbox" name="checkbox" style="width: 20px; height: 20px; position: relative; top: 6.5px;" id="use"/>&nbsp;
+		 						<input type="checkbox" name="ex_share" style="width: 20px; height: 20px; position: relative; top: 6.5px;" id="use"/>&nbsp;
 		 						<label for="use" style="font-size: 13pt; color:#4c4c4c; position: relative; top: 3.0px;">사용</label>&nbsp;
 		 						<span style="color: red; position: relative; top: 1.5px;">[선택 시 문서가 작성자의 소속 부서원들에게 공유되며, 해당문서는 부서결재함에서 확인이 가능합니다.]</span>
 		 					</td>
@@ -411,8 +539,9 @@
 		 		</form>
 		 		<br/>
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	 		
-	    	</div>	
 	    	
+		
+	    	</div>	
 		</div> 
 		</div>	
 			<br/> <!-- 아래여백을 주기위함  -->
@@ -429,150 +558,7 @@
 		<div><input type="hidden" name="approvalHidden" class="approvalHidden3" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->
 		<div><input type="hidden" name="statusHidFrm" class="statusHidFrm" value="0" /></div> <!-- 결재상태 value  -->	
 	</div>
-	
-
-<!-- 	결재라인추가 modal 시작		 -->
-
-<div class="container" >
-
-	<h2>Modal Example</h2>
-	<!-- Trigger the modal with a button -->
-	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">결재라인 추가버튼</button>
-	
-	<!-- Modal -->
-	<div class="modal fade" id="myModal" role="dialog">
-		<div class="modal-dialog">
-		
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button><%--	x로 닫기 버튼   --%>
-				<h6 class="modal-title">결재자추가</h6>
-			</div>
-			<div class="modal-body" style="background-color: #e6e6e6;">
-			
-				<div class="add_search">
-					<form action="">
-						<table class="add_search_table">
-							<tr>
-								<th>부서</th>
-								<td>
-									<select>
-										<option value="">부서 1</option>
-										<option value="">부서 2</option>
-										<option value="">부서 3</option>
-										<option value="">부서 4</option>
-										<option value="">부서 5</option>
-									</select>
-								</td>
-							</tr>
-							
-							<tr>
-								<th>성명</th>
-								<td>
-									<input type="text" name="" class="" />
-									<button type="button" class="add_search_btn">검색</button>
-									<input type="text" style="display: none;" />
-									
-								</td>
-							</tr>
-						</table>
-					</form>
-				</div>
-				
-				<div class="add_result_List">
-					<table style="width: 100%;">
-						<thead>
-							<tr class="add_result_List_title">
-								<th>부서</th>
-								<th>성명</th>
-								<th>직위</th>
-							</tr>
-						</thead>
-						<tbody class="add_result_List_contents">
-							<tr>
-								<td>부서부서</td>
-								<td>너의 이름은?</td>
-								<td>레벨</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-		  
-		</div>
-	</div>
-  
-</div>
-<!-- 	결재라인추가 modal 끝		 -->
-	
-	
 </body>
-
-
-
-
-<!-- 	결재라인추가 modal css		 -->
-<style type="text/css">
-
- 	.add_search {background: white; border: 1px solid #e6e6e6; width: 100%;}
-	
-	.add_search > th {
-		font-family: 'Malgun Gothic', '맑은 고딕', 'Dotum', '돋움', sans-serif;
-		background: #007bff;
-	    min-width: 50px;
-	    width: 100px;
-	    padding: 10px;
-	    font-size: 13px;
-	    line-height: 17px;
-	    color: #fff;
-	    vertical-align: middle;
-	}
-	
-	.add_search > td {padding: 10px 10px 5px 10px;}
-	
-	.add_search_btn {
-		width: 80px;
-		height: 30px;
-		border: solid 1px #007bda;
-	    border-radius: 3px;
-	    box-sizing: border-box;
-	    background: #0083e7;
-	    color: #fff;
-	}
-	
-	.add_result_List {background: white;	border: 1px solid #e6e6e6; width: 97%;}
-	.add_result_List_title {
-		border-bottom: 1px solid #e6e6e6;
-	    background: #1c5691;
-	    font-weight: bold;
-	    font-size: 15px;
-	    line-height: 15px;
-	    color: #fff;
-	    text-align: center;
-	}
-	.add_result_List th {padding: 15px 0;}
-	.add_result_List_contents td {
-		padding: 7px 0;
-	    border-bottom: 1px solid #e6e6e6;
-	    background: #fff;
-	    font-size: 14px;
-	    line-height: 17px;
-	    color: #777777;
-	    text-align: center;
-	}
-	
-	
-	
-</style>
-
-
-
-
 </html>
 
 
