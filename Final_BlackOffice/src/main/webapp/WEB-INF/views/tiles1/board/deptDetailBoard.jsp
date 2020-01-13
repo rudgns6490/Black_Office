@@ -6,7 +6,7 @@
 	String ctxPath = request.getContextPath();
 %>
 	
-  <link href="<%= ctxPath %>/resources/css/noticeBoard.css" rel="stylesheet"><!-- 부서별 css 생성하거나 공콩 css로 통일 -->
+  <link href="<%= ctxPath %>/resources/css/Board.css" rel="stylesheet"><!-- 부서별 css 생성하거나 공콩 css로 통일 -->
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -46,7 +46,9 @@
 				
 				</tbody>
 			</table>
-			<div align="right" style="margin-right: 50px;" >
+			<div align="right" style="margin-right: 50px;" >	
+				<button type="button" class="btn btn_modify btn-primary" id="btn_modify" style="width: 10%; display: inline-block;">수정</button>
+				<button type="button" class="btn btn_delete btn-primary" id="btn_delete" style="width: 10%; display: inline-block;">삭제</button>
 				<button type="button" class="btn btn_write btn-primary" id="btn_write" style="width: 10%; display: inline-block; " >목록</button>
 			</div>
 			
@@ -62,11 +64,7 @@
 					<button type="button" class="btn btn_commentsave btn-primary" id="btn_commentsave" style="width: 50%; height: 150%; display: inline-block;">댓글 등록</button>
 				</div>
 			</div>
-			<div align="right" style="margin-right: 50px; margin-top: 25px;" >
-				<button type="button" class="btn btn_write btn-primary" id="btn_write" style="width: 10%; display: inline-block;">쓰기</button>
-				<button type="button" class="btn btn_modify btn-primary" id="btn_modify" style="width: 10%; display: inline-block;">수정</button>
-				<button type="button" class="btn btn_delete btn-primary" id="btn_delete" style="width: 10%; display: inline-block;">삭제</button>
-			</div>	
+			
 			<!-- style="padding: 50px;" -->
 			<div class="" style="margin-top: 25px;">
 				<table class="commentTable table-bordered">
