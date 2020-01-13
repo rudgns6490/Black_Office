@@ -14,22 +14,35 @@ public class BoardController {
 		return "board/noticeBoard.tiles1";
 	}
 	
+	//공지 게시판
+	@RequestMapping(value="/noticeDetailBoard.action")
+	public String noticeDetailBoard() {
+		return "board/noticeDetailBoard.tiles1";
+	}
+	
+	//공지 작성
+	@RequestMapping(value="/noticeBoardWrite.action")
+	public String noticeBoardWrite() {
+		return "board/noticeBoardWrite.tiles1";
+	}
+	
 	//부서별 게시판 목록
 	@RequestMapping(value="/deptBoard.action")
 	public String deptBoard() {
 		return "board/deptBoard.tiles1";
 	}
 	
-	//공지 게시판
-	@RequestMapping(value="/noticeDetailBoard.action")
-	public String noticeDetailBoard() {
-		return "board/noticeDetailBoard.tiles1";
-	}
-		
 	//부서별 게시판
 	@RequestMapping(value="/deptDetailBoard.action")
 	public String deptDetailBoard() {
 		return "board/deptDetailBoard.tiles1";
 	}
+	
+	//부서별 게시판
+	@RequestMapping(value="/deptBoardWrite.action")
+	public String deptBoardWrite() {
+		return "board/deptBoardWrite.tiles1";
+	}
 			
 }
+
