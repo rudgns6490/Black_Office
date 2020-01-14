@@ -5,36 +5,5 @@
 <mapper namespace="schedule"> 
 
 
-	<!-- 개인일정 가져오기  -->
-	<select id="individualScheduleJSONList" resultType="com.bo.schedule.model.ScheduleVO" >
-
-		select schedule_no, user_no,  schedule_title,  schedule_content,
-		     TO_CHAR(schedule_start, 'yyyy-mm-dd"T"hh24:mi:ss') as schedule_start,
-		     TO_CHAR(schedule_end, 'yyyy-mm-dd"T"hh24:mi:ss') as schedule_end,
-		     schedule_color, schedule_importance, schedule_progresStat, schedule_allday,
-		     schedule_authority, schedule_type
-		from tbl_fsemi_schedule 
-		where schedule_type = 0 and user_no = 1 
-	</select>
-	
-	
-	
-	<insert id="addCalendaraddSchedule" parameterType="com.bo.schedule.model.ScheduleVO">
-	
-		insert into tbl_fsemi_schedule(schedule_no, user_no,  schedule_title,  schedule_content,  schedule_start,                       
-                    schedule_end, schedule_color, schedule_importance, schedule_progresStat, schedule_allday,                   
-                    schedule_authority, schedule_type)                                                                          
-		values(seq_fsemi_schedul.nextval, #{user_no}, #{}, ?, to_date(?,'yyyy-mm-dd hh24:mi:ss'),
-		        to_date(?, 'yyyy-mm-dd hh24:mi:ss'), ?, 0, 0, ?,
-		        0, ?)
-	
-	</insert>
-
-
-
-
-
-
-
 
 </mapper>
