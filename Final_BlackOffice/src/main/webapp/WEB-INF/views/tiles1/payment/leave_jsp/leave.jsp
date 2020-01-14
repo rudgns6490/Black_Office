@@ -418,7 +418,7 @@ $(document).ready(function(){
 		 				<tr> 
 		 					<td class="title2Td1">제목</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="text" name="title" class="title" style="width: 99%;" />
+		 						&nbsp;<input type="text" name="title" class="title" style="width: 99%;" autocomplete="off" />
 		 					</td>
 		 				</tr>
 		 				
@@ -468,7 +468,7 @@ $(document).ready(function(){
 			<br/> <!-- 아래여백을 주기위함  -->
 		<div class="save">
 			<button type="button" class="saveBtn" onclick="save()">제출하기</button>&nbsp;
-			<button type="button" class="saveBtn2" onclick="temporary()">저장하기</button>
+			<button type="button" class="saveBtn2" onclick="javascript:history.go(0);">취소</button>
 		</div>
 	
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	
