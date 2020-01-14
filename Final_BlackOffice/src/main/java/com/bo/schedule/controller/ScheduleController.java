@@ -91,7 +91,7 @@ public class ScheduleController {
 
 
 	// 일정드랍 event시 이벤트 2020/01/13 hjp
-	@RequestMapping(value="/calendarDropUpdate.action")
+	/*@RequestMapping(value="/calendarDropUpdate.action")
 	public String calendarDropUpdate(HttpServletRequest request) { 
 
 
@@ -122,7 +122,7 @@ public class ScheduleController {
 
 
 		return "schedule/jsonResult.tiles1";
-	}
+	}*/
 
 
 	/*

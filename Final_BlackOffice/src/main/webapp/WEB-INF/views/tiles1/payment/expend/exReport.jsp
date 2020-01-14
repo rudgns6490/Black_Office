@@ -78,10 +78,12 @@
 	.saveBtn2 {padding: 5px 20px; border: solid 1px #bfbfbf; border-radius:3px;}  
 	
 	
-	/* 	결재라인추가 modal css		   */ 
-	.add_search {background: white; border: 1px solid #e6e6e6; width: 100%;}
+	/* 	결재라인추가 modal css	  */ 
+	.add_search {background: white; border: 1px solid #e6e6e6; width: 100%; margin-bottom: 10px;}
 	
-	.add_search > th {
+	.add_search_table {border-style: none; }
+	
+	.add_search th {
 		font-family: 'Malgun Gothic', '맑은 고딕', 'Dotum', '돋움', sans-serif;
 		background: #007bff;
 	    min-width: 50px;
@@ -92,8 +94,10 @@
 	    color: #fff;
 	    vertical-align: middle;
 	}
+		
+	.add_search td {padding: 10px; vertical-align: text-top;}
 	
-	.add_search > td {padding: 10px 10px 5px 10px;}
+	.add_search_name { font-size: 12pt; }
 	
 	.add_search_btn {
 		width: 80px;
@@ -103,6 +107,7 @@
 	    box-sizing: border-box;
 	    background: #0083e7;
 	    color: #fff;
+	    font-size: 12pt;
 	}
 	
 	.add_result_List {background: white;	border: 1px solid #e6e6e6; width: 97%;}
@@ -403,7 +408,7 @@
 											<tr>
 												<th>성명</th>
 												<td>
-													<input type="text" name="" class="" />
+													<input type="text" name="name" class="add_search_name" />
 													<button type="button" class="add_search_btn">검색</button>
 													<input type="text" style="display: none;" />
 													
