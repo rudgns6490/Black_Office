@@ -16,7 +16,7 @@ import com.bo.payment_report.service.InterPayment_Report_Service;
 그리고 bean의 이름(첫글자는 소문자)은 해당 클래스명이 된다. */
 @Component
 @Controller
-public class Payment_Report_Controller {
+public class Payment_Report_Controller { 
 	
 	// === #35. 의존객체 주입하기(DI: Dependency Injection) ===
 	@Autowired   // Type에 따라 알아서 Bean 을 주입해준다.
