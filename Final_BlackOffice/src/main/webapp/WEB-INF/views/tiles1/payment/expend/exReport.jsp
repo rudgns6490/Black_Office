@@ -132,7 +132,7 @@
 
 
 	$(document).ready(function(){
-
+		
 		$(".title").focus();
 		$("input:radio[id=tableRadio]").prop("checked",true);
 		
@@ -189,40 +189,29 @@
 						$("input:hidden[class=approvalHidden"+clickIndex+"]").val("0");
 					}
 					
-				//	alert($("input:hidden[class=approvalHidden"+clickIndex+"]").val());
 				
-					/* 결재상태 status */
-					/* var bool = !$("input:hidden[class=approvalHidden"+clickIndex+"]").val().empty;
-					var imgVal = $("input:hidden[class=approvalHidden"+clickIndex+"]").val(); */
-					
-				//	console.log($("td.approvalImg")[0] || $("td.approvalImg")[1] )
-				//	console.log($(".approvalHidden")[0].val());
-				
-				//	var flag= false;
-					
-					
-				// 4 
-			/* 		 for(var i=0; i<appr_length-1; i++) {
-						 var flag = false;
-						 if($("#approvalImg"+i+"").val() != "1") {
-							flag = false;
-							return false;		// break				
-						}
-					}
-				
-				if(flag == true) {
-					$(".statusHidFrm").val("1");
-				}	
-				
-				console.log($(".statusHidFrm").val());
-				
-				} */
-		}
+			}
 			
 			else {
 				alert("결재자가 비어 있습니다.");
 			}
 		});
+		
+		
+		// 결재라인 추가시 <select> <option> 부서 넣어주기
+		$.ajax({
+			url:"<%= ctxPath%>/addAprroval.action",
+			type:"GET",
+			dataType:"JSON",
+			success:function(json){
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		}); // end of ajax({})-------------------------------------------------
+		
+		
 		
 	});// end of $(document).ready(function(){})------------------------------------
 	
@@ -390,23 +379,22 @@
 						<!-- Modal content-->
 						<div class="modal-content">
 							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button><%--	x로 닫기 버튼   --%>
+								<button type="button" class="close" data-dismiss="modal" >&times;</button><%--	x로 닫기 버튼   --%>
 								<h6 class="modal-title">결재자추가</h6>
 							</div>
 							<div class="modal-body" style="background-color: #e6e6e6;">
 							
 								<div class="add_search">
-									<form action="">
 										<table class="add_search_table">
 											<tr>
 												<th>부서</th>
 												<td>
-													<select>
-														<option value="">부서 1</option>
-														<option value="">부서 2</option>
-														<option value="">부서 3</option>
-														<option value="">부서 4</option>
-														<option value="">부서 5</option>
+													<select class="addApproval">
+														<!-- <option onclick="" value="">부서 1</option>
+														<option onclick="" value="">부서 2</option>
+														<option onclick="" value="">부서 3</option>
+														<option onclick="" value="">부서 4</option>
+														<option onclick="" value="">부서 5</option> -->
 													</select>
 												</td>
 											</tr>
@@ -421,7 +409,6 @@
 												</td>
 											</tr>
 										</table>
-									</form>
 								</div>
 								
 								<div class="add_result_List">
@@ -558,6 +545,15 @@
 		<div><input type="hidden" name="approvalHidden" class="approvalHidden3" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->
 		<div><input type="hidden" name="statusHidFrm" class="statusHidFrm" value="0" /></div> <!-- 결재상태 value  -->	
 	</div>
+	
+	
+	<form>	<!-- Modal 을 위해 숨긴 form 태그 -->
+		<input type="hidden" />
+		<input type="hidden" />
+		<input type="hidden" />
+		<input type="hidden" />
+	</form>
+	
 </body>
 </html>
 
