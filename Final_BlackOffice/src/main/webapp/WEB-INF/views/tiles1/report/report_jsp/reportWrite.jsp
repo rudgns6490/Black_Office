@@ -261,35 +261,35 @@
 		 			<tbody>
 		 				<tr>
 		 					<td class="title2Td1">제출일자</td>
-		 					<td class="title2Td">&nbsp;<input id="" name="" readonly style="border: none;" value="${sysYear}" /></td>
+		 					<td class="title2Td">&nbsp;<input id="" name="reportday" readonly style="border: none;" value="${sysYear}" /></td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">제출자</td>
 		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" value="${sessionScope.loginuser.name}" />
-		 					<input type="hidden" id="" name="fk_userid" readonly style="border: none;" value="${sessionScope.loginuser.userid}" /></td>
+		 					<input type="hidden" id="" name="fk_employeeno" readonly style="border: none;" value="${sessionScope.loginuser.employeeno}" /></td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">소속</td>
-		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" /></td>
+		 					<td class="title2Td"><input id="" name="departmentname" readonly style="border: none;" /></td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">수신직원</td>
 		 					<td class="title2Td">
 		 						&nbsp;&nbsp;<button type="button" name="" style="border-radius:3px; background-color: #0099cc; color: #fff; border: solid 1px #0099cc;">수신자 추가</button> 
-		 						&nbsp;&nbsp;<input type="text" class="" name="" value="" readonly style="border: none;"/> 
+		 						&nbsp;&nbsp;<input type="text" class="" name="addressee" value="" readonly style="border: none;"/> 
 		 					</td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">보고서 선택</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="radio" name="tableRadio" class="radioSpan" id="tableRadio" value="" />&nbsp;
+		 						&nbsp;<input type="radio" name="reporttype" class="radioSpan" id="tableRadio" value="0" />&nbsp;
 		 						<span><label for="tableRadio" class="radioSpan">일일 보고서</label></span>&nbsp;&nbsp;
 		 						
-		 						<input type="radio" name="tableRadio" class="radioSpan" id="tableRadio1" value="" />&nbsp;
+		 						<input type="radio" name="reporttype" class="radioSpan" id="tableRadio1" value="1" />&nbsp;
 		 						<span><label for="tableRadio1" class="radioSpan">주간 보고서</label></span>
 		 					</td>
 		 				</tr>
@@ -313,7 +313,7 @@
 		 				<tr>
 		 					<td class="title2Td1">메모</td>
 		 					<td class="title2Td" align="center">&nbsp;&nbsp;
-		 						<textarea id="memo" name="" style="width: 95%; height: 90%; position: relative; top: 3.0px; right: 7px;"></textarea> 
+		 						<textarea id="memo" name="memo" style="width: 95%; height: 90%; position: relative; top: 3.0px; right: 7px;"></textarea> 
 		 					</td>
 		 				</tr>
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	 				 
