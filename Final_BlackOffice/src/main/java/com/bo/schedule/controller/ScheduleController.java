@@ -91,7 +91,7 @@ public class ScheduleController {
 
 
 	// 일정드랍 event시 이벤트 2020/01/13 hjp
-	@RequestMapping(value="/calendarDropUpdate.action")
+	/*@RequestMapping(value="/calendarDropUpdate.action")
 	public String calendarDropUpdate(HttpServletRequest request) { 
 
 
@@ -103,14 +103,14 @@ public class ScheduleController {
 
 		Inter_ScheduleDAO dao = new ScheduleDAO(); 
 
-		int n = dao.updateDropCalendarSchedule(schedulevo); 
+	//	int n = dao.updateDropCalendarSchedule(schedulevo); 
 
 		JSONObject jsobj = new JSONObject();
 
-		if( n == 1) 
+	//	if( n == 1) 
 			jsobj.put("result", true); 
 
-		else 
+	//	else 
 			jsobj.put("result", false); 
 
 
@@ -122,7 +122,7 @@ public class ScheduleController {
 
 
 		return "schedule/jsonResult.tiles1";
-	}
+	}*/
 
 
 	/*
