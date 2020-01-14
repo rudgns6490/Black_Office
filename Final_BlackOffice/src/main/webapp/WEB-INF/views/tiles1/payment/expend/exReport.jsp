@@ -32,7 +32,7 @@
    	.Td1 { width: 80%; background-color: #fff;} 
 	.Td2 { background-color: #e0ebeb; text-align: center; font-size: 15pt; color: #333333; }
 	.radioCursor:hover { cursor: pointer; }
-	/*----------------------------------------------------------------------------------------------  */
+	/* ----------------------------------------------------------------------------------------------  */
 	
 	.headertable th,td {
 		border: solid 1px #639c9c;
@@ -61,7 +61,7 @@
 	.title2Td1 { background-color: #e0ebeb; text-align: center; font-size: 15pt; color: #333333; }
 	.iframeDiv { width: 100%; height: 500px; } 
 	
-	/*----------------------------------------------------------------------------------------------  */
+	/* ----------------------------------------------------------------------------------------------  */
 	
 	.title {
 		background: url(<%= request.getContextPath() %>/resources/images/체크이미지.png) no-repeat 3px center; 
@@ -72,13 +72,13 @@
 	#tableRadio, #tableRadio1, .radioSpan { position: relative; top: 4.5px; } 
 	
 	
-	/*--- 아래 저장버튼 -----------------------------------------------------------------------------------------  */
+	/*--- 아래 저장버튼 --------------------------------------------------------------------------------  */
 	.save { float: right; margin-right: 90px; }
 	.saveBtn { border: solid 1px #0099cc; border-radius:3px; padding: 5px 20px; background-color: #0099cc; color: #fff; }
 	.saveBtn2 {padding: 5px 20px; border: solid 1px #bfbfbf; border-radius:3px;}  
 	
 	
-	/* 	결재라인추가 modal css		   */
+	/* 	결재라인추가 modal css		   */ 
 	.add_search {background: white; border: 1px solid #e6e6e6; width: 100%;}
 	
 	.add_search > th {
