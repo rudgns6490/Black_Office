@@ -140,6 +140,16 @@
 	         
 	     bean 으로 등록되어진 클래스만이 스프링컨테이너가 자동적으로 관리를 해줄 수 있게 된다. --> 
 	
-	
-	
+	<!-- ===== 일단 스프링에서 트랜잭션 처리를 하기 위해서는
+	         먼저 src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml 파일에
+	     Namespaces 에 aop를 체크를 하고, 아래와 같이 트랜잭션 처리를 위한 aop 포인트컷을 등록을 해야 한다.    
+       - 아래의 <aop:aspectj-autoproxy />가 AOP 관련 어노테이션 동작이 가능하게 설정해주는 것임.
+    -->	
+	<!--  AOP 관련 어노테이션 동작이 가능하게 설정 -->	
+	<aop:aspectj-autoproxy /> <!-- 추가 -->	     
+	 
+	<aop:config proxy-target-class="true">
+	  <aop:pointcut id="controllerOperation" expression="execution(public * com.spring..*Controller.*(..))" />
+    </aop:config>
+		
 </beans:beans>

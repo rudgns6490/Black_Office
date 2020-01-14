@@ -27,4 +27,13 @@
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 		
+	<!-- ==== 트랜잭션 처리를 위해서 아래와 같이 트랜잭션매니저 객체를 bean 으로 등록해야 한다. ==== -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- ==== jackson 과 관련된 기능을 사용하기 위해 빈을 등록한다. ==== -->
+	<bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+
 </beans>
