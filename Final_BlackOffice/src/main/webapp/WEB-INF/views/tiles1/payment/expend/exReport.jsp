@@ -72,16 +72,18 @@
 	#tableRadio, #tableRadio1, .radioSpan { position: relative; top: 4.5px; } 
 	
 	
-	/*--- 아래 저장버튼 --------------------------------------------------------------------------------  */
+	/* --- 아래 저장버튼 --------------------------------------------------------------------------------  */
 	.save { float: right; margin-right: 90px; }
 	.saveBtn { border: solid 1px #0099cc; border-radius:3px; padding: 5px 20px; background-color: #0099cc; color: #fff; }
 	.saveBtn2 {padding: 5px 20px; border: solid 1px #bfbfbf; border-radius:3px;}  
 	
 	
 	/* 	결재라인추가 modal css	  */ 
-	.add_search {background: white; border: 1px solid #e6e6e6; width: 100%; margin-bottom: 10px;}
+	.add_search {background: white; width: 97%; margin-bottom: 10px;}
 	
-	.add_search_table {border-style: none; }
+	.add_search_table {width: 100%;  border: none;}
+	
+	.add_search_table > th,td {  }
 	
 	.add_search th {
 		font-family: 'Malgun Gothic', '맑은 고딕', 'Dotum', '돋움', sans-serif;
@@ -89,10 +91,12 @@
 	    min-width: 50px;
 	    width: 100px;
 	    padding: 10px;
-	    font-size: 13px;
+	    font-size: 15px;
 	    line-height: 17px;
 	    color: #fff;
 	    vertical-align: middle;
+	    text-align: center; 
+	   
 	}
 		
 	.add_search td {padding: 10px; vertical-align: text-top;}
@@ -121,9 +125,10 @@
 	    text-align: center;
 	}
 	.add_result_List th {padding: 15px 0;}
+	
 	.add_result_List_contents td {
 		padding: 7px 0;
-	    border-bottom: 1px solid #e6e6e6;
+	    /* border-bottom: 1px solid #e6e6e6; */ 
 	    background: #fff;
 	    font-size: 14px;
 	    line-height: 17px;
@@ -374,19 +379,19 @@
 
 	 <!------ 	결재라인추가 modal 시작	-------------------------------	 -->
 		
-				<div class="container" id="ptLineAdd"> 
+				<div class="container" id="ptLineAdd" > 
 					<!-- Trigger the modal with a button -->
 					<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" style="background-color: #0099cc;">결재라인 추가버튼</button>
 					
 					<!-- Modal -->
-					<div class="modal fade" id="myModal" role="dialog">
+					<div class="modal fade" id="myModal" role="dialog" style="width: 1000px;">
 						<div class="modal-dialog">
 						
 						<!-- Modal content-->
 						<div class="modal-content">
 							<div class="modal-header">
+								<h4 class="modal-title" style="font-weight: bold;">결재자추가</h4>
 								<button type="button" class="close" data-dismiss="modal" >&times;</button><%--	x로 닫기 버튼   --%>
-								<h6 class="modal-title">결재자추가</h6>
 							</div>
 							<div class="modal-body" style="background-color: #e6e6e6;">
 							
