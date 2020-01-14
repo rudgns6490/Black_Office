@@ -139,10 +139,10 @@ public class BoardController {
 			HttpSession session = request.getSession();
 			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
 			
-			String userid = null;
+			String id = null;
 			
 			if(loginuser != null) {
-				userid = loginuser.getUserid();
+				id = loginuser.getId();
 				// 로그인 되어진 사용자의 userid
 			}
 			
@@ -161,7 +161,7 @@ public class BoardController {
 			if("yes".equals(session.getAttribute("readCountPermission"))) {
 				// 글목록보기를 클릭한 다음 특정글을 조회해온 경우이다. 
 				
-				boardvo = service.getView(seq, userid); 
+				boardvo = service.getView(seq, id); 
 				// 글조회수 증가와 함께 글1개를 조회를 해주는 것 
 				
 				session.removeAttribute("readCountPermission");
@@ -197,7 +197,7 @@ public class BoardController {
 			HttpSession session = request.getSession();
 			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
 			
-			if( !loginuser.getUserid().equals(boardvo.getFk_userid())) { 
+			if( !loginuser.getId().equals(boardvo.getFk_userid())) { 
 				String msg = "다른 사용자의 글은 수정이 불가합니다.";
 				String loc = "javascript:history.back()";
 				

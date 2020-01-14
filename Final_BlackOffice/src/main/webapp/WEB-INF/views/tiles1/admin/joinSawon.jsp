@@ -19,7 +19,7 @@
 		    <form name="registerSawon" method="post">
 		      <table class="table table-bordered">
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">이메일</td>
+		      	  <td style="background-color: #e0ebeb;">아이디</td>
 		      	  <td>
 		      	    <input type="text" name="email" id="email" value="" maxlength="20" required autofocus autocomplete="off" />@blackoffice.com
 		      	  </td>
