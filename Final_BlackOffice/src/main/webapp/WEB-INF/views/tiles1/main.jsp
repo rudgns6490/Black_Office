@@ -5,7 +5,76 @@
 	String ctxPath = request.getContextPath();
 %>
 
-<link rel="stylesheet" type="text/css" href="<%=ctxPath%>/resources/css/main.css">
+<style type="text/css">
+
+/* Tag */
+
+a {
+	text-decoration: none !important; 
+}
+
+hr {
+	border: solid 1px #ccc;
+}
+
+/* Class */
+
+.inbl {
+	display: inline-block;  
+}
+
+.dvideLine {
+/*  	border: solid 1px black; */
+ 	height: 400px;
+}
+
+.contentMenu{
+	data-text-content="true";
+	width:100px;
+	color: rgb(255, 255, 255);
+	background-color: rgb(46, 204, 113);
+	padding: 15px;
+	border-radius: 4px;
+	text-align: center;
+	font-size: 16px; line-height: 0.8em;
+	data-min-width="40";
+	data-min-height="40";
+	position: relative; top: -10px; left: -10px;
+} 
+ 
+.buttons {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
+  margin-top: 12px;  
+}
+
+.bluebutton {
+	background-color: #008CBA;
+	border-radius: 6px;;
+}
+
+.maincontainer { /* 메인 각박스 */
+	background-color: #fff;
+	height: 400px;
+	/* border: solid 1px gray; */
+	border-radius: 16px;
+}
+
+/* ID */
+#content-wrapper {
+	background-color: #f2f2f2;
+}
+
+
+</style>
 
 <script type="text/javascript">
 

@@ -7,6 +7,16 @@
     
 <link href="<%= ctxPath %>/resources/css/admin/joinSawon.css" rel="stylesheet">
 
+<script type="text/javascript">
+
+	function goRegister() {
+		var frm = document.registerSawon
+		frm.method = "POST";
+		frm.action = "<%= ctxPath%>/register.action";
+		frm.submit();
+	}
+
+</script>
   <div id="content-wrapper" style="padding-top: 0;">
     <div class="container-fluid text-center">
       
@@ -19,28 +29,52 @@
 		    <form name="registerSawon" method="post">
 		      <table class="table table-bordered">
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">이메일</td>
+		      	  <td style="background-color: #e0ebeb;">
+		      	  	<label for="userid">아이디</label>
+		      	  </td>
 		      	  <td>
-		      	    <input type="text" name="email" id="email" value="" maxlength="20" required autofocus autocomplete="off" />@blackoffice.com
+		      	    <input type="text" name="userid" id="userid" value="" maxlength="20" required autofocus autocomplete="off" />@blackoffice.com
 		      	  </td>
 		      	</tr>
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">비밀번호</td>
+		      	  <td style="background-color: #e0ebeb;">
+		      	  	<label for="password">비밀번호</label>
+		      	  </td>
 		      	  <td>
 		      	    <input type="password" name="password" id="password" value="" maxlength="20" required />
 		      	  </td>
 		      	</tr>
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">성명</td>
+		      	  <td style="background-color: #e0ebeb;">
+		      	  	<label for="name">성명</label>
+		      	  </td>
 		      	  <td>
 		      	    <input type="text" name="name" id="name" value="" maxlength="20" required autofocus autocomplete="off" />
 		      	  </td>
 		      	</tr>
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">주민번호</td>
+		      	  <td style="background-color: #e0ebeb;">
+		      	   	<label for="jubun1">주민번호</label>
+		      	  </td>
 		      	  <td>
 		      	    <input type="text" name="jubun1" id="jubun1" value="" maxlength="6" required autofocus autocomplete="off" /> - 
 		      	    <input type="text" name="jubun2" id="jubun2" value="" maxlength="7" required autofocus autocomplete="off" />
+		      	  </td>
+		      	</tr>
+		      	<tr>
+		      	  <td style="background-color: #e0ebeb;">
+		      	  	<label for="email">이메일</label>
+		      	  </td>
+		      	  <td>
+		      	    <input type="text" name="email" id="email" value="" maxlength="20" required autofocus autocomplete="off" />
+		      	  </td>
+		      	</tr>
+		      	<tr>
+		      	  <td style="background-color: #e0ebeb;">
+		      	  	<label for="emailpassword">이메일암호</label>
+		      	  </td>
+		      	  <td>
+		      	    <input type="text" name="emailpassword" id="emailpassword" value="" maxlength="20" required autofocus autocomplete="off" />
 		      	  </td>
 		      	</tr>
 		      	<tr>
@@ -68,16 +102,19 @@
 		      	  </td>
 		      	</tr>
 		      </table>
+		      
+		      <div style="float: right; margin-top: 10px; padding: 5%;">
+		        <button type="button" class="btn btn-primary" onclick="goRegister();">등록</button>
+		      	<button type="button" class="btn btn-secondary" onclick="goCancle();">취소</button>
+		      </div>
+		      
 		    </form>
 		  
 		  </fieldset>
         </div>
       </div>
       
-      <div style="float: right; margin-top: 10px; padding: 5%;">
-        <button type="button" class="btn btn-primary" onclick="goRegister();">등록</button>
-      	<button type="button" class="btn btn-secondary" onclick="goCancle();">취소</button>
-      </div>
+      
       
       
       

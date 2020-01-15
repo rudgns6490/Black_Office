@@ -74,8 +74,8 @@
           <span>주소록</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="">개인 주소록</a>
-          <a class="dropdown-item" href="">공용 주소록</a>
+          <a class="dropdown-item" href="http://localhost:9090/controller/addressBook.action">개인 주소록</a>
+          <a class="dropdown-item" href="http://localhost:9090/controller/addressOpenBook.action">공용 주소록</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>

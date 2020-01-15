@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bo.board.service.InterBoardService;
 import com.bo.board.model.BoardVO;
-import com.bo.board.common.MyUtil;
+import com.bo.common.MyUtil;
 import com.bo.member.model.MemberVO;
 
 //=== 컨트롤러 선언 ===
