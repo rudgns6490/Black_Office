@@ -155,7 +155,3 @@ public class MemberVO {
 	}
 	
 }
-
-
-
-
