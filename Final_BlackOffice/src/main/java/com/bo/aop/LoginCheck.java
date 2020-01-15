@@ -1,4 +1,4 @@
-package com.bo.aop;
+/*package com.bo.aop;
 
 import java.io.IOException;
 
@@ -16,19 +16,19 @@ import org.springframework.stereotype.Component;
 
 import com.bo.common.MyUtil;
 
-/* === 주업무(<예:글쓰기, 글수정, 댓글쓰기 등등>를 실행하기 앞서 
+ === 주업무(<예:글쓰기, 글수정, 댓글쓰기 등등>를 실행하기 앞서 
 이러한 주업무들은 먼저 로그인을 해야만 사용가능한 작업이므로  
 주업무에 대한 보조업무 객체로 로그인 여부를 체크하는 관심 클래스(객체)를 생성하여 
 포인트컷과 더불어 어드바이스를 생성하여 동작하도록 만들겠다.       
-*/
+
 
 //===== #53. 공통관심사 클래스(Aspect 클래스)생성하기 =====
 @Aspect
-/* 공통관심사 클래스 객체로 등록한다.
-- 기존의 XML <aop:aspect> 역할을 한다. */ 
+ 공통관심사 클래스 객체로 등록한다.
+- 기존의 XML <aop:aspect> 역할을 한다.  
 @Component
-/* XML에서 빈을 만드는 대신에 클래스명 앞에 @Component 어노테이션을 적어주면 해당 클래스는 bean으로 자동 등록된다. 
-그리고 bean의 이름(첫글자는 소문자)은 해당 클래스명이 된다. */	
+ XML에서 빈을 만드는 대신에 클래스명 앞에 @Component 어노테이션을 적어주면 해당 클래스는 bean으로 자동 등록된다. 
+그리고 bean의 이름(첫글자는 소문자)은 해당 클래스명이 된다. 	
 public class LoginCheck {
 	
 	// === Pointcut 을 생성한다 ===
@@ -76,3 +76,4 @@ public class LoginCheck {
 	}
 
 }
+*/
