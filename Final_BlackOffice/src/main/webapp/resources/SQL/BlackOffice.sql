@@ -44,6 +44,8 @@ CREATE TABLE TBL_BO_EMPLOYEES (
     ,ID              NVARCHAR2(100)         -- 아이디
     ,PASSWD          NVARCHAR2(100)         -- 비밀번호    
     ,JUBUN           NVARCHAR2(13)          -- 주민번호
+    ,EMAIL           NVARCHAR2(100) NOT NULL    -- 이메일
+    ,EMAILPW         NVARCHAR2(100) NOT NULL    -- 이메일 암호
     ,PHONE           NVARCHAR2(11)          -- 핸드폰
     ,ADDRESS         NVARCHAR2(100)         -- 주소
     ,DETAILADDRESS   NVARCHAR2(100)         -- 상세주소
@@ -58,6 +60,12 @@ CREATE TABLE TBL_BO_EMPLOYEES (
     ,CONSTRAINT FK_TBL_BO_EMP_DEPARTMENTNO FOREIGN KEY (FK_DEPARTMENTNO)
                 REFERENCES TBL_BO_DEPARTMENT (DEPARTMENTNO) ON DELETE CASCADE
 );
+
+alter table TBL_BO_EMPLOYEES
+add email nvarchar2(100) not null;
+
+alter table TBL_BO_EMPLOYEES
+add emailpw nvarchar2(100) not null;
 
 CREATE SEQUENCE SEQ_BO_EMPLOYEES
 START WITH 1
