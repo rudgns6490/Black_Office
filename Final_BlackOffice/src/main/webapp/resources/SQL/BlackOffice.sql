@@ -39,13 +39,15 @@ from TBL_BO_DEPARTMENT;
 
 -- 사원 테이블
 CREATE TABLE TBL_BO_EMPLOYEES (
-     EMPLOYEENO      NUMBER                   -- 사원번호
-    ,NAME            NVARCHAR2(10)              -- 사원이름
-    ,ID              NVARCHAR2(100)                -- 아이디
-    ,PASSWD          NVARCHAR2(100)            -- 비밀번호    
-    ,JUBUN           NVARCHAR2(13)               -- 주민번호
-    ,PHONE           NVARCHAR2(11)              -- 핸드폰
-    ,ADDRESS         NVARCHAR2(100)            -- 주소
+     EMPLOYEENO      NUMBER                 -- 사원번호
+    ,NAME            NVARCHAR2(10)          -- 사원이름
+    ,ID              NVARCHAR2(100)         -- 아이디
+    ,PASSWD          NVARCHAR2(100)         -- 비밀번호    
+    ,JUBUN           NVARCHAR2(13)          -- 주민번호
+    ,EMAIL           NVARCHAR2(100) NOT NULL    -- 이메일
+    ,EMAILPW         NVARCHAR2(100) NOT NULL    -- 이메일 암호
+    ,PHONE           NVARCHAR2(11)          -- 핸드폰
+    ,ADDRESS         NVARCHAR2(100)         -- 주소
     ,DETAILADDRESS   NVARCHAR2(100)         -- 상세주소
     ,REGISTERDAY     DATE DEFAULT SYSDATE -- 입사일자
     ,GOTOWORK        NUMBER(1)                 -- 출근 1 퇴근 0
@@ -67,8 +69,18 @@ NOMINVALUE
 NOCYCLE
 NOCACHE;
 
+alter table TBL_BO_EMPLOYEES
+add email nvarchar2(100) not null;
+
+alter table TBL_BO_EMPLOYEES
+add emailpw nvarchar2(100) not null;
+
 select *
 from TBL_BO_EMPLOYEES;
+
+delete TBL_BO_EMPLOYEES;
+
+commit;
 
 -- 주소록 테이블
 CREATE TABLE TBL_BO_ADDRESSBOOK (

@@ -1,5 +1,7 @@
 package com.bo.admin.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bo.admin.service.InterAdminService;
+import com.bo.member.model.MemberVO;
 
 //=== 컨트롤러 선언 ===
 @Component
@@ -40,13 +43,29 @@ public class AdminController {
 	}
 	
 	//신규 입사 등록 2020/01/15 lbh
-//	@RequestMapping(value="/register.action")
-//	public ModelAndView register(ModelAndView mav) {
-//		// int n = service.register(registervo);
-////		mav.addObject("n", n);
-//		mav.setViewName("admin/joinSawon.tiles1");
-//		return mav;
-//	}
+	@RequestMapping(value="/register.action")
+	public ModelAndView register(HttpServletRequest request, ModelAndView mav) {
+		
+		String id = request.getParameter("id");
+		String passwd = request.getParameter("passwd");
+		String name = request.getParameter("name");
+		String jubun = request.getParameter("jubun1") + request.getParameter("jubun2");
+		String email = request.getParameter("email");
+		String emailpw = request.getParameter("emailpw");
+		
+		MemberVO mvo = new MemberVO();
+		mvo.setId(id);
+		mvo.setPasswd(passwd);
+		mvo.setName(name);
+		mvo.setJubun(jubun);
+		mvo.setEmail(email);
+		mvo.setEmailpw(emailpw);
+		
+		int n = service.register(mvo);
+		mav.addObject("n", n);
+		mav.setViewName("admin/joinSawon.tiles1");
+		return mav;
+	}
 	
 	//인사 이동 컨트롤러 2020/01/06 kkh
 	@RequestMapping(value="/personnelAnnouncement.action")
