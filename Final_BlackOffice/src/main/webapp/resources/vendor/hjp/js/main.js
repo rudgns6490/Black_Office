@@ -176,7 +176,7 @@ var calendar = $('#calendar').fullCalendar({
       content: $('<div />', {
           class: 'popoverInfoCalendar'
         }).append('<p><strong>등록자:</strong> ' + event.username + '</p>')										// db에서 유저 아이 넣어오기 
-        .append('<p><strong>구분:</strong> ' + event.type + '</p>')										// db에서 구분에서 한글로 바꿔주기 
+        .append('<p><strong>구분:</strong> ' + event.type + '</p>')											// db에서 구분에서 한글로 바꿔주기 
         .append('<p><strong>시간:</strong> ' + getDisplayEventDate(event) + '</p>')						 
         .append('<div class="popoverDescCalendar"><strong>설명:</strong> ' + event.description + '</div>'),	
       delay: {
@@ -187,7 +187,7 @@ var calendar = $('#calendar').fullCalendar({
       trigger: 'hover',
       placement: 'top',
       html: true,
-      container: 'body'
+      container: 'wrapper1'
     	  
     }); // popover event ----------------------------------------------------------
 
@@ -258,17 +258,17 @@ var calendar = $('#calendar').fullCalendar({
   // 일정을 받아오는 곳  json 데이터 ------------------------------------
   events: 
 	  function (start, end, timezone, callback) {
-	  
-	  
+
 	  	  // 일정을 올린 db에서 가져온 경우  
 		  $.ajax({
 		      type: "get",
-		      dataType : "json", 
+		      dataType : "JSON", 
 		      url: "/controller/individualScheduleJSONList.action",
 		      data: {
 		    	  
 		      },
 		      success: function (response) {   
+		    	  
 		        var fixedDate = response.map(function (array) {
 		          if (array.allDay && array.start !== array.end) {
 		            // 이틀 이상 AllDay 일정인 경우 달력에 표기시 하루를 더해야 정상출력
@@ -282,27 +282,6 @@ var calendar = $('#calendar').fullCalendar({
 					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 				}
 		    });
-		    
-		  
-//	        $.ajax({
-//	        	type: "get",
-//	        	dataType : "json", 
-//	        	url: "holiday_daty.json",
-//	        	data: {
-//			    	  
-//			    },
-//			    success: function (response) {   
-//			        var fixedDate = response.map(function (array) {
-//			          if (array.allDay && array.start !== array.end) {
-//			            // 이틀 이상 AllDay 일정인 경우 달력에 표기시 하루를 더해야 정상출력
-//			            array.end = moment(array.end).add(1, 'days');
-//			          }
-//			          return array;
-//			        })
-//			        callback(fixedDate); 
-//			      }
-//		    }); 
-		  
 		  },
 
 		  
@@ -318,30 +297,6 @@ var calendar = $('#calendar').fullCalendar({
       $(".fc-content").css('text-align', 'center'); 
       $(".fc-time").remove();
       $(".fc-content").css('height', 'auto');
-      
-      $.ajax({
-	      type: "get",
-	      dataType : "json", 
-	      url: "/controller/individualScheduleJSONList.action",
-	      data: {
-	    	  
-	      },
-	      success: function (response) {   
-	    	  if ( $(".fc-day-top").getAttribute('data-date') ==  response.start)
-	    	  
-	        var fixedDate = response.map(function (array) {
-	          if (array.allDay && array.start !== array.end) {
-	            // 이틀 이상 AllDay 일정인 경우 달력에 표기시 하루를 더해야 정상출력
-	            array.end = moment(array.end).add(1, 'days');
-	          }
-	          return array;
-	        })
-	        callback(fixedDate); 
-	      }
-	    });
-      
-      
-      
       
     }
 	
