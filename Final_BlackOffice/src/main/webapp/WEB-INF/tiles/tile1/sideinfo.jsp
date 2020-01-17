@@ -18,7 +18,7 @@
           <span>게시판</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="<%= ctxPath%>/noticeBoard.action">전체게시판</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/noticeBoardList.action">공지게시판</a>
           <a class="dropdown-item" href="<%= ctxPath%>/deptBoard.action">업무게시판</a>
           <div class="dropdown-divider"></div>
         </div>
