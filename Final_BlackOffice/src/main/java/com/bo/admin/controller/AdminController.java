@@ -39,3 +39,4 @@ public class AdminController {
 	}
 	
 }
+import org.springframework.web.bind.annotation.RequestMethod;

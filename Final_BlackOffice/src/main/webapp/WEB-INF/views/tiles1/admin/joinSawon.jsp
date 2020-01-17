@@ -379,24 +379,28 @@
 		      	<tr>
 		      	  <td style="background-color: #e0ebeb;">부서</td>
 		      	  <td>
-		      	    <select class="form-control" style="width: 30%;">
-	  				  <option>1</option>
-	  				  <option>2</option>
-	  				  <option>3</option>
-	  				  <option>4</option>
-	  				  <option>5</option>
+		      	    <select name="FK_POSITIONNO" id="FK_POSITIONNO" class="form-control" style="width: 30%;">
+		      	      <option>선택</option>
+	  				  <option value="1">사장</option>
+	  				  <option value="2">이사</option>
+	  				  <option value="3">부장</option>
+	  				  <option value="4">차장</option>
+	  				  <option value="5">과장</option>
+	  				  <option value="6">대리</option>
+	  				  <option value="7">사원</option>
 					</select>
 		      	  </td>
 		      	</tr>
 		      	<tr>
 		      	  <td style="background-color: #e0ebeb;">직위</td>
 		      	  <td>
-		      	    <select class="form-control" style="width: 30%;">
-	  				  <option>1</option>
-	  				  <option>2</option>
-	  				  <option>3</option>
-	  				  <option>4</option>
-	  				  <option>5</option>
+		      	    <select name="FK_DEPARTMENTNO" id="FK_DEPARTMENTNO" class="form-control" style="width: 30%;">
+		      	      <option>선택</option>
+	  				  <option value="1">인사팀</option>
+	  				  <option value="2">마케팅팀</option>
+	  				  <option value="3">개발1팀</option>
+	  				  <option value="4">개발2팀</option>
+	  				  <option value="5">영업팀</option>
 					</select>
 		      	  </td>
 		      	</tr>
@@ -443,7 +447,7 @@
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+          <a class="btn btn-primary" href="<%= ctxPath %>/login.action">Logout</a>
         </div>
       </div>
     </div>
