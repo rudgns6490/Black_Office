@@ -7,6 +7,32 @@ CREATE TABLE TBL_BO_POSITION(
     ,CONSTRAINT PK_TBL_BO_POSITIONNO PRIMARY KEY (POSITIONNO)
 );
 
+select *
+from TBL_BO_POSITION;
+
+insert into TBL_BO_POSITION(POSITIONNO, POSITIONNAME, POSITIONRANK)
+values(SEQ_BO_POSITION.nextval, '사장', 1);
+
+insert into TBL_BO_POSITION(POSITIONNO, POSITIONNAME, POSITIONRANK)
+values(SEQ_BO_POSITION.nextval, '이사', 2);
+
+insert into TBL_BO_POSITION(POSITIONNO, POSITIONNAME, POSITIONRANK)
+values(SEQ_BO_POSITION.nextval, '부장', 3);
+
+insert into TBL_BO_POSITION(POSITIONNO, POSITIONNAME, POSITIONRANK)
+values(SEQ_BO_POSITION.nextval, '차장', 4);
+
+insert into TBL_BO_POSITION(POSITIONNO, POSITIONNAME, POSITIONRANK)
+values(SEQ_BO_POSITION.nextval, '과장', 5);
+
+insert into TBL_BO_POSITION(POSITIONNO, POSITIONNAME, POSITIONRANK)
+values(SEQ_BO_POSITION.nextval, '대리', 6);
+
+insert into TBL_BO_POSITION(POSITIONNO, POSITIONNAME, POSITIONRANK)
+values(SEQ_BO_POSITION.nextval, '사원', 7);
+
+commit;
+
 CREATE SEQUENCE SEQ_BO_POSITION
 START WITH 1
 INCREMENT BY 1
@@ -18,6 +44,9 @@ NOCACHE;
 select *
 from TBL_BO_POSITION;
 
+select DEPARTMENTNAME
+from TBL_BO_DEPARTMENT;
+
 
 -- 부서 테이블
 CREATE TABLE TBL_BO_DEPARTMENT(
@@ -25,6 +54,23 @@ CREATE TABLE TBL_BO_DEPARTMENT(
     ,DEPARTMENTNAME      NVARCHAR2(20)  -- 부서 이름 -- 인사팀, 개발1팀, 개발2팀
     ,CONSTRAINT PK_TBL_BO_DEPARTMENTNO PRIMARY KEY (DEPARTMENTNO)
 );
+
+insert into TBL_BO_DEPARTMENT(DEPARTMENTNO, DEPARTMENTNAME)
+values(SEQ_BO_DEPARTMENT.nextval, '인사팀');
+
+insert into TBL_BO_DEPARTMENT(DEPARTMENTNO, DEPARTMENTNAME)
+values(SEQ_BO_DEPARTMENT.nextval, '마케팅팀');
+
+insert into TBL_BO_DEPARTMENT(DEPARTMENTNO, DEPARTMENTNAME)
+values(SEQ_BO_DEPARTMENT.nextval, '개발1팀');
+
+insert into TBL_BO_DEPARTMENT(DEPARTMENTNO, DEPARTMENTNAME)
+values(SEQ_BO_DEPARTMENT.nextval, '개발2팀');
+
+insert into TBL_BO_DEPARTMENT(DEPARTMENTNO, DEPARTMENTNAME)
+values(SEQ_BO_DEPARTMENT.nextval, '영업팀');
+
+commit;
 
 CREATE SEQUENCE SEQ_BO_DEPARTMENT
 START WITH 1
@@ -36,6 +82,16 @@ NOCACHE;
 
 select *
 from TBL_BO_DEPARTMENT;
+
+select *
+from TBL_BO_EMPLOYEES;
+
+commit;
+
+drop TABLE TBL_BO_EMPLOYEES CASCADE CONSTRAINTS;
+drop sequence SEQ_BO_EMPLOYEES;
+
+commit;
 
 -- 사원 테이블
 CREATE TABLE TBL_BO_EMPLOYEES (
@@ -49,23 +105,17 @@ CREATE TABLE TBL_BO_EMPLOYEES (
     ,PHONE           NVARCHAR2(11)          -- 핸드폰
     ,ADDRESS         NVARCHAR2(100)         -- 주소
     ,DETAILADDRESS   NVARCHAR2(100)         -- 상세주소
-    ,REGISTERDAY     DATE DEFAULT SYSDATE   -- 입사일자
-    ,GOTOWORK        NUMBER(1)              -- 출근 1 퇴근 0
-    ,STATUS          NUMBER(1)              -- 퇴사는 0 재직 1 휴직 2
-    ,FK_POSITIONNO   NUMBER                 -- 참조 키 직급번호
-    ,FK_DEPARTMENTNO NUMBER                 -- 참조 키 부서번호
+    ,REGISTERDAY     DATE DEFAULT SYSDATE -- 입사일자
+    ,GOTOWORK        NUMBER(1)                 -- 출근 1 퇴근 0
+    ,STATUS          NUMBER(1)                      -- 퇴사는 0 재직 1 휴직 2
+    ,FK_POSITIONNO   NUMBER                     -- 참조 키 직급번호
+    ,FK_DEPARTMENTNO NUMBER                  -- 참조 키 부서번호
     ,CONSTRAINT PK_TBL_BO_EMPLOYEENO PRIMARY KEY (EMPLOYEENO)
     ,CONSTRAINT FK_TBL_BO_EMP_POSITIONNO FOREIGN KEY (FK_POSITIONNO)
                 REFERENCES TBL_BO_POSITION (POSITIONNO) ON DELETE CASCADE
     ,CONSTRAINT FK_TBL_BO_EMP_DEPARTMENTNO FOREIGN KEY (FK_DEPARTMENTNO)
                 REFERENCES TBL_BO_DEPARTMENT (DEPARTMENTNO) ON DELETE CASCADE
 );
-
-alter table TBL_BO_EMPLOYEES
-add email nvarchar2(100) not null;
-
-alter table TBL_BO_EMPLOYEES
-add emailpw nvarchar2(100) not null;
 
 CREATE SEQUENCE SEQ_BO_EMPLOYEES
 START WITH 1
@@ -74,6 +124,17 @@ NOMAXVALUE
 NOMINVALUE
 NOCYCLE
 NOCACHE;
+
+alter table TBL_BO_EMPLOYEES
+add email nvarchar2(100) not null;
+
+alter table TBL_BO_EMPLOYEES
+add emailpw nvarchar2(100) not null;
+
+select *
+from TBL_BO_EMPLOYEES;
+
+commit;
 
 -- 주소록 테이블
 CREATE TABLE TBL_BO_ADDRESSBOOK (
@@ -181,18 +242,18 @@ from TBL_BO_EXPENDITURE;
 
 -- 휴가/휴직 테이블
 CREATE TABLE TBL_BO_VACATION (
-     VACATIONNO                 NUMBER                      -- 휴가/휴직 테이블
-    ,FK_EMPLOYEENO              NUMBER                      -- 참조키 사원번호
-    ,WRITEDAY                   DATE DEFAULT SYSDATE        -- 작성일자
-    ,STARTDAY                   DATE DEFAULT SYSDATE        -- 시작일
-    ,ENDDAY                     DATE DEFAULT SYSDATE + 1    -- 종료일
-    ,TITLE                      NVARCHAR2(100)              -- 제목
-    ,REASON                     NVARCHAR2(200)              -- 사유
-    ,EMERGENCYCONTACTNETWORK    NVARCHAR2(11)               -- 비상 연락망
-    ,SHAREDEPARTMENTNO          NUMBER                      -- 공유 부서번호
-    ,ATTACHFILENAME             NVARCHAR2(100)              -- 첨부 파일명
-    ,STATUS                     NUMBER(1)                   -- 결재 여부 1이면 결재완료, 0이면 결재대기중
-    ,APPROVER                   NVARCHAR2(300)              -- 결재자 사원번호
+     VACATIONNO                 NUMBER                               -- 휴가/휴직 테이블
+    ,FK_EMPLOYEENO              NUMBER                              -- 참조키 사원번호
+    ,WRITEDAY                   DATE DEFAULT SYSDATE             -- 작성일자
+    ,STARTDAY                   DATE DEFAULT SYSDATE             -- 시작일
+    ,ENDDAY                     DATE DEFAULT SYSDATE + 1        -- 종료일
+    ,TITLE                      NVARCHAR2(100)                           -- 제목
+    ,REASON                     NVARCHAR2(200)                        -- 사유
+    ,EMERGENCYCONTACTNETWORK    NVARCHAR2(11)           -- 비상 연락망
+    ,SHAREDEPARTMENTNO          NUMBER                          -- 공유 부서번호
+    ,ATTACHFILENAME             NVARCHAR2(100)                    -- 첨부 파일명
+    ,STATUS                     NUMBER(1)                                 -- 결재 여부 1이면 결재완료, 0이면 결재대기중
+    ,APPROVER                   NVARCHAR2(300)                       -- 결재자 사원번호
     ,CONSTRAINT PK_TBL_BO_VACATIONNO PRIMARY KEY(VACATIONNO)
     ,CONSTRAINT FK_TBL_BO_VACATION_EMPNO FOREIGN KEY(FK_EMPLOYEENO)
                REFERENCES TBL_BO_EMPLOYEES(EMPLOYEENO) ON DELETE CASCADE

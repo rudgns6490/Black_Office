@@ -55,39 +55,36 @@
 				</select>
 
 			</div>
-
 			
 			<div class="col-sm-12 bordertopline" style="padding: 15px 0px; " >
 				<div class="displayline checkboxline">
 					<input type="checkbox">&nbsp;&nbsp;&nbsp;
 				</div>
 				<div class="table1" style="width: 100px;">이름</div>
-				<div class="table1" style="width: 400px;">이메일</div>
-				<div class="table1" style="width: 250px;">전화번호</div>
+				<div class="table1" style="width: 250px;">이메일</div>
+				<div class="table1" style="width: 150px;">전화번호</div>
 				<div class="table1" style="width: 100px;">직책</div>
-				<div class="table1" style="width: 200px;">부서</div>
+				<div class="table1" style="width: 150px;">부서</div>
 				<div class="table1" style="width: 200px;">회사</div>
 				<div class="table1" style="width: 200px;">그룹</div>
-				<div class="table1" style="width: 150px; text-align: center;">수정</div>
+				<div class="table1" style="width: 100px; text-align: center;">수정</div>
 			</div>
-			
 			
 			<!-- 테이블 내용 -->
 			<div class="col-sm-12 borderTopAndBottomline" style="padding: 15px 0px; " >
 				<div class="displayline checkboxline">
 					<input type="checkbox">&nbsp;&nbsp;&nbsp;
 				</div>
+				
 				<div class="table1" style="width: 100px;">관리자</div>
-				<div class="table1" style="width: 400px;">demo@demo.whoisg.kr</div>
-				<div class="table1" style="width: 250px;">00001</div>
+				<div class="table1" style="width: 250px;">demo@demo.whoisg.kr</div>
+				<div class="table1" style="width: 150px;">010-2222-3333</div>
 				<div class="table1" style="width: 100px;">관리자</div>
-				<div class="table1" style="width: 200px;">G2WorksDemo</div>
+				<div class="table1" style="width: 150px;">G2WorksDemo</div>
 				<div class="table1" style="width: 200px;">G2WorksDemo</div>
 				<div class="table1" style="width: 200px;">직원주소록</div>
-				<div class="table1" style="width: 150px; text-align: center;"><button class="btn1">수정</button></div>
+				<div class="table1" style="width: 100px; text-align: center;">수정</div>
 			</div>
-			
-			
 			
 		</div>
 	</div>

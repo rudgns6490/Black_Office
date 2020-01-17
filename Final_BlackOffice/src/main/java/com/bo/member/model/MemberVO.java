@@ -1,32 +1,31 @@
 package com.bo.member.model;
 
 public class MemberVO {
-
-	private int employeeno;
-	private String id;
-	private String passwd;
-	private String jubun;
-	private String email;
-	private String emailpw;
-	private String phone;
-	private String address;
-	private String detailaddress;
-	private String registerday;
-	private int gotowork;
-	private int status;
-	private int fk_positionno;
-	private int fk_departmentno;
 	
+	private int employeeno;			// 사원번호
+	private String name;			// 사원이름
+	private String id;				// 아이디
+	private String passwd;			// 비밀번호
+	private String jubun;			// 주민번호
+	private String email;			// 이메일
+	private String emailpw;			// 이메일 비밀번호
+	private String phone;			// 전화번호
+	private String address;			// 주소
+	private String detailaddress;	// 상세주소
+	private String registerday;		// 입사일자
+	private int gotowork;			// 출근 1 퇴근 0
+	private int status;				// 퇴사 0 재직 1 휴직2
+	private int fk_positionno;		// 참조 키 직위번호
+	private int fk_departmentno;	// 참조 키 부서번호
 	
 	public MemberVO() {}
-	
-	public MemberVO(int employeeno, String id, String passwd,
-					String jubun, String email, String emailpw,
-					String phone, String address, String detailaddress,
-					String registerday, int gotowork, int status,
-					int fk_positionno, int fk_departmentno) {
+
+	public MemberVO(int employeeno, String name, String id, String passwd, String jubun, String email, String emailpw,
+			String phone, String address, String detailaddress, String registerday, int gotowork, int status,
+			int fk_positionno, int fk_departmentno) {
 		super();
 		this.employeeno = employeeno;
+		this.name = name;
 		this.id = id;
 		this.passwd = passwd;
 		this.jubun = jubun;
@@ -48,6 +47,14 @@ public class MemberVO {
 
 	public void setEmployeeno(int employeeno) {
 		this.employeeno = employeeno;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getId() {
@@ -154,4 +161,10 @@ public class MemberVO {
 		this.fk_departmentno = fk_departmentno;
 	}
 	
+	
+	
 }
+
+
+
+
