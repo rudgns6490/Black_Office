@@ -5,7 +5,7 @@ public class ScheduleVO {
 	
 
 	private int schedule_no ;			// 일정번호
-	private int fk_employeeno ; 				// 유저no
+	private int user_no ; 				// 유저no
 	private String schedule_title; 		// 일정제목
 	private String schedule_content;	// 일정내용
 	private String schedule_start; 		// 시작날짜
@@ -32,13 +32,13 @@ public class ScheduleVO {
 	
 	
 	
-	public ScheduleVO(int schedule_no, int fk_employeeno, String schedule_title, String schedule_content,
+	public ScheduleVO(int schedule_no, int user_no, String schedule_title, String schedule_content,
 			String schedule_start, String schedule_end, String schedule_color, int schedule_importance,
 			int schedule_progresStat, int schedule_allday, String schedule_authority, int schedule_type,
 			boolean allday) {
 		super();
 		this.schedule_no = schedule_no;
-		this.fk_employeeno = fk_employeeno;
+		this.user_no = user_no;
 		this.schedule_title = schedule_title;
 		this.schedule_content = schedule_content;
 		this.schedule_start = schedule_start;
@@ -71,11 +71,11 @@ public class ScheduleVO {
 	public void setSchedule_no(int schedule_no) {
 		this.schedule_no = schedule_no;
 	}
-	public int getfk_employeeno() {
-		return fk_employeeno;
+	public int getUser_no() {
+		return user_no;
 	}
-	public void setfk_employeeno(int fk_employeeno) {
-		this.fk_employeeno = fk_employeeno;
+	public void setUser_no(int user_no) {
+		this.user_no = user_no;
 	}
 	public String getSchedule_title() {
 		return schedule_title;
@@ -137,12 +137,12 @@ public class ScheduleVO {
 	public void setSchedule_type(int schedule_type) {
 		this.schedule_type = schedule_type;
 	}
-	public ScheduleVO(int schedule_no, int fk_employeeno, String schedule_title, String schedule_content,
+	public ScheduleVO(int schedule_no, int user_no, String schedule_title, String schedule_content,
 			String schedule_start, String schedule_end, String schedule_color, int schedule_importance,
 			int schedule_progresStat, int schedule_allday, String schedule_authority, int schedule_type) {
 		super();
 		this.schedule_no = schedule_no;
-		this.fk_employeeno = fk_employeeno;
+		this.user_no = user_no;
 		this.schedule_title = schedule_title;
 		this.schedule_content = schedule_content;
 		this.schedule_start = schedule_start;

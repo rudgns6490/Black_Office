@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.bo.schedule.model.Inter_ScheduleDAO;
 import com.bo.schedule.model.ScheduleDAO;
@@ -19,6 +18,8 @@ import com.google.gson.Gson;
 public class ScheduleController {
 
 	// ***** 개인일정 
+
+
 	@Autowired  
 	private Inter_ScheduleService service;
 
@@ -35,14 +36,14 @@ public class ScheduleController {
 
 	// 개인일정 JSON 데이터 2020/01/13 hjp
 	@RequestMapping(value="/individualScheduleJSONList.action")
-	public ModelAndView individualcalendarJSONList(HttpServletRequest request, ModelAndView mav) { 
+	public String individualcalendarJSONList(HttpServletRequest request) { 
 
 		String result = service.individualcalendarJSONList(); 
 
-		mav.addObject("result", result); 
-		mav.setViewName("jsonResult");
+		request.setAttribute("result", result);
 
-		return mav; 
+		return "schedule/jsonResult.tiles1";
+
 	}
 
 
@@ -52,61 +53,90 @@ public class ScheduleController {
 	// 일정 추가 2020/01/13 hjp
 	@ResponseBody
 	@RequestMapping(value="/addSchedule.action", produces="text/plain;charset=UTF-8")
-	public ModelAndView addSchedule(HttpServletRequest request, ModelAndView mav) { 
+	public String addSchedule(HttpServletRequest request) { 
 
 		String result1 = request.getParameter("eventData") ;
 
-		String result = service.addSchedule(result1, request); 
+		// String JSON데이터를 객체화
+		Gson gson = new Gson(); 
+		ScheduleVO schedulevo = gson.fromJson(result1, ScheduleVO.class); 
 
-		mav.addObject("result", result); 
-		mav.setViewName("jsonResult");
+		if( schedulevo.isAllday() == false ) {
+			schedulevo.setSchedule_allday(0);
+		}
 
-		return mav; 
+		else 
+			schedulevo.setSchedule_allday(1);
 
+
+		Inter_ScheduleDAO dao = new ScheduleDAO(); 
+
+		int n = dao.addCalendaraddSchedule(schedulevo); 
+
+		JSONObject jsobj = new JSONObject();
+
+		if( n == 1) 
+			jsobj.put("result", true); 
+
+		else 
+			jsobj.put("result", false); 
+
+		String result = jsobj.toString(); 
+
+		request.setAttribute("result", result);
+
+		return "schedule/jsonResult.tiles1";
 	}
 
 
 
 	// 일정드랍 event시 이벤트 2020/01/13 hjp
-	@RequestMapping(value="/calendarDropUpdate.action")
-	public ModelAndView calendarDropUpdate(HttpServletRequest request, ModelAndView mav) { 
+	/*@RequestMapping(value="/calendarDropUpdate.action")
+	public String calendarDropUpdate(HttpServletRequest request) { 
+
 
 		String result1 = request.getParameter("eventData") ;
 
-		String result = service.calendarDropUpdate(result1, request); 
-
-		mav.addObject("result", result); 
-		mav.setViewName("jsonResult");
-
-		return mav; 
-	}
+		Gson gson = new Gson(); 
+		ScheduleVO schedulevo = gson.fromJson(result1, ScheduleVO.class); 
 
 
+		Inter_ScheduleDAO dao = new ScheduleDAO(); 
 
+	//	int n = dao.updateDropCalendarSchedule(schedulevo); 
+
+		JSONObject jsobj = new JSONObject();
+
+	//	if( n == 1) 
+			jsobj.put("result", true); 
+
+	//	else 
+			jsobj.put("result", false); 
+
+
+		String result = jsobj.toString(); 
+
+		request.setAttribute("result", result);
+
+
+
+
+		return "schedule/jsonResult.tiles1";
+	}*/
+
+
+	/*
 
 
 
 	// 일정 수정 2020/01/13 hjp
 	@ResponseBody
 	@RequestMapping(value="/calendarUpdate.action")
-	public ModelAndView calendarUpdate(HttpServletRequest request, ModelAndView mav) { 
-
-		String result1 = request.getParameter("eventData") ;
-
-		String result = service.updateCalendarSchedule(result1, request); 
-
-		mav.addObject("result", result); 
-		mav.setViewName("jsonResult");
-
-		return mav; 
-
+	public String calendarUpdate() { 
+		return "schedule/calendarUpdate.tiles1";
 	}
 
 
-
-
-
-	/*
 
 
 

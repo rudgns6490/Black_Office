@@ -5,56 +5,5 @@
 <mapper namespace="schedule"> 
 
 
-	<!-- 개인일정 가져오기   hjp -->
-	<select id="individualScheduleJSONList" resultType="com.bo.schedule.model.ScheduleVO" >
-
-		select schedule_no, FK_EMPLOYEENO,  schedule_title,  schedule_content,
-		     TO_CHAR(schedule_start, 'yyyy-mm-dd"T"hh24:mi:ss') as schedule_start,
-		     TO_CHAR(schedule_end, 'yyyy-mm-dd"T"hh24:mi:ss') as schedule_end,
-		     schedule_color, schedule_importance, schedule_progresStat, schedule_allday,
-		     schedule_authority, schedule_type
-		from TBL_BO_SCHEDULE 
-		where schedule_type = 0 and fk_employeeno = 2 
-	</select>
-	
-	
-	<!-- 일정추가하기  hjp -->
-	<insert id="addCalendaraddSchedule" parameterType="com.bo.schedule.model.ScheduleVO">
-	
-		insert into TBL_BO_SCHEDULE(schedule_no, FK_EMPLOYEENO,  schedule_title,  schedule_content,  schedule_start,                       
-                    schedule_end, schedule_color, schedule_importance, schedule_progresStat, schedule_allday,                   
-                    schedule_authority, schedule_type)                                                                          
-		values(SEQ_BO_SCHEDULE.nextval, #{fk_employeeno}, #{schedule_title}, #{schedule_content}, to_date(#{schedule_start},'yyyy-mm-dd hh24:mi:ss'),
-		        to_date(#{schedule_end}, 'yyyy-mm-dd hh24:mi:ss'), #{schedule_color}, 0, 0, #{schedule_allday},
-		        0, #{schedule_type})
-	
-	</insert>
-	
-	
-	
-	<!-- 이벤트 드랍시 일정수정 hjp -->
-	<update id="updateDropCalendarSchedule" parameterType="com.bo.schedule.model.ScheduleVO">
-	
-		update TBL_BO_SCHEDULE
-		set schedule_start = to_date(#{schedule_start}, 'yyyy-mm-dd hh24:mi:ss'), schedule_end = to_date(#{schedule_end}, 'yyyy-mm-dd hh24:mi:ss')
-		where schedule_no = #{schedule_no}
-		
-	</update>
-
-
-
-	<!-- 이벤트 클릭후 수정시  -->
-	<update id="updateCalendarSchedule" parameterType="com.bo.schedule.model.ScheduleVO">
-	
-		update TBL_BO_SCHEDULE
-		set schedule_title = #{schedule_title}, schedule_content = #{schedule_content}, schedule_start = to_date(#{schedule_start}, 'yyyy-mm-dd hh24:mi:ss'), schedule_end = to_date(#{schedule_end}, 'yyyy-mm-dd hh24:mi:ss'),
-		schedule_color = #{schedule_color}, schedule_allday = #{schedule_allday}, schedule_type = #{schedule_type}
-		where schedule_no = #{schedule_no}
-		
-	</update>
-
-
-
-
 
 </mapper>

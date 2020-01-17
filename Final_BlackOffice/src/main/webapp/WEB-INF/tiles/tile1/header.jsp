@@ -30,9 +30,9 @@
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
           <a class="dropdown-item" href="#">내 정보 수정</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">로그아웃</a>
+          <a class="dropdown-item" href="<%= ctxPath %>/logout.action">로그아웃</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="http://localhost:9090/controller/login.action" >로그인</a>
+          <a class="dropdown-item" href="<%= ctxPath %>>login.action" >로그인</a>
         </div>
       </li>
     </ul>

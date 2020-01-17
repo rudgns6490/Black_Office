@@ -7,8 +7,8 @@
 <mapper namespace="admin"> 
 	
 	<insert id="register" parameterType="com.bo.member.model.MemberVO">
-		insert into TBL_BO_EMPLOYEES(EMPLOYEENO, id, passwd, name, jubun, email, emailpw, phone, registerday)
-		values(SEQ_BO_EMPLOYEES.nextval, #{id}, #{passwd}, #{name}, #{jubun}, #{email}, #{emailpw}, #{phone}, default)
+		insert into TBL_BO_EMPLOYEES(EMPLOYEENO, id, passwd, name, jubun, email, emailpw, phone, registerday, status, fk_positionno, fk_departmentno)
+		values(SEQ_BO_EMPLOYEES.nextval, #{id}, #{passwd}, #{name}, #{jubun}, #{email}, #{emailpw}, #{phone}, default, 1, #{fk_positionno}, #{fk_departmentno})
 	</insert>
 	
 </mapper>
