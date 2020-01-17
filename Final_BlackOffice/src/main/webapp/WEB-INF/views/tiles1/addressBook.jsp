@@ -63,13 +63,13 @@
 					<input type="checkbox">&nbsp;&nbsp;&nbsp;
 				</div>
 				<div class="table1" style="width: 100px;">이름</div>
-				<div class="table1" style="width: 400px;">이메일</div>
-				<div class="table1" style="width: 250px;">전화번호</div>
+				<div class="table1" style="width: 250px;">이메일</div>
+				<div class="table1" style="width: 150px;">전화번호</div>
 				<div class="table1" style="width: 100px;">직책</div>
-				<div class="table1" style="width: 200px;">부서</div>
+				<div class="table1" style="width: 150px;">부서</div>
 				<div class="table1" style="width: 200px;">회사</div>
 				<div class="table1" style="width: 200px;">그룹</div>
-				<div class="table1" style="width: 150px;">수정</div>
+				<div class="table1" style="width: 100px;">수정</div>
 			</div>
 
 

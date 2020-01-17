@@ -86,12 +86,12 @@
 		           	</div>
 		           	
 		           	<hr> <!-- 라인만들기 -->
-           			<div style="padding:0px; margin:0px;"><a href="http://localhost:9090/controller/maintest.action">근태정보</a>&nbsp;&nbsp;&nbsp;<a href="http://localhost:9090/controller/maintest.action">휴가정보</a></div> 
+           			<div style="padding:0px; margin:0px;"><a href="http://localhost:9090/controller/main.action">근태정보</a>&nbsp;&nbsp;&nbsp;<a href="http://localhost:9090/controller/maintest.action">휴가정보</a></div> 
 	           		<hr> <!-- 라인만들기 -->
 	           		
 	           		<div style="margin: 0 auto;" align="center">
 						<img style="width: 30px; height:30px;" src="<%= ctxPath %>/resources/images/time.PNG">
-						&nbsp;현재시각 :&nbsp;
+						현재시각 :
 						<div id="clock" style="display:inline;"></div>
 					</div>
 					
@@ -107,7 +107,7 @@
            			<br><br>
            			<h3>이번달 결제</h3> 
            			<br><br>
-           			<a href="http://localhost:9090/controller/maintest.action"><img src="<%= ctxPath %>/resources/images/chart.PNG"></a>
+           			<a href="http://localhost:9090/controller/main.action"><img style="width: 250px; "src="<%= ctxPath %>/resources/images/chart.PNG"></a>
            			
            			
            		</div>
@@ -118,26 +118,26 @@
          	
 	           	<div class="maincontainer" style="text-align: left; ">
 	        		<div class="contentMenu inbl"><span style="font-size: small;">업무공유 / 전자결제</span></div>
-	        		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	        		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	        		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	           		<div class="inbl">
-		           		<a href="http://localhost:9090/controller/maintest.action"><strong>공유업무</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		           		<a href="http://localhost:9090/controller/maintest.action"><strong>일일보고</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		           		<a href="http://localhost:9090/controller/maintest.action"><strong>특별보고</strong></a>
+		           		<a href="http://localhost:9090/controller/main.action"><strong>공유업무</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		           		<a href="http://localhost:9090/controller/main.action"><strong>일일보고</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		           		<a href="http://localhost:9090/controller/main.action"><strong>특별보고</strong></a>
 	           		</div>
 	           		<hr> <!-- 라인만들기 -->
 	           		<br>
 		           		<div style="text-align: center;" class="row content">
 		           			<div class="col-sm-6" style="border-right: solid 1px black;">
 		           				<br>
-	           					<a href="http://localhost:9090/controller/maintest.action">
+	           					<a href="http://localhost:9090/controller/main.action">
 	           						<img style="width: 280px; height: 220px;" src="<%= ctxPath %>/resources/images/workimage1.PNG">
 		           				</a>
 		           	 		</div>
 		           	 		
 		           	 		<div class="col-sm-6">	
 		           				<br>
-		           				<a href="http://localhost:9090/controller/maintest.action">
+		           				<a href="http://localhost:9090/controller/main.action">
 	           						<img style="width: 280px; height: 220px;" src="<%= ctxPath %>/resources/images/workimage2.PNG">
 	           					</a>	
 		           			</div>
@@ -154,16 +154,16 @@
 		           				
 		           	 		</div>
 		           	 		
-		           	 		<div class="col-sm-5 dvideLine maincontainer" style="margin: 0 0 0 57px; padding: 0 20px 0 0;">	
+		           	 		<div class="col-sm-5 dvideLine maincontainer" style="margin: 0 0 0 40px; padding: 0 20px 0 0;">	
 		           				<div class="contentMenu"><span style="font-size: small;">공지사항</span></div>
-		           				<hr style="width: 292px;">
+		           				<hr style="width: 256px;">
 		           				<br><br>
 			           				<div>
 				           				<ul>
-											<li><a href="http://localhost:9090/controller/maintest.action">공지사항1</a></li>
-											<li><a href="http://localhost:9090/controller/maintest.action">공지사항2</a></li>
-											<li><a href="http://localhost:9090/controller/maintest.action">공지사항3</a></li>
-											<li><a href="http://localhost:9090/controller/maintest.action">공지사항4</a></li>
+											<li><a href="http://localhost:9090/controller/main.action">공지사항1</a></li>
+											<li><a href="http://localhost:9090/controller/main.action">공지사항2</a></li>
+											<li><a href="http://localhost:9090/controller/main.action">공지사항3</a></li>
+											<li><a href="http://localhost:9090/controller/main.action">공지사항4</a></li>
 										</ul>
 									</div>
 		           			</div>	
@@ -177,8 +177,8 @@
 	           	<div class="maincontainer" style="height: 400px;">
 	           		<div class="contentMenu"><span style="font-size: small;">일정</span></div>
 	           		<br>
-	           		<a href="http://localhost:9090/controller/maintest.action"><img style="width: 315px; height: 285px;" src="<%= ctxPath %>/resources/images/calendar.PNG"></a>
-	           		<div>등록된 일정이 없습니다.</div>
+	           		<a href="http://localhost:9090/controller/main.action"><img style="width: 250px; height: 250px;" src="<%= ctxPath %>/resources/images/calendar.PNG"></a>
+	           		<br><br><div>등록된 일정이 없습니다.</div>
 	           	</div>
            
 	           	<div class="maincontainer" style="height: 400px; margin-top: 50px;">

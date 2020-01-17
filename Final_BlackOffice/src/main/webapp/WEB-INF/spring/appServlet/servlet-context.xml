@@ -41,12 +41,10 @@
 	        예를 들어 
 	        컨트롤러에서 뷰의 이름을 excelDownloadView 으로 주면 (즉, 리턴만 excelDownloadView 로 주면) 
 	     bean 객체의 id가 excelDownloadView 인것을 찾는다.
-
 		 @RequestMapping(value="/testExcel.action")
 		 public String testExcel() {
 		    return "excelDownloadView";
 		 }
-
 		 <beans:bean id="excelDownloadView" class="com.spring.excel.ExcelDownloadView"/>
                 그리하여 com.spring.excel.ExcelDownloadView 클래스가 실행된다.	 
                 
