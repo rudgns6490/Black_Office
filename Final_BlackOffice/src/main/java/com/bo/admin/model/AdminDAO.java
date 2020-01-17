@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bo.member.model.MemberVO;
 
+//=== DAO 선언 ===
 @Repository
 public class AdminDAO implements InterAdminDAO {
 	
@@ -19,6 +20,13 @@ public class AdminDAO implements InterAdminDAO {
 	public int register(MemberVO mvo) {
 		int register = sqlsession.insert("admin.register", mvo);
 		return register;
+	}
+	
+	// 개인주소록 추가등록 2020/01/16 LBH
+	@Override
+	public int registerPersonal(AdressbookVO abvo) {
+		int registerPersonal = sqlsession.insert("admin.registerPersonal", abvo);
+		return registerPersonal;
 	}
 	
 	

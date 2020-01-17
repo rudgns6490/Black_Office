@@ -11,6 +11,10 @@
 	
 	$(document).ready(function(){
 		
+		
+		// ajax
+		
+		
 		// 비밀번호 확인하기
 		$("input#passwdCheck").blur(function(){
 	    	if( $(this).val() != $("input#passwd").val() ) {
@@ -131,32 +135,32 @@
 	    		$("span.emailpwCheck_error").empty();
 	    		$(":input").attr("disabled",false);
 	    		
-	    		$("input#tel").focus();
+	    		$("input#phone").focus();
 	    	}
 	    });
 		
 	 	// 전화번호
-		$(".telCheck_error").hide();
-		$("#tel").blur(function(){
-			var tel = $("input#tel").val().trim();
+		$(".phoneCheck_error").hide();
+		$("#phone").blur(function(){
+			var phone = $("input#phone").val().trim();
 			//  == 
 			var regExp = /^01([0|1|6|7|8|9]?)([0-9]{3,4})([0-9]{4})$/;
-			var bool = regExp.test(tel);
+			var bool = regExp.test(phone);
 			
 			if(!bool) {
 	    		
 	    		$(":input").attr("disabled",true);
-	    		$("input#tel").attr("disabled",false);
+	    		$("input#phone").attr("disabled",false);
 	    		$(this).attr("disabled",false);
 	    		
-				$("span.telCheck_error").show();
+				$("span.phoneCheck_error").show();
 				$("input#jubun2").val("");
 				$("input#jubun2").focus();
 				return false;  
 				// 여기서 종료함. 즉, 서브밋을 하지 말라는 뜻이다.
 			}
 			else {
-				$("span.telCheck_error").hide();
+				$("span.phoneCheck_error").hide();
 	    		$(":input").attr("disabled",false);
 	    	}
 		});
@@ -167,7 +171,7 @@
 		});
 		
 		// 이메일 비밀번호에서 
-		$("#tel").keydown(function(event){
+		$("#phone").keydown(function(event){
   			if(event.keyCode == 13) { // 엔터를 했을 경우
   				goRegister();
   			}
@@ -184,7 +188,7 @@
 		var jubun2 = $("#jubun2").val();
 		var email = $("#email").val();
 		var emailpw = $("#emailpw").val();
-		var tel = $("#tel").val();
+		var phone = $("#phone").val();
 		
 		if(id.trim()=="") {
 			alert("아이디를 입력하세요!!");
@@ -240,10 +244,10 @@
 		}
 		
 		// 전화번호
-		if(tel.trim()=="") {
+		if(phone.trim()=="") {
 			alert("전화번호를 입력하세요!!");
-			$("#tel").val(""); 
-			$("#tel").focus();
+			$("#phone").val(""); 
+			$("#phone").focus();
 			return;
 		}
 		
@@ -363,13 +367,13 @@
 		      	
 		      	<tr>
 		      	  <td style="background-color: #e0ebeb;">
-		      	  	<label for="tel">전화번호</label>
+		      	  	<label for="phone">전화번호</label>
 		      	  </td>
 		      	  <td>
-		      	    <input type="text" name="tel" id="tel" value="" maxlength="11" required placeholder="-는 제외하고 입력" style="width: 200px;"/>
+		      	    <input type="text" name="phone" id="phone" value="" maxlength="11" required placeholder="-는 제외하고 입력" style="width: 200px;"/>
 		      	    
 		      	    <%-- ====  emailpwCheck check ==== --%>
-		      	    <span class="error telCheck_error" style="color: red; font-size: 12px;">01([0|1|6|7|8|9]) 시작하는 11자리 숫자로 -는 제외하고 입력하세요</span>
+		      	    <span class="error phoneCheck_error" style="color: red; font-size: 12px;">01([0|1|6|7|8|9]) 시작하는 11자리 숫자로 -는 제외하고 입력하세요</span>
 		      	    <%-- ====  emailpwCheck check ==== --%>
 		      	    
 		      	  </td>
@@ -380,11 +384,12 @@
 		      	  <td style="background-color: #e0ebeb;">부서</td>
 		      	  <td>
 		      	    <select class="form-control" style="width: 30%;">
-	  				  <option>1</option>
-	  				  <option>2</option>
-	  				  <option>3</option>
-	  				  <option>4</option>
-	  				  <option>5</option>
+	  				  <option></option> 
+					  <option>인사팀</option>
+					  <option>마케팅팀</option>
+					  <option>개발1팀</option>
+					  <option>개발2팀</option>
+					  <option>영업팀</option>
 					</select>
 		      	  </td>
 		      	</tr>
@@ -392,11 +397,14 @@
 		      	  <td style="background-color: #e0ebeb;">직위</td>
 		      	  <td>
 		      	    <select class="form-control" style="width: 30%;">
-	  				  <option>1</option>
-	  				  <option>2</option>
-	  				  <option>3</option>
-	  				  <option>4</option>
-	  				  <option>5</option>
+	  				  <option></option>
+					  <option>사장</option>
+					  <option>이사</option>
+					  <option>부장</option>
+					  <option>차장</option>
+					  <option>과장</option>
+					  <option>대리</option>
+					  <option>사원</option>
 					</select>
 		      	  </td>
 		      	</tr>
