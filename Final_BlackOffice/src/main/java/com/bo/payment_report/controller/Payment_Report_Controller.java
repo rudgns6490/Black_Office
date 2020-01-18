@@ -1,12 +1,18 @@
 package com.bo.payment_report.controller;
 
+import java.util.HashMap;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bo.payment_report.service.InterPayment_Report_Service;
 
@@ -179,9 +185,76 @@ public class Payment_Report_Controller {
 		request.setAttribute("title", title);
 		return "report/report_jsp/reportWrite.tiles1";
 	}
+//////////////////////////////////////////////////////////////////////////////////
+	
+/////////////////////////////// Modal ajax로 부서 넣어주기 //////////////////////////////////////	
+	
+	// Modal ajax
+	@ResponseBody
+	@RequestMapping(value="/addAprroval.action", produces = "text/plain;charset=UTF-8")
+	public String addAprroval() {
+		
+		List<HashMap<String,String>> addAprrovalList = service.addAprrovalModal();
+		
+		JSONArray jsonArr = new JSONArray();
+		for( HashMap<String,String> addAprrovalMap : addAprrovalList ) {
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("departmentname", addAprrovalMap.get("departmentname"));
+			
+			jsonArr.put(jsonObj);
+		}
+		String addAprroval = jsonArr.toString();
+		return addAprroval;
+	}
+	
+//////////////////////////////////////////////////////////////////////////////////////////////	
 	
 
 	
+/////////////////////////////// Modal ajax로 넣어준 부서에 대한 사원명단 select //////////////////////////////////////		
+	
+	@ResponseBody
+	@RequestMapping(value="/addModalVal.action", method= {RequestMethod.GET}, produces="text/plain;charset=UTF-8")
+	public String addModalSelect(HttpServletRequest request) {
+		
+		String departmentname = request.getParameter("modalDepartmentName");
+
+		List<HashMap<String,String>> addModalSelectList = service.addModalSelect(departmentname);
+	//	System.out.println(addModalSelectList);
+		JSONArray jsonArr = new JSONArray();
+		for( HashMap<String,String> modalmap : addModalSelectList) {
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("DEPARTMENTNAME", modalmap.get("DEPARTMENTNAME"));
+			jsonObj.put("NAME", modalmap.get("NAME"));
+			jsonObj.put("POSITIONNAME", modalmap.get("POSITIONNAME"));
+			
+			jsonArr.put(jsonObj);
+		}
+		return jsonArr.toString();
+	}
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+	
+
+	
+/////////////////////////////// 지출결재서 결재함으로 보내주기 //////////////////////////////////////	
+	@RequestMapping(value="/addreport.action", method= {RequestMethod.POST})
+	public String addreport(HttpServletRequest request) {
+		
+		int tdCount = Integer.parseInt(request.getParameter("tdCount"));
+
+		for(int i=0; i<tdCount; i++) {
+			String approver = request.getParameter("approverhidden"+i+"");
+			System.out.println(approver);
+		}
+		
+		
+		return "";
+	}
+	
+	
+	
+////////////////////////////////////////////////////////////////////////////////////////////	
 }
 
 

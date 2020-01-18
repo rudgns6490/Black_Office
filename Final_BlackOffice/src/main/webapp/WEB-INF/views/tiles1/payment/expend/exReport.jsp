@@ -34,6 +34,7 @@
 	.radioCursor:hover { cursor: pointer; }
 	/*----------------------------------------------------------------------------------------------  */
 	
+	.headertable { margin-right: 70px; }
 	.headertable th,td {
 		border: solid 1px #639c9c;
 		border-collapse: collapse;  
@@ -46,13 +47,14 @@
 	
 	.headertable th { background-color: #e0ebeb;}	
 	.hdth { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
-	.hdtd , .hdtd0 , .hdtd1 , .hdtd2 , .hdtd3 { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
+	.hdtd { width: 120px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
 	.approvalImg { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
 	.headertable {float: right; margin-top:20px;}
 	
 	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:300px; height: 35px; font-size: 15pt; }
 	.approval th{ background-color: #e0ebeb; font-size: 13pt; font-weight: bold; }
 	.approvalImg:hover { cursor: pointer; }
+	.minus:hover { cursor: pointer; }
 	
 	.titleLine { clear: both; border: solid 0px #639c9c; height: 35px; }  /* 야매로 줄바꿈 해주기위한것 */
 	.title2, .title3 { clear: both; border: solid 1px #639c9c; border-bottom: none;  width: 100%;}
@@ -126,6 +128,8 @@
 	    text-align: center;
 	}
 	
+	.modalAddEmployees { cursor: pointer; } /* Modal 안에 td  */
+	
 </style>
 
 <script type="text/javascript">
@@ -133,6 +137,7 @@
 
 	$(document).ready(function(){
 		
+		$(".modaladdTd").append("");
 		$(".title").focus();
 		$("input:radio[id=tableRadio]").prop("checked",true);
 		
@@ -171,39 +176,18 @@
 		});// end of $("input:radio[name=radio]").click(function(){})----------
 		
 		
-		// 결재란 td 클릭시 이미지 넣어주기
-		$(".approvalImg").click(function(){
-			var clickIndex = $(this).index();
-			
-			if($(".hdtd"+clickIndex+"").text().length > 1) { 
-				var appr_length = $("input:hidden[name = approvalHidden]").length;
-				
-					var hiddenVal = $("input:hidden[class=approvalHidden"+clickIndex+"]").val();
-					
-					if(hiddenVal == "0") {
-						$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/뭐.png'>"); 
-						$("input:hidden[class=approvalHidden"+clickIndex+"]").val("1");	
-					}
-					else {
-						$(this).html("");
-						$("input:hidden[class=approvalHidden"+clickIndex+"]").val("0");
-					}
-					
-				
-			}
-			
-			else {
-				alert("결재자가 비어 있습니다.");
-			}
-		});
-		
-		
 		// 결재라인 추가시 <select> <option> 부서 넣어주기
+		$(".addApproval").append("");
 		$.ajax({
 			url:"<%= ctxPath%>/addAprroval.action",
 			type:"GET",
 			dataType:"JSON",
 			success:function(json){
+				var html = "";
+				$.each(json,function(index, item){
+					html += "<option>"+item.departmentname+"</option>"			
+				}); 
+				$(".addApproval").append(html); 
 				
 			},
 			error: function(request, status, error){
@@ -212,8 +196,209 @@
 		}); // end of ajax({})-------------------------------------------------
 		
 		
+		/* ---------------------------------------------------------------------------------------------------- */
+		// 결재라인 부서에 따른 사원 select 
+		$(".addApproval").on('change',function(event){ 
+		//	alert( $(this).val() );	
+			if($(this).val() != null && $(this).val() != "0") {
+				
+				$.ajax({
+					url:"<%= ctxPath%>/addModalVal.action",
+					type:"GET",
+					data:{"modalDepartmentName":$(this).val()},
+					dataType:"JSON",
+					success:function(json){
+						var html = "";
+						$.each(json,function(index, item){
+							html += "<tr class='modalAddEmployees' class='close'>"
+							html += "<td class='DEPARTMENTNAME'>"+item.DEPARTMENTNAME+"</td>";
+							html += "<td class='NAME'>"+item.NAME+"</td>";
+							html += "<td class='POSITIONNAME'>"+item.POSITIONNAME+"</td>";
+							html += "</tr>";	
+						}); 
+						$(".modalTrLength").html(html);
+						
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				}); // end of ajax({})-------------------------------------------------
+			}
+			
+		});// end of $(".addApproval").on('change',function(event){})--------------------------------
 		
+		
+		/* ---------------------------------------------------------------------------------------------------- */
+	
+		
+		$(document).on("click",".modalAddEmployees",function(){
+			var valHtml0 = ""; 
+			var valHtml1 = "";
+			var valHtml2 = "";
+			var valHidden = "";
+		//	var modalAddLength = $(".modalAddEmployees").length;
+		//	alert(modalAddLength);
+			/*
+			//	alert($(this).index());
+			var index = $(this).index();
+			//	alert($(".NAME").text());
+		//	alert($(index).find('.NAME').val());
+			alert($(index).children().first().val()); */
+			
+		//	alert($(this).find('.NAME').val());
+			
+		//	console.log($(".addApproval").val());
+		//	console.log( $(this).text() );
+		
+		//  console.log($(this).html());
+		    
+		    var html = $(this).html();
+	     // <td class="DEPARTMENTNAME">개발2팀</td><td class="NAME">박시준</td><td class="POSITIONNAME">부장</td>
+	        var index = html.indexOf('class="NAME"');
+	        html = html.substring(index);
+	     // console.log(html);
+	     // class="NAME">박시준</td><td class="POSITIONNAME">부장</td>
+	        	        
+	        index = html.indexOf(">");
+	        html = html.substring(index);
+	     // console.log(html);
+	     // >박시준</td><td class="POSITIONNAME">부장</td>
+	        
+	        index = html.indexOf(">");
+	        html = html.substring(index);
+	     // console.log(html);
+	     // >박시준</td><td class="POSITIONNAME">부장</td>
+	        
+	        index2 = html.indexOf("<");
+	        // index2 ==> 4
+	        
+	     //   console.log(html.substring(1,4));
+	        var name = html.substring(1,4);
+	        
+			/* 
+			var totalText = $(this).text();
+			var deptName = $(".addApproval").val();
+			var beginIndex = totalText.length - deptName.length - 1;
+			console.log( totalText.substr(beginIndex, 3)); */
+
+	// ----------------------------- 결재라인 추가 -------------------------------------- //	
+			 
+		//	var count = $(this).index();
+			var hdtdLength = $(".th").length;
+			if(hdtdLength < 3){
+				
+				valHtml0 += "<th class='hdth hdth"+hdtdLength+" th'>결재자</th>";
+				$(".modaladdTh").append(valHtml0);
+				
+				<%-- valHtml1 += "<td class='hdtd hdtd"+hdtdLength+" td'>"+name+"&nbsp;<img class='minus' style='width:20px; height:20px; position: relative; top: -2.5px;'  src='<%= ctxPath%>/resources/images/빼기이미지.png'></td> "; --%>
+				valHtml1 += "<td class='hdtd hdtd"+hdtdLength+" td' name='approver"+hdtdLength+"' value='1'>"+name+"&nbsp;<img class='minus"+hdtdLength+" minus' style='width:20px; height:20px; position: relative; top: -2.5px;'  src='<%= ctxPath%>/resources/images/빼기이미지.png'></td> ";
+				$(".modaladdTd").append(valHtml1);
+				valHidden += "<input type='text' class='approverhidden' name='approverhidden"+hdtdLength+"' value='"+name+"' />";
+				$("#formHidden").append(valHidden);
+				
+				
+				valHtml2 = "<td class='approvalImg approvalImg"+hdtdLength+"'>";
+				$("#test").append(valHtml2);
+			}
+			else {
+				alert("더이상 추가할 수 없습니다.");
+			}
+			
+	// --------------------------------------------------------------------------- //		
+		}); // $(document).on("click",".modalAddEmployees",function(){})-----------------------
+		
+	// --------------------------------------------------------------------------- //	
+		// 결재란 이미지 넣기
+		$(document).on("click",".approvalImg",function(){
+			<%-- var clickIndex = $(this).index(); 
+			
+			 if($(".hdtd"+clickIndex+"").text().length > 1) { 
+				var appr_length = $("input:hidden[name = approvalHidden]").length;
+				 
+					var hiddenVal = $("input:hidden[class=approvalHidden"+clickIndex+"]").val();
+					
+					if(hiddenVal == "0") {
+						$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/뭐.png'>"); 
+						$("input:hidden[class=approvalHidden"+clickIndex+"]").val("1");	
+						
+					}
+					else {
+						$(this).html("");
+						$("input:hidden[class=approvalHidden"+clickIndex+"]").val("0");
+						
+					}	
+			}
+			
+			 else {
+				alert("결재자가 비어 있습니다.");
+			} --%>
+			
+			alert("결재가 불가 합니다.");
+		}); // end of $(document).on("click",".approvalImg",function(){})-------------------------------
+		
+		
+		// 결재란 비우기
+		$(document).on("click",".minus",function(){
+		//	alert($(this).parent().text());
+		//	$(this).parent().text("");
+			var idx = $(this).parents().index();
+		//	alert(idx);
+			/* $(".hdth"+index+"").remove();
+			$(this).parent().remove();
+			$(".approvalImg"+index+"").remove(); */
+		//	var class_by_class = $(this).parent().parent().html();
+		
+		//------------------------------------------------------------//
+		//	alert(idx);
+		//	alert((".approvalImg").length);
+			 /* for(var i=0; i<$(".td").length; i++) {
+				var hdthInedx = $(".hdth"+i+"").index();
+				hdthInedx = $(".hdth"+i+"").index()-1;
+			//	alert(hdthInedx);
+				var imgIndex = $(".approvalImg"+i+"").index();
+				if(idx == $(this).parents().index() && hdthInedx == idx && imgIndex == idx ) {
+				//	alert("ddd");
+					$(".hdth"+i+"").remove();
+					$(this).parent().remove();
+					$(".approvalImg"+i+"").remove();
+					break;
+				}  
+				} // end of for()---------------*/
+				
+			//	alert($(this).parent().text());	
+				/* var idx = $(this).parent().index();
+				var thText = $(this).parents().parents().find(".hdth"+idx+"").text();
+				var imgText = $(this).parents().parents().find(".approvalImg"+idx+"").text(); */
+				
+				
+				var approvalHtml = $(this).parents().html();
+				// 박시준&nbsp;<img class="minus0 minus" style="width:20px; height:20px; position: relative; top: -2.5px;" src="/controller/resources/images/빼기이미지.png">
+					var str_appHtml = approvalHtml.indexOf('class');
+					approvalHtml = approvalHtml.substring(str_appHtml);
+				//	console.log(approvalHtml);
+				//	class="minus1 minus" style="width:20px; height:20px; position: relative; top: -2.5px;" src="/controller/resources/images/빼기이미지.png">
+					str_appHtml = approvalHtml.indexOf('m');
+					approvalHtml = approvalHtml.substring(str_appHtml);
+				//	console.log(approvalHtml);
+				//	minus2 minus" style="width:20px; height:20px; position: relative; top: -2.5px;" src="/controller/resources/images/빼기이미지.png">
+					var index = approvalHtml.indexOf('0');
+				//	console.log(index);
+				//	index = 5
+				//	console.log(approvalHtml.substring(5,6));
+			    	var count = approvalHtml.substring(5,6);
+			    
+		    	$(".hdth"+count+"").remove();
+				$(this).parent().remove();
+				$(".approvalImg"+count+"").remove();
+	
+		}); // end of $(document).on("click",".minus",function(){})----------------------------
+	// --------------------------------------------------------------------------- //	
+		
+	
+		
+
 	});// end of $(document).ready(function(){})------------------------------------
+	
 	
 	
 	// 지출결의서 보고서
@@ -260,22 +445,30 @@
 	
 	// 제출하기 버튼의 onclick
 	function save() {
+	   
+		var modaladdTd = $(".modaladdTd").text();
 		
-		for(var i=0; i<n; i++) {
-			if($("#approvalImg"+ i+"").val() == "0") {
-				alert("결제자를 확인해주세여"); 
-				return false; 
-			} 
-		}
+		if(modaladdTd.trim() == "") {
+			alert("결재자를 선택해 주세요");
+			return;
+		} 
+		else {
+			var td = $(".modaladdTd").find('td').text();
+		//	alert(td);
+			var count = $(".th").length;
+			$("input:hidden[id = tdCount]").val(count);
+		//	alert($("#tdCount").val());
 		
-		
-		var frm = document.submitFrm;
-		frm.method = "POST";
-		frm.action = "<%= ctxPath%>/maintest.action";
-		frm.submit();
+				
+			frm = document.submitFrm;
+			frm.method = "POST";
+			frm.action = "<%= ctxPath%>/addreport.action";
+			frm.submit();
+		}	
 	}
 	
-
+	////////////////////////////////////////////////////
+	
 
 </script>
 
@@ -324,41 +517,24 @@
 	    		
 	    		<form name="submitFrm">
 	    		<table class="headertable">
-	    				<thead>
-	    				
-	    				<tr>
-	    					<th rowspan="2" class="hdth">결재</th> 
-	    					<th class="hdth">결재자</th>
-	    					<th class="hdth"></th>
-	    					<th class="hdth"></th>
-	    					<th class="hdth"></th>
-	    					
-	    				</tr> 
-	    				
-	    				<tr>
-	    					<td class="hdtd hdtd0">김차장</td>  
-	    					<td class="hdtd hdtd1">박차장</td> 
-	    					<td class="hdtd hdtd2"></td> 
-	    					<td class="hdtd hdtd3"></td>
-	    				</tr>	
-	    				</thead>
+					<thead>
+                   
+	                   <tr class ="modaladdTh">
+	                      <th rowspan="2" class="hdth">결재</th> 
+	                      <%-- <th class="hdth">결재자</th> --%>
+	                   </tr> 
+	                   
+	                   <tr class ="modaladdTd"></tr>   
+                   </thead>
 
-	    				<tbody>
-	    				<tr>
-	    					<th rowspan="2" class="hdth">결재란</th>  
-	    				</tr>
+                   <tbody>
+	                   <tr>
+	                      <th rowspan="2" class="hdth">결재란</th>
+	                   </tr>
+	                   
+	                   <tr id="test"></tr>
+                   </tbody>
 	    				
-	    				<tr id="test">
-	    					<td class="approvalImg">	    						
-	    					</td>
-	    					<td class="approvalImg">	    						
-	    					</td>
-	    					<td class="approvalImg">  						
-	    					</td>
-	    					<td class="approvalImg">    						
-	    					</td>
-	    				</tr>
-	    				</tbody>
 	    		</table>
 	    		
 	    		
@@ -370,7 +546,7 @@
 		
 				<div class="container" id="ptLineAdd"> 
 					<!-- Trigger the modal with a button -->
-					<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" style="background-color: #0099cc;">결재라인 추가버튼</button>
+					<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" style="background-color: #0099cc;">결재라인 추가</button>
 					
 					<!-- Modal -->
 					<div class="modal fade" id="myModal" role="dialog">
@@ -390,11 +566,7 @@
 												<th>부서</th>
 												<td>
 													<select class="addApproval">
-														<!-- <option onclick="" value="">부서 1</option>
-														<option onclick="" value="">부서 2</option>
-														<option onclick="" value="">부서 3</option>
-														<option onclick="" value="">부서 4</option>
-														<option onclick="" value="">부서 5</option> -->
+														<option value="0"> -- 부서 선택 -- </option> 
 													</select>
 												</td>
 											</tr>
@@ -420,12 +592,8 @@
 												<th>직위</th>
 											</tr>
 										</thead>
-										<tbody class="add_result_List_contents">
-											<tr>
-												<td>부서부서</td>
-												<td>너의 이름은?</td>
-												<td>레벨</td>
-											</tr>
+										<tbody class="add_result_List_contents modalTrLength">
+
 										</tbody>
 									</table>
 								</div>
@@ -453,17 +621,17 @@
 		 			<tbody>
 		 				<tr>
 		 					<td class="title2Td1">제출일자</td>
-		 					<td class="title2Td">&nbsp;<input id="" name="ex_sysdt" readonly style="border: none;" value="${sysYear}" /></td>
+		 					<td class="title2Td">&nbsp;<input id="" name="writeday" readonly style="border: none;" value="${sysYear}" /></td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">제출자</td>
-		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" /></td>
+		 					<td class="title2Td"><input id="" name="employeename" readonly style="border: none;" /></td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">소속</td>
-		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" /></td>
+		 					<td class="title2Td"><input id="" name="department" readonly style="border: none;" /></td>
 		 				</tr>
 		 				
 		 				<tr>
@@ -480,21 +648,22 @@
 		 				<tr>
 		 					<td class="title2Td1">지출일자</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="date" name="ex_exp_dt" />
+		 						&nbsp;<input type="date" name="expenditureday" />
 		 					</td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">제목</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="text" name="ex_title" class="title" style="width: 99%;" />
+		 						&nbsp;<input type="text" name="title" class="title" style="width: 99%;" />
 		 					</td>
 		 				</tr>
 		 			 	
 		 				<tr>
-		 					<td colspan="2">
+		 					<td class="title2Td1">내용</td>
+		 					<td>
 		 						<div >
-	    							<iframe class="iframeDiv" name="ex_content" ></iframe>
+	    							<textarea class="content" name="content" style="width: 100%; height: 400px;"></textarea>
 	    						</div>
 	    					</td>	
 		 				</tr> 
@@ -523,6 +692,10 @@
 		
 		 			</tbody>
 		 		</table>
+		 		
+		 		<div id="formHidden"> <!-- 결재란 td 개수를 가지고 넘어가기 위해 숨겨둔다. -->
+					<input type="hidden" id="tdCount" name="tdCount" value="" />
+				</div>
 		 		</form>
 		 		<br/>
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	 		
@@ -539,24 +712,15 @@
 	
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	
 			<br/><br/><br/> 
-		<div><input type="hidden" name="approvalHidden" class="approvalHidden0" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
-		<div><input type="hidden" name="approvalHidden" class="approvalHidden1" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
-		<div><input type="hidden" name="approvalHidden" class="approvalHidden2" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->	
-		<div><input type="hidden" name="approvalHidden" class="approvalHidden3" value="0" /></div> <!-- 결재란 이미지위해 숨긴 div  -->
-		<div><input type="hidden" name="statusHidFrm" class="statusHidFrm" value="0" /></div> <!-- 결재상태 value  -->	
+
+		<!-- <div><input type="hidden" name="approvalHidden" class="approvalHidden3" value="0" /></div> --> <!-- 결재란 이미지위해 숨긴 div  -->
+		<div class="hiddenval"></div> <!-- 결재란 이미지위해 숨긴 div  -->
+		
 	</div>
 	
-	
-	<form>	<!-- Modal 을 위해 숨긴 form 태그 -->
-		<input type="hidden" />
-		<input type="hidden" />
-		<input type="hidden" />
-		<input type="hidden" />
-	</form>
-	
+
 </body>
 </html>
-
 
 
 
