@@ -3,6 +3,7 @@ package com.bo.admin.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bo.admin.model.AdressbookVO;
 import com.bo.admin.model.InterAdminDAO;
 import com.bo.member.model.MemberVO;
 
@@ -24,6 +25,12 @@ public class AdminService implements InterAdminService{
 		return register;
 	}
 	
+	// 개인주소록 추가등록 2020/01/16 LBH 
+	@Override
+	public int registerPersonal(AdressbookVO abvo) {
+		int registerPersonal = dao.registerPersonal(abvo);
+		return registerPersonal;
+	}
 
 	
 	

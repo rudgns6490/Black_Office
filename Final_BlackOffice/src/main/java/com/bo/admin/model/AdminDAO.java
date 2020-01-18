@@ -22,6 +22,13 @@ public class AdminDAO implements InterAdminDAO {
 		return register;
 	}
 	
+	// 개인주소록 추가등록 2020/01/16 LBH
+	@Override
+	public int registerPersonal(AdressbookVO abvo) {
+		int registerPersonal = sqlsession.insert("admin.registerPersonal", abvo);
+		return registerPersonal;
+	}
+	
 	
 	
 	
