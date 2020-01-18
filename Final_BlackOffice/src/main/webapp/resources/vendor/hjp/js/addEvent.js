@@ -38,7 +38,7 @@ var newEvent = function (start, end, eventType) {
     	
     	
         var eventData = {
-        	fk_employeeno: '2', 		//	사원db 만들어지면 연동하기 
+       		user_no: '1', 		//	사원db 만들어지면 연동하기 
        		schedule_title: editTitle.val(),
        		schedule_start: editStart.val(),
        		schedule_end: editEnd.val(),

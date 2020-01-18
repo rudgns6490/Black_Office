@@ -31,6 +31,7 @@ public class AdminService implements InterAdminService{
 		int registerPersonal = dao.registerPersonal(abvo);
 		return registerPersonal;
 	}
+
 	
 	
 	

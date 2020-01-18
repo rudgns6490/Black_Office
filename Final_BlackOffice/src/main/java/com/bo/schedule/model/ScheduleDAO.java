@@ -11,14 +11,13 @@ public class ScheduleDAO implements Inter_ScheduleDAO {
 
 	
 	@Autowired  
-	private SqlSessionTemplate sqlsession;
+	private SqlSessionTemplate sqlschedule;
 	
 	
 	// 2020.01.14 개인일정 가져오기 
 	@Override
 	public List<ScheduleVO> individualScheduleJSONList() {
-		
-		List<ScheduleVO> JSONList = sqlsession.selectList("schedule.individualScheduleJSONList");
+		List<ScheduleVO> JSONList = sqlschedule.selectList("schedule.individualScheduleJSONList");
 
 		return JSONList; 
 	}
@@ -27,28 +26,8 @@ public class ScheduleDAO implements Inter_ScheduleDAO {
 	@Override
 	public int addCalendaraddSchedule(ScheduleVO schedulevo) {
 		
-		int n = sqlsession.insert("schedule.addCalendaraddSchedule", schedulevo); 
+		int n = sqlschedule.insert("schedule.addCalendaraddSchedule", schedulevo); 
 		return n ; 
 	}
-
-	// 일정드랍 event시 이벤트 2020/01/13 hjp
-	@Override
-	public int updateDropCalendarSchedule(ScheduleVO schedulevo) {
-
-		int n = sqlsession.update("schedule.updateDropCalendarSchedule", schedulevo); 
-		return n ; 
-	}
-
-	// 일정 수정 2020/01/13 hjp
-	@Override
-	public int updateCalendarSchedule(ScheduleVO schedulevo) {
-		
-		int n = sqlsession.update("schedule.updateCalendarSchedule", schedulevo); 
-		return n ; 
-	}
-	
-	
-	
-	
 
 }
