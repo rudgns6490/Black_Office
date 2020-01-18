@@ -7,6 +7,34 @@
 
 <link rel="stylesheet" type="text/css" href="<%=ctxPath%>/resources/css/login.css">
 
+<script type="text/javascript">
+	function goLogin(){
+		
+		var id = $("#id").val(); 
+		 var passwd = $("#passwd").val(); 
+		
+		 if(id.trim()=="") {
+		 	 alert("아이디를 입력하세요!!");
+			 $("#id").val(""); 
+			 $("#id").focus();
+			 return;
+		 }
+		
+		 if(passwd.trim()=="") {
+			 alert("비밀번호를 입력하세요!!");
+			 $("#passwd").val(""); 
+			 $("#passwd").focus();
+			 return;
+		 }
+		
+		var frm = document.login;
+		
+		frm.action = "<%= ctxPath%>/loginEnd.action";
+		frm.method = "POST";
+		frm.submit();
+	}
+</script>
+
 <div id="content-wrapper" style="padding: 0px;" > 
 	<div class="container-fluid text-center">
 
@@ -52,9 +80,9 @@
 			           				<br>
 			           				
 			           				<div class="writelogin" style="width: 400px; text-align: center;">
-			           					<label for="userid"><img src="<%= ctxPath %>/resources/images/myinforpicture.PNG"></label>
+			           					<label for="id"><img src="<%= ctxPath %>/resources/images/myinforpicture.PNG"></label>
 			           					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-			           					<input type="text" name="userid" id="userid" class="myinput" size="20" maxlength="20"
+			           					<input type="text" name="id" id="id" class="myinput" size="20" maxlength="20"
 										required placeholder="아이디" autocomplete="off">
 			           				
 			           				</div>
@@ -73,7 +101,7 @@
 			           					<label for="hobby1" class="hobby">&nbsp;아이디 저장</label>
 			           				</div>
 			           				
-			           				<button class="buttons bluebutton" >로그인</button>
+			           				<button class="buttons bluebutton" onclick="goLogin()">로그인</button>
 			           				
 			           	 		</div>
 		           	 		</form>

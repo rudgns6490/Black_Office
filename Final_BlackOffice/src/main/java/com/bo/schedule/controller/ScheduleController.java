@@ -103,14 +103,14 @@ public class ScheduleController {
 
 		Inter_ScheduleDAO dao = new ScheduleDAO(); 
 
-		int n = dao.updateDropCalendarSchedule(schedulevo); 
+	//	int n = dao.updateDropCalendarSchedule(schedulevo); 
 
 		JSONObject jsobj = new JSONObject();
 
-		if( n == 1) 
+	//	if( n == 1) 
 			jsobj.put("result", true); 
 
-		else 
+	//	else 
 			jsobj.put("result", false); 
 
 

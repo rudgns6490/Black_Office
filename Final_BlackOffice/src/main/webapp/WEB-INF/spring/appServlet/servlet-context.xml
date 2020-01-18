@@ -172,7 +172,7 @@
 	<aop:aspectj-autoproxy /> <!-- 추가 -->	     
 	 
 	<aop:config proxy-target-class="true">
-	  <aop:pointcut id="controllerOperation" expression="execution(public * com.spring..*Controller.*(..))" />
+	  <aop:pointcut id="controllerOperation" expression="execution(public * com.bo..*Controller.*(..))" />
     </aop:config>
     
 	

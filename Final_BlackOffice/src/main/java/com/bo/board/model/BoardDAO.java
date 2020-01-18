@@ -7,7 +7,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.bo.member.model.MemberVO;
+import com.bo.board.model.BoardVO;
+import com.bo.board.model.CommentVO;
 
 //=== DAO 선언 ===
 @Repository
@@ -16,44 +17,13 @@ public class BoardDAO implements InterBoardDAO {
 	// === 의존객체 주입하기(DI: Dependency Injection) ===
 	@Autowired   // Type에 따라 알아서 Bean 을 주입해준다.
 	private SqlSessionTemplate sqlsession;
-
 	
-	/*// === 메인 페이지용 이미지 파일명 가져오기 ===  
-	@Override
-	public List<String> getImgfilenameList() {
-		List<String> imgfilenameList = sqlsession.selectList("board.getImgfilenameList");
-		return imgfilenameList;
-	}*/
-
-
-	/*// === 로그인 처리하기 ===  
-	@Override
-	public MemberVO getLoginMember(HashMap<String, String> paraMap) {
-		MemberVO loginuser = sqlsession.selectOne("board.getLoginMember", paraMap);
-		return loginuser;
-	}*/
-	
-	/*// 마지막으로 로그인 한 날짜시간 변경(기록)하기
-	@Override
-	public void setLastLoginDate(HashMap<String, String> paraMap) {
-		sqlsession.update("board.setLastLoginDate", paraMap);
-	}*/
-
 	// === 글쓰기(파일첨부가 없는것) ===
 	@Override
 	public int add(BoardVO boardvo) {
 		int n = sqlsession.insert("board.add", boardvo);
 		return n;
 	}
-
-
-	// === 페이징 처리를 안한 검색어가 없는 전체 글목록 보여주기 ===
-	@Override
-	public List<BoardVO> boardListNoSearch() {
-		List<BoardVO> boardList = sqlsession.selectList("board.boardListNoSearch");
-		return boardList;
-	}
-
 
 	// === 1개 글 보여주기 === //
 	@Override
@@ -68,10 +38,10 @@ public class BoardDAO implements InterBoardDAO {
 	}
 
 
-	// === 글수정 및 글삭제시 암호일치 여부 알아오기 ===  일치하는 아이디만 게시판 수정 및 글삭제가 가능하게 변경 필요
+	// === 글수정 및 글삭제시 작성자 이이디 일치 여부 알아오기 === 
 	@Override
-	public boolean checkPW(BoardVO boardvo) {
-		int n = sqlsession.selectOne("board.checkPW", boardvo); 
+	public boolean checkID(BoardVO boardvo) {
+		int n = sqlsession.selectOne("board.checkID", boardvo); 
 		
 		if(n==1)
 			return true;
@@ -86,20 +56,80 @@ public class BoardDAO implements InterBoardDAO {
 		int n = sqlsession.update("board.updateBoard", boardvo);
 		return n;
 	}
+
+	// === 글 1개를 삭제한다. === //  
+		@Override
+		public int deleteBoard(String seq) {
+			int n = sqlsession.update("board.deleteBoard", seq);
+			return n;
+		}
+
+	// ===댓글쓰기(tblComment 테이블에 insert) === //
 	@Override
-	public List<String> getImgfilenameList() {
-		// TODO Auto-generated method stub
-		return null;
+	public int addComment(CommentVO commentvo) {
+		int n = sqlsession.insert("board.addComment", commentvo);
+		return n;
 	}
 
-
+	// === tblBoard 테이블에 commentCount 컬럼의 값을 1증가(update) === //
 	@Override
-	public MemberVO getLoginMember(HashMap<String, String> paraMap) {
-		// TODO Auto-generated method stub
-		return null;
+	public int updateCommentCount(String parentSeq) {
+		int n = sqlsession.update("board.updateCommentCount", parentSeq);
+		return n;
 	}
 
+	// === 원게시물에 딸린 댓글 보여주기 === //
+	@Override
+	public List<CommentVO> getCommentList(String parentSeq) {
+		List<CommentVO> commentList = sqlsession.selectList("board.getCommentList", parentSeq);
+		return commentList;
+	}
 
+	// === 원게시물에 딸린 모든 댓글들을 삭제하도록 한다. === //
+	@Override
+	public int deleteComent(String seq) {
+		int n = sqlsession.delete("board.deleteComent", seq);
+		return n;
+	}
+	
+	// ===  페이징 처리를 안한 검색어가 있는 전체 글목록 보여주기 === //
+	@Override
+	public List<BoardVO> boardListSearch(HashMap<String, String> paraMap) {
+		List<BoardVO> boardList = sqlsession.selectList("board.boardListSearch", paraMap);
+		return boardList;
+	}
+
+	// 검색조건이 있을 경우의 총 게시물 건수(totalCount)
+	@Override
+	public int getTotalCountWithsearch(HashMap<String, String> paraMap) {
+		int count = sqlsession.selectOne("board.getTotalCountWithsearch", paraMap);
+		return count;
+	}
+
+	// 페이징 처리한 글목록 가겨오기(검색이 있든지, 검색이 없든지 모두 다 포함한것)
+	@Override
+	public List<BoardVO> boardListWithPaging(HashMap<String, String> paraMap) {
+		List<BoardVO> boardList = sqlsession.selectList("board.boardListWithPaging", paraMap);
+		return boardList;
+	}
+
+	// 페이징 처리를 안한 검색어가 없는 전체 글목록 보여주기 == //
+	@Override
+	public List<BoardVO> boardListNoSearch() {
+		List<BoardVO> boardList = sqlsession.selectList("board.boardListNoSearch");
+		return boardList;
+	}
+
+	// 검색조건이 없을 경우의 총 게시물 건수(totalCount)
+	@Override
+	public int getTotalCountWithNOsearch() {
+		int count = sqlsession.selectOne("board.getTotalCountWithNOsearch");
+		return count;
+	}
+
+	
+
+	
 	
 	
 	

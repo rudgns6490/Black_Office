@@ -1,7 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ page import="java.net.InetAddress"%>
 
-<% String ctxPath = request.getContextPath(); %>     
+<% 
+	String ctxPath = request.getContextPath();
+	
+	//=== (웹채팅관련3) === //
+	// === 서버 IP 주소 알아오기 ===
+	InetAddress inet = InetAddress.getLocalHost();
+	String serverIP = inet.getHostAddress(); 		// IP 주소를 얻어온 것
+	
+// 	System.out.println("serverIP : " + serverIP);
+	// serverIP : 192.168.50.39
+
+	serverIP = "172.30.1.23";						// 본인의 IP 를 넣어줘야 한다.
+	int portnumber = request.getServerPort();		// 포트넘버 얻어온 것
+// 	System.out.println("portnumber : " + portnumber);
+	// portnumber : 9090
+	
+	String serverName ="http://" + serverIP + ":" + portnumber;	// 주소값 풀네임 만들어서 가져온 것
+// 	System.out.println("serverName : " + serverName);
+	// serverName : http://192.168.50.39:9090
+
+%>     
   <div id="wrapper"> 
 
 	<!-- 사이드바 내용은 요기에 추가 2020/01/03 kkh -->
@@ -18,7 +40,7 @@
           <span>게시판</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="<%= ctxPath%>/noticeBoard.action">전체게시판</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/noticeBoardList.action">공지게시판</a>
           <a class="dropdown-item" href="<%= ctxPath%>/deptBoard.action">업무게시판</a>
           <div class="dropdown-divider"></div>
         </div>
@@ -74,8 +96,8 @@
           <span>주소록</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="">개인 주소록</a>
-          <a class="dropdown-item" href="">공용 주소록</a>
+          <a class="dropdown-item" href="http://localhost:9090/controller/addressBook.action">개인 주소록</a>
+          <a class="dropdown-item" href="http://localhost:9090/controller/addressOpenBook.action">공용 주소록</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>
@@ -85,7 +107,7 @@
           <span>채팅</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="">채팅</a>
+          <a class="dropdown-item" href="<%= serverName%><%=ctxPath%>/chatting.action">채팅</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>

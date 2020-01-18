@@ -25,7 +25,7 @@
 							<th class="" style="background-color: #e0ebeb;" >작성자</th>
 							<td id="boardWriter">관리자</td>
 							<th class="" style="background-color: #e0ebeb;">작성일</th>
-							<td id="boardWriteDate" style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2019-11-25 07:21:34</td>
+							<td id="boardWriteDate" style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${boardvo.regDate}</td>
 						</tr>
 						<tr>
 							<th id="boardTitle" class="" style="background-color: #e0ebeb;">제목</th>
@@ -47,9 +47,9 @@
 						</tbody>
 					</table>
 					<div align="right" style="margin-right: 50px;" >
-						<button type="button" class="btn btn_modify btn-primary" id="btn_modify" style="width: 10%; display: inline-block;">수정</button>
+						<button type="button" class="btn btn_modify btn-primary" id="btnUpdate" style="width: 10%; display: inline-block;">수정</button>
 						<button type="button" class="btn btn_delete btn-primary" id="btn_delete" style="width: 10%; display: inline-block;">삭제</button>
-						<button type="button" class="btn btn_write btn-primary" id="btn_write" style="width: 10%; display: inline-block; " >목록</button>
+						<button type="button" class="btn btn_write btn-primary" style="width: 10%; display: inline-block;" onclick="javascript:history.back();">취소</button>
 					</div>
 					
 					<!-- <div class="commentSection row" style="margin-top: 50px;" > 공지사항에서는 댓글 비활성화

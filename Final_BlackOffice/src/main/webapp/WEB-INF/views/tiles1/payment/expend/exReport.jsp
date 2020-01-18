@@ -32,7 +32,7 @@
    	.Td1 { width: 80%; background-color: #fff;} 
 	.Td2 { background-color: #e0ebeb; text-align: center; font-size: 15pt; color: #333333; }
 	.radioCursor:hover { cursor: pointer; }
-	/*----------------------------------------------------------------------------------------------  */
+	/* ----------------------------------------------------------------------------------------------  */
 	
 	.headertable { margin-right: 70px; }
 	.headertable th,td {
@@ -63,7 +63,7 @@
 	.title2Td1 { background-color: #e0ebeb; text-align: center; font-size: 15pt; color: #333333; }
 	.iframeDiv { width: 100%; height: 500px; } 
 	
-	/*----------------------------------------------------------------------------------------------  */
+	/* ----------------------------------------------------------------------------------------------  */
 	
 	.title {
 		background: url(<%= request.getContextPath() %>/resources/images/체크이미지.png) no-repeat 3px center; 
@@ -74,43 +74,50 @@
 	#tableRadio, #tableRadio1, .radioSpan { position: relative; top: 4.5px; } 
 	
 	
-	/*--- 아래 저장버튼 -----------------------------------------------------------------------------------------  */
+	/* --- 아래 저장버튼 --------------------------------------------------------------------------------  */
 	.save { float: right; margin-right: 90px; }
 	.saveBtn { border: solid 1px #0099cc; border-radius:3px; padding: 5px 20px; background-color: #0099cc; color: #fff; }
 	.saveBtn2 {padding: 5px 20px; border: solid 1px #bfbfbf; border-radius:3px;}  
 	
 	
-	<!-- 	결재라인추가 modal css		 --> 
-	.add_search {background: white; border: 1px solid #e6e6e6; width: 100%;}
+	/* 	결재라인추가 modal css	  */ 
+	.add_search {background: white; width: 97%; margin-bottom: 10px;}
 	
-	.add_search > th {
+	.add_search_table {border: none; width: 100%}
+	
+	.add_search th {
 		font-family: 'Malgun Gothic', '맑은 고딕', 'Dotum', '돋움', sans-serif;
-		background: #007bff;
+		background: #639c9c;
 	    min-width: 50px;
 	    width: 100px;
 	    padding: 10px;
-	    font-size: 13px;
+	    font-size: 15px;
 	    line-height: 17px;
 	    color: #fff;
 	    vertical-align: middle;
+	    text-align: center; 
 	}
+		
+	.add_search td {padding: 10px; vertical-align: text-top;}
 	
-	.add_search > td {padding: 10px 10px 5px 10px;}
+	.add_search_name {font-size: 12pt; width: 220px; margin-right: 12px;}
 	
 	.add_search_btn {
 		width: 80px;
 		height: 30px;
-		border: solid 1px #007bda;
+		border: solid 1px #639c9c;
 	    border-radius: 3px;
 	    box-sizing: border-box;
-	    background: #0083e7;
+	    background: #639c9c;      /* #0083e7 */
 	    color: #fff;
+	    font-size: 12pt;
 	}
 	
-	.add_result_List {background: white;	border: 1px solid #e6e6e6; width: 97%;}
+	.add_result_List {background: white; border: 1px solid #e6e6e6; width: 97%;}
+	
 	.add_result_List_title {
 		border-bottom: 1px solid #e6e6e6;
-	    background: #1c5691;
+	    background: #0000b3;
 	    font-weight: bold;
 	    font-size: 15px;
 	    line-height: 15px;
@@ -118,9 +125,9 @@
 	    text-align: center;
 	}
 	.add_result_List th {padding: 15px 0;}
+	
 	.add_result_List_contents td {
 		padding: 7px 0;
-	    border-bottom: 1px solid #e6e6e6;
 	    background: #fff;
 	    font-size: 14px;
 	    line-height: 17px;
@@ -542,9 +549,10 @@
 	    			<div><button type="button" style="color: #333333; border-radius: 5px;">결재라인 추가</button></div><br/>
 	    		</div> -->
 	    		
+
 	 <!------ 	결재라인추가 modal 시작	-------------------------------	 -->
 		
-				<div class="container" id="ptLineAdd"> 
+				<div class="container" id="ptLineAdd" > 
 					<!-- Trigger the modal with a button -->
 					<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" style="background-color: #0099cc;">결재라인 추가</button>
 					
@@ -555,8 +563,8 @@
 						<!-- Modal content-->
 						<div class="modal-content">
 							<div class="modal-header">
+								<h4 class="modal-title" style="font-weight: bold;">결재자추가</h4>
 								<button type="button" class="close" data-dismiss="modal" >&times;</button><%--	x로 닫기 버튼   --%>
-								<h6 class="modal-title">결재자추가</h6>
 							</div>
 							<div class="modal-body" style="background-color: #e6e6e6;">
 							
@@ -574,7 +582,7 @@
 											<tr>
 												<th>성명</th>
 												<td>
-													<input type="text" name="" class="" />
+													<input type="text" name="name" class="add_search_name" />
 													<button type="button" class="add_search_btn">검색</button>
 													<input type="text" style="display: none;" />
 													
@@ -608,6 +616,7 @@
 				  
 				</div>
 				<!-- -----------	결재라인추가 modal 끝	------------------------------------------------------------	 -->
+
 	    		<br/><br/>
 	    		
 	    		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
@@ -717,8 +726,21 @@
 		<div class="hiddenval"></div> <!-- 결재란 이미지위해 숨긴 div  -->
 		
 	</div>
+
+	
+<<<<<<< HEAD
+
+=======
+	
+	<form>	<!-- Modal 을 위해 숨긴 form 태그 -->
+		<input type="hidden" />
+		<input type="hidden" />
+		<input type="hidden" />
+		<input type="hidden" />
+	</form>
 	
 
+>>>>>>> branch 'master' of https://github.com/rudgns6490/Final_BlackOffice.git
 </body>
 </html>
 
