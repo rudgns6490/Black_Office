@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bo.admin.model.AdressbookVO;
 import com.bo.admin.service.InterAdminService;
 import com.bo.member.model.MemberVO;
 
@@ -23,6 +24,19 @@ public class AdminController {
 	private InterAdminService service;
 	
 	/* 관리자 메뉴 관련 컨트롤러  2020/01/03 kkh*/
+	
+	// 나중에 삭제
+	// 메인페이지 2020/01/06 LBH 
+	@RequestMapping(value="/main.action")
+	public String maincontenttest() {
+		return "main.tiles1";
+	}
+	
+	// 로그인 2020/01/07 LBH
+	@RequestMapping(value="/login.action")
+	public String login() {
+		return "login.tiles1";
+	}
 	
 	/*지출통계 컨트롤러 2020/01/06 kkh*/
 	@RequestMapping(value="/admintotalexpenditure.action")
@@ -42,7 +56,7 @@ public class AdminController {
 		return "admin/joinSawon.tiles1";
 	}
 	
-	//신규 입사 등록 2020/01/15 lbh
+	//신규 입사 등록 2020/01/15 LBH
 	@RequestMapping(value="/register.action")
 	public ModelAndView register(HttpServletRequest request, ModelAndView mav) {
 		
@@ -52,6 +66,7 @@ public class AdminController {
 		String jubun = request.getParameter("jubun1") + request.getParameter("jubun2");
 		String email = request.getParameter("email");
 		String emailpw = request.getParameter("emailpw");
+		String phone = request.getParameter("phone");
 		
 		MemberVO mvo = new MemberVO();
 		mvo.setId(id);
@@ -60,6 +75,7 @@ public class AdminController {
 		mvo.setJubun(jubun);
 		mvo.setEmail(email);
 		mvo.setEmailpw(emailpw);
+		mvo.setPhone(phone);
 		
 		int n = service.register(mvo);
 		mav.addObject("n", n);
@@ -78,5 +94,49 @@ public class AdminController {
 	public String personnelAnnouncementList() {
 		return "admin/personnelAnnouncementList.tiles1";
 	}
+	
+	
+	// 개인주소록 2020/01/06 LBH
+	@RequestMapping(value="/addressBook.action")
+	public String addressBook() {
+		return "addressBook.tiles1";
+	}
+	
+	// 개인주소록 추가등록 2020/01/16 LBH
+	@RequestMapping(value="/registerPersonal.action")
+	public ModelAndView registerPersonal(HttpServletRequest request, ModelAndView mav) {
+		
+		String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		String phone = request.getParameter("phone");
+		String positionname = request.getParameter("positionname");
+		String departmentname = request.getParameter("departmentname");
+		String company = request.getParameter("company");
+		String group = request.getParameter("group");
+		
+		AdressbookVO abvo = new AdressbookVO();
+		abvo.setName(name);
+		abvo.setEmail(email);
+		abvo.setPhone(phone);
+		abvo.setPositionname(positionname);
+		abvo.setDepartmentname(departmentname);
+		abvo.setCompany(company);
+		abvo.setGroup(group);
+		
+		int n = service.registerPersonal(abvo);
+		mav.addObject("n", n);
+		mav.setViewName("addressBook.tiles1");
+		return mav;
+	}
+	
+	// 공용주소록 2020/01/07 LBH
+	@RequestMapping(value="/addressOpenBook.action")
+	public String addressOpenBook() {
+		return "addressOpenBook.tiles1";
+	}
+	
+	
+	
+	
 	
 }
