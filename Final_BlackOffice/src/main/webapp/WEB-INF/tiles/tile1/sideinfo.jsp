@@ -14,7 +14,7 @@
 // 	System.out.println("serverIP : " + serverIP);
 	// serverIP : 192.168.50.39
 
-	serverIP = "172.30.1.23";						// 본인의 IP 를 넣어줘야 한다.
+	serverIP = "192.168.150.69";						// 본인의 IP 를 넣어줘야 한다.
 	int portnumber = request.getServerPort();		// 포트넘버 얻어온 것
 // 	System.out.println("portnumber : " + portnumber);
 	// portnumber : 9090

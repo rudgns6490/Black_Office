@@ -107,6 +107,8 @@ CREATE TABLE TBL_BO_EMPLOYEES (
                 REFERENCES TBL_BO_DEPARTMENT (DEPARTMENTNO) ON DELETE CASCADE
 );
 
+alter table TBL_BO_EMPLOYEES drop constraint FK_TBL_BO_EMP_DEPARTMENTNO;
+
 CREATE SEQUENCE SEQ_BO_EMPLOYEES
 START WITH 1
 INCREMENT BY 1
@@ -393,4 +395,36 @@ NOCYCLE
 NOCACHE;
 -- 채팅 테이블
 
+drop table TBL_BO_ADDRESSBOOK_PERSONAL purge;
 
+
+-- 개인주소록 테이블
+CREATE TABLE TBL_BO_ADDRESSBOOK_PERSONAL (
+ADDRNO             NUMBER                        -- 주소록번호
+,NAME                NVARCHAR2(10)               -- 이름
+,EMAIL                NVARCHAR2(100)              -- 이메일
+,PHONE               NVARCHAR2(20)               -- 전화  (개인이 마음대로 할 수 있게 설정함 - 해외전화도저장가능)
+,POSITIONNAME    NVARCHAR2(20)               -- 직책
+,DEPARTMENTNAME NVARCHAR2(20)           -- 부서
+,COMPANYNAME   NVARCHAR2(20)               -- 회사
+,GROUPNAME       NVARCHAR2(20)               -- 그룹
+,CONSTRAINT     PK_TBL_BO_ADDRESSBOOK_P_ADDRNO PRIMARY KEY (ADDRNO)
+);
+
+alter table TBL_BO_ADDRESSBOOK_PERSONAL
+add adressmode number(1);
+
+CREATE SEQUENCE SEQ_BO_ADDRESSBOOK_PERSONAL
+START WITH 1
+INCREMENT BY 1
+NOMAXVALUE
+NOMINVALUE
+NOCYCLE
+NOCACHE;
+
+select *
+from TBL_BO_ADDRESSBOOK_PERSONAL;
+
+select positionname
+from tbl_bo_position
+where positionno = 1;

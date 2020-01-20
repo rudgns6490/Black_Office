@@ -11,6 +11,32 @@
 		values(SEQ_BO_EMPLOYEES.nextval, #{id}, #{passwd}, #{name}, #{jubun}, #{email}, #{emailpw}, #{phone}, default, 1, #{fk_positionno}, #{fk_departmentno})
 	</insert>
 	
+	<!-- 로그인 처리 -->
+	<select id="getLoginMember" parameterType="HashMap" resultType="com.bo.member.model.MemberVO">
+		select employeeno, id, passwd, name, email, emailpw 
+		from TBL_BO_EMPLOYEES 
+		where status = 1 and 
+		      id = #{id} and
+		      passwd = #{passwd}
+	</select>
+	
+	<select id="getPositionname" parameterType="int" resultType="String">
+		select POSITIONNAME
+		from TBL_BO_POSITION
+		where POSITIONNO = #{fk_positionno}
+	</select>
+	
+	<select id="getDepartmentname" parameterType="int" resultType="String">
+		select DEPARTMENTNAME
+		from TBL_BO_DEPARTMENT
+		where DEPARTMENTNO = #{fk_departmentno}
+	</select>
+	
+	<insert id="adressRegister" parameterType="com.bo.admin.model.AdressbookVO">
+		insert into TBL_BO_ADDRESSBOOK_PERSONAL(ADDRNO, NAME, EMAIL, PHONE, POSITIONNAME, DEPARTMENTNAME, adressmode)
+		values(SEQ_BO_ADDRESSBOOK_PERSONAL.nextval, #{name}, #{email}, #{phone}, #{positionname}, #{departmentname}, 2)
+	</insert>
+	
 </mapper>
 
 
