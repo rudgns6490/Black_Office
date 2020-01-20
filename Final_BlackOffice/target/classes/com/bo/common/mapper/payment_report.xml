@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ==== #29. mapper 기본설정 ==== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- ==== #29. 루트 엘리먼트 & 네임스페이스 설정(프로젝트 전체내에서 유일해야 한다.) ==== -->
+<mapper namespace="payment_report"> 
+	
+	<!-- Modal ajax로 부서 넣어주기 -->
+	<resultMap type="HashMap" id="addAprrovalMap">
+		<result property="departmentname" column="DEPARTMENTNAME" javaType="String"/>
+	</resultMap>
+	<select id="addAprrovalModal" resultMap="addAprrovalMap">
+		select DEPARTMENTNAME
+		from TBL_BO_DEPARTMENT
+	</select>
+	
+	
+	<!-- Modal ajax로 넣어준 부서에 대한 사원명단 select -->
+	<resultMap type="HashMap" id="addModalSelectMap">
+		<result property="DEPARTMENTNAME" column="DEPARTMENTNAME" javaType="String"/>
+		<result property="NAME" column="NAME" javaType="String"/>
+		<result property="POSITIONNAME" column="POSITIONNAME" javaType="String"/>
+	</resultMap>
+	<select id="addModalSelect" parameterType="String" resultMap="addModalSelectMap">
+		select E.DEPARTMENTNAME, D.NAME, C.POSITIONNAME
+		from TBL_BO_DEPARTMENT E join TBL_BO_EMPLOYEES D
+		on E.DEPARTMENTNO = D.FK_DEPARTMENTNO
+		join TBL_BO_POSITION C
+		on D.FK_POSITIONNO = C.POSITIONNO
+		where E.DEPARTMENTNAME = #{departmentname}
+	</select>
+	
+	<!-- 부서 성명 직위 -->
+	
+</mapper>
+
+
