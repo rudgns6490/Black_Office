@@ -89,7 +89,5 @@ public class AdressbookVO {
 	public void setGroup(String group) {
 		this.group = group;
 	}
-	
-	
-	
+		
 }
