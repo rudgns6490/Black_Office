@@ -1,0 +1,20 @@
+
+[
+{"dateKind":"01","start":"2020-01-01","end":"2020-01-01","seq":"1","isHoliday":"Y","dateName":"신정"},
+{"dateKind":"01","start":"2020-01-24","end":"2020-01-24","seq":"1","isHoliday":"Y","dateName":"설날"},
+{"dateKind":"01","start":"2020-01-25","end":"2020-01-25","seq":"1","isHoliday":"Y","dateName":"설날"},
+{"dateKind":"01","start":"2020-01-26","end":"2020-01-26","seq":"1","isHoliday":"Y","dateName":"설날"},
+{"dateKind":"01","start":"2020-01-27","end":"2020-01-27","seq":"1","isHoliday":"Y","dateName":"설날"},
+{"dateKind":"01","start":"2020-03-01","end":"2020-03-01","seq":"1","isHoliday":"Y","dateName":"삼일절"},
+{"dateKind":"01","start":"2020-04-15","end":"2020-04-15","seq":"1","isHoliday":"Y","dateName":"제21대 국회의원선거"},
+{"dateKind":"01","start":"2020-04-30","end":"2020-04-30","seq":"1","isHoliday":"Y","dateName":"부처님오신날"},
+{"dateKind":"01","start":"2020-05-05","end":"2020-05-05","seq":"1","isHoliday":"Y","dateName":"어린이날"},
+{"dateKind":"01","start":"2020-06-06","end":"2020-06-06","seq":"1","isHoliday":"Y","dateName":"현충일"},
+{"dateKind":"01","start":"2020-08-15","end":"2020-08-15","seq":"1","isHoliday":"Y","dateName":"광복절"},
+{"dateKind":"01","start":"2020-09-30","end":"2020-09-30","seq":"1","isHoliday":"Y","dateName":"추석"},
+{"dateKind":"01","start":"2020-10-01","end":"2020-10-01","seq":"1","isHoliday":"Y","dateName":"추석"},
+{"dateKind":"01","start":"2020-10-02","end":"2020-10-02","seq":"1","isHoliday":"Y","dateName":"추석"},
+{"dateKind":"01","start":"2020-10-03","end":"2020-10-03","seq":"1","isHoliday":"Y","dateName":"개천절"},
+{"dateKind":"01","start":"2020-10-09","end":"2020-10-09","seq":"1","isHoliday":"Y","dateName":"한글날"},
+{"dateKind":"01","start":"2020-12-25","end":"2020-12-25","seq":"1","isHoliday":"Y","dateName":"기독탄신일"}
+]

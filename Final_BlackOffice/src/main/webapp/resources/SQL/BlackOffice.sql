@@ -15,8 +15,9 @@ NOMINVALUE
 NOCYCLE
 NOCACHE;
 
-select *
-from TBL_BO_POSITION;
+select positionname
+from TBL_BO_POSITION
+where positionno = 7;
 
 insert into TBL_BO_POSITION(POSITIONNO, POSITIONNAME, POSITIONRANK)
 values(SEQ_BO_POSITION.nextval, '사장', 1);
@@ -43,6 +44,10 @@ commit;
 
 select *
 from TBL_BO_POSITION;
+
+select departmentname
+from TBL_BO_DEPARTMENT
+where DEPARTMENTNO = 3;
 
 
 -- 부서 테이블
@@ -78,23 +83,31 @@ values(SEQ_BO_DEPARTMENT.nextval, '영업팀');
 commit;
 
 select *
-from TBL_BO_DEPARTMENT;
+from TBL_BO_EMPLOYEES;
+
+DELETE FROM TBL_BO_EMPLOYEES
+where EMPLOYEENO = 25;
+
+commit;
+
+drop TABLE TBL_BO_EMPLOYEES CASCADE CONSTRAINTS;
+drop sequence SEQ_BO_EMPLOYEES;
 
 -- 사원 테이블
 CREATE TABLE TBL_BO_EMPLOYEES (
      EMPLOYEENO      NUMBER                 -- 사원번호
-    ,NAME                NVARCHAR2(10)          -- 사원이름
-    ,ID                      NVARCHAR2(100)         -- 아이디
-    ,PASSWD              NVARCHAR2(100)         -- 비밀번호    
-    ,JUBUN                NVARCHAR2(13)          -- 주민번호
-    ,EMAIL                 NVARCHAR2(100) NOT NULL    -- 이메일
-    ,EMAILPW             NVARCHAR2(100) NOT NULL    -- 이메일 암호
-    ,PHONE               NVARCHAR2(11)          -- 핸드폰
-    ,ADDRESS            NVARCHAR2(100)         -- 주소
+    ,NAME            NVARCHAR2(10)          -- 사원이름
+    ,ID              NVARCHAR2(100)         -- 아이디
+    ,PASSWD          NVARCHAR2(100)         -- 비밀번호    
+    ,JUBUN           NVARCHAR2(13)          -- 주민번호
+    ,EMAIL           NVARCHAR2(100) NOT NULL    -- 이메일
+    ,EMAILPW         NVARCHAR2(100) NOT NULL    -- 이메일 암호
+    ,PHONE           NVARCHAR2(11)          -- 핸드폰
+    ,ADDRESS         NVARCHAR2(100)         -- 주소
     ,DETAILADDRESS   NVARCHAR2(100)         -- 상세주소
-    ,REGISTERDAY       DATE DEFAULT SYSDATE -- 입사일자
+    ,REGISTERDAY     DATE DEFAULT SYSDATE -- 입사일자
     ,GOTOWORK        NUMBER(1)                 -- 출근 1 퇴근 0
-    ,STATUS               NUMBER(1)                      -- 퇴사는 0 재직 1 휴직 2
+    ,STATUS          NUMBER(1)                      -- 퇴사는 0 재직 1 휴직 2
     ,FK_POSITIONNO   NUMBER                     -- 참조 키 직급번호
     ,FK_DEPARTMENTNO NUMBER                  -- 참조 키 부서번호
     ,CONSTRAINT PK_TBL_BO_EMPLOYEENO PRIMARY KEY (EMPLOYEENO)
@@ -129,16 +142,16 @@ commit;
 
 -- 주소록 테이블
 CREATE TABLE TBL_BO_ADDRESSBOOK (
-ADDRNO             NUMBER                        -- 주소록번호
-,NAME                NVARCHAR2(10)               -- 이름
-,PHONE               NVARCHAR2(11)               -- 핸드폰 번호
-,EMAIL                 NVARCHAR2(100)             -- 이메일
-,ADDRESS             NVARCHAR2(100)             -- 주소
-,DETAILADDRESS    NVARCHAR2(100)             -- 상세주소
-,FK_EMPLOYEENO   NUMBER                        -- 참조키 사원번호
-,CONSTRAINT     PK_TBL_BO_ADDRNO PRIMARY KEY (ADDRNO)
-,CONSTRAINT     FK_TBL_BO_ADDR_EMPLOYEENO FOREIGN KEY (FK_EMPLOYEENO)
-                REFERENCES TBL_BO_EMPLOYEES (EMPLOYEENO) ON DELETE CASCADE
+     ADDRNO         NUMBER                  -- 주소록번호
+    ,NAME           NVARCHAR2(10)           -- 이름
+    ,PHONE          NVARCHAR2(11)           -- 핸드폰 번호
+    ,EMAIL          NVARCHAR2(100)          -- 이메일
+    ,ADDRESS        NVARCHAR2(100)          -- 주소
+    ,DETAILADDRESS  NVARCHAR2(100)          -- 상세주소
+    ,FK_EMPLOYEENO  NUMBER                  -- 참조키 사원번호
+    ,CONSTRAINT     PK_TBL_BO_ADDRNO PRIMARY KEY (ADDRNO)
+    ,CONSTRAINT     FK_TBL_BO_ADDR_EMPLOYEENO FOREIGN KEY (FK_EMPLOYEENO)
+                    REFERENCES TBL_BO_EMPLOYEES (EMPLOYEENO) ON DELETE CASCADE
 );
 
 CREATE SEQUENCE SEQ_BO_ADDRESSBOOK
@@ -148,6 +161,8 @@ NOMAXVALUE
 NOMINVALUE
 NOCYCLE
 NOCACHE;
+
+
 
 select *
 from TBL_BO_ADDRESSBOOK;
@@ -419,6 +434,9 @@ NOCACHE;
 
 select *
 from TBL_BO_ADDRESSBOOK_PERSONAL;
+
+delete from TBL_BO_ADDRESSBOOK_PERSONAL
+where addrno = 1;
 
 select positionname
 from tbl_bo_position

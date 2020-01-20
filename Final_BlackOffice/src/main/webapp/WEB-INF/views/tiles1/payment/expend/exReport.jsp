@@ -726,21 +726,6 @@
 		<div class="hiddenval"></div> <!-- 결재란 이미지위해 숨긴 div  -->
 		
 	</div>
-
-	
-<<<<<<< HEAD
-
-=======
-	
-	<form>	<!-- Modal 을 위해 숨긴 form 태그 -->
-		<input type="hidden" />
-		<input type="hidden" />
-		<input type="hidden" />
-		<input type="hidden" />
-	</form>
-	
-
->>>>>>> branch 'master' of https://github.com/rudgns6490/Final_BlackOffice.git
 </body>
 </html>
 

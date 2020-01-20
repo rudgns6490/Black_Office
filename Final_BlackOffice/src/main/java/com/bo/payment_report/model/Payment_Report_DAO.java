@@ -30,4 +30,21 @@ public class Payment_Report_DAO implements InterPayment_Report_DAO {
 		List<HashMap<String, String>> addModalSelectList = sqlsession.selectList("payment_report.addModalSelect", departmentname);
 		return addModalSelectList;
 	}
+
+	// 파일첨부가 없는 경우 exReport insert 하기
+	@Override
+	public int add(ExReportVO exReportvo) {
+		int n = sqlsession.insert("payment_report.add", exReportvo);
+		return n;
+	}
+
+	// 파일첨부가 있는 경우 exReport insert 하기
+	@Override
+	public int add_withFile(ExReportVO exReportvo) {
+		int n = sqlsession.insert("payment_report.add_withFile", exReportvo);
+		return n;
+	}
+	
+	
+	
 }

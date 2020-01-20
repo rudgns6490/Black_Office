@@ -85,7 +85,7 @@
           <span>일정</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="">개인 일정</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/individualSchedule.action">개인 일정</a>
           <a class="dropdown-item" href="">공유된 일정</a>
           <div class="dropdown-divider"></div>
         </div>

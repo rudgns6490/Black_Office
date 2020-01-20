@@ -1,9 +1,11 @@
 package com.bo.payment_report.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,8 +15,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.bo.payment_report.model.ExReportVO;
 import com.bo.payment_report.service.InterPayment_Report_Service;
+import com.bo.common.MyUtil;
+import com.bo.common.FileManager;
 
 
 // === 컨트롤러 선언 ===
@@ -24,9 +31,11 @@ import com.bo.payment_report.service.InterPayment_Report_Service;
 @Controller
 public class Payment_Report_Controller { 
 	
-	// === #35. 의존객체 주입하기(DI: Dependency Injection) ===
 	@Autowired   // Type에 따라 알아서 Bean 을 주입해준다.
 	private InterPayment_Report_Service service;
+	 
+	@Autowired
+	private FileManager fileManager;
 	
 	// 기안서
 	@RequestMapping(value="/draft.action")
@@ -227,6 +236,7 @@ public class Payment_Report_Controller {
 			jsonObj.put("DEPARTMENTNAME", modalmap.get("DEPARTMENTNAME"));
 			jsonObj.put("NAME", modalmap.get("NAME"));
 			jsonObj.put("POSITIONNAME", modalmap.get("POSITIONNAME"));
+			jsonObj.put("EMPLOYEENO", modalmap.get("EMPLOYEENO"));
 			
 			jsonArr.put(jsonObj);
 		}
@@ -239,20 +249,102 @@ public class Payment_Report_Controller {
 	
 /////////////////////////////// 지출결재서 결재함으로 보내주기 //////////////////////////////////////	
 	@RequestMapping(value="/addreport.action", method= {RequestMethod.POST})
-	public String addreport(HttpServletRequest request) {
+//	public String addreport(ExReportVO exReportvo, MultipartHttpServletRequest mrequest) {
+	public String addreport(HttpServletRequest request) {  
 		
 		int tdCount = Integer.parseInt(request.getParameter("tdCount"));
-
+		
 		for(int i=0; i<tdCount; i++) {
 			String approver = request.getParameter("approverhidden"+i+"");
 			System.out.println(approver);
 		}
 		
+		/*MultipartFile attach = exReportvo.getAttach();
 		
-		return "";
-	}
-	
-	
+		if(!attach.isEmpty()) {
+			
+			HttpSession session = mrequest.getSession();
+		 	String root = session.getServletContext().getRealPath("/");
+		 	String path = root + "resources" + File.separator + "files";
+		 	// File.separator 는 운영체제에서 사용하는 폴더와 파일의 구분자이다.
+		 	// 운영체제가 Windows 이라면 File.separator 은 "\" 이고,
+		    // 운영체제가 UNIX, Linux 이라면 File.separator 은 "/" 이다.
+		 	
+		 	// path 가 첨부파일을 저장할 WAS(톰캣)의 폴더가 된다.
+		 	System.out.println(">>> 확인용 path ==>" + path);
+			// >>> 확인용 path ==>C:\springworkspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\Board\resources\files 
+		 // == 2. 파일첨부를 위한 변수의 설정 및 값을 초기화한 후 파일 올리기 ==
+		 	String newFileName = "";
+		 	// WAS(톰캣)의 디스크에 저장될 파일명
+		 	
+		 	byte[] bytes = null;
+		 	// 첨부파일을 WAS(톰캣)의 디스크에 저장할때 사용되는 용도
+		 	
+		 	long fileSize = 0;
+		 	// 파일크기를 읽어오기 위한 용도 
+		 	
+		 	try {
+				bytes = attach.getBytes();
+				// getBytes() 메소드는 첨부된 파일을 바이트단위로 파일을 다 읽어오는 것이다. 
+				// 예를 들어, 첨부한 파일이 "강아지.png" 이라면
+				// 이파일을 WAS(톰캣) 디스크에 저장시키기 위해 byte[] 타입으로 변경해서 올린다.
+				
+				newFileName = fileManager.doFileUpload(bytes, attach.getOriginalFilename(), path);
+				// 이제 파일올리기를 한다.
+				// attach.getOriginalFilename() 은 첨부된 파일의 파일명(강아지.png)이다.getOriginalFilename() 이미 메소드가 만들어져 있는것이다.
+				
+				System.out.println(">>> 확인용 newFileName ==> " + newFileName); 
+				// >>> 확인용 newFileName ==> 201907251244341722885843352000.png 
+				
+				// == 3. BoardVO boardvo 에 fileName 값과 orgFilename 값과  fileSize 값을 넣어주기 
+				exReportvo.setFileName(newFileName);
+				// WAS(톰캣)에 저장된 파일명(201907251244341722885843352000.png)
+				
+				exReportvo.setOrgFilename(attach.getOriginalFilename());
+				// 게시판 페이지에서 첨부된 파일의 파일명(강아지.png)을 보여줄때 및  
+				// 사용자가 파일을 다운로드 할때 사용되어지는 파일명
+				
+				fileSize = attach.getSize();
+				exReportvo.setFileSize(String.valueOf(fileSize));
+				// 게시판 페이지에서 첨부한 파일의 크기를 보여줄때 String 타입으로 변경해서 저장함.
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+		}
+		
+		 ========= !!첨부파일이 있는지 없는지 알아오기 끝!! =========  
+				
+				
+			// *** 크로스 사이트 스크립트 공격에 대응하는 안전한 코드(시큐어 코드) 작성하기 *** //
+			exReportvo.setTitle(MyUtil.replaceParameter(exReportvo.getTitle()));
+			exReportvo.setContent(MyUtil.replaceParameter(exReportvo.getContent()));
+			exReportvo.setContent(exReportvo.getContent().replaceAll("\r\n", "<br/>"));
+			
+		//	int n = service.add(boardvo);
+			
+		//  === #143. 파일첨부가 있는 경우와 없는 경우에 따라서 Service단 호출하기 === 
+		//      먼저 위의 	int n = service.add(boardvo); 부분을 주석처리하고서 아래처럼 한다.
+		
+			int n = 0;
+			if(attach.isEmpty()) {
+				// 첨부파일이 없는 경우이라면
+				n = service.add(exReportvo); 
+			}
+			else {
+				// 첨부파일이 있는 경우이라면
+				n = service.add_withFile(exReportvo);
+			}*/
+			
+			
+			//	mav.addObject("n", n);
+			//	mav.setViewName("board/addEnd.tiles1");
+			//	return mav;
+
+		//	mrequest.setAttribute("n", n);
+			
+			return "";
+		}
 	
 ////////////////////////////////////////////////////////////////////////////////////////////	
 }

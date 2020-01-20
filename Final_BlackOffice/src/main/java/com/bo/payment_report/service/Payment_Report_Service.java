@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bo.payment_report.model.ExReportVO;
 import com.bo.payment_report.model.InterPayment_Report_DAO;
 
 //=== Service 선언 ===
@@ -39,4 +40,32 @@ public class Payment_Report_Service implements InterPayment_Report_Service {
 		List<HashMap<String, String>> addModalSelectList = dao.addModalSelect(departmentname);
 		return addModalSelectList;
 	}
+
+	// 파일첨부가 없는 경우 exReport insert 하기
+	@Override
+	public int add(ExReportVO exReportvo) {
+		int n = dao.add(exReportvo);
+		return n;
+	}
+	// 파일첨부가 있는 경우 exReport insert 하기
+	@Override
+	public int add_withFile(ExReportVO exReportvo) {
+		int n =dao.add_withFile(exReportvo);
+		return n;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
