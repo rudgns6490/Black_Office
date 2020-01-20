@@ -384,7 +384,7 @@
 		      	<tr>
 		      	  <td style="background-color: #e0ebeb;">부서</td>
 		      	  <td>
-		      	    <select name="FK_POSITIONNO" id="FK_POSITIONNO" class="form-control" style="width: 30%;">
+		      	    <select name="fk_departmentno" id="fk_departmentno" class="form-control" style="width: 30%;">
 		      	      <option>선택</option>
 	  				  <option value="1">인사팀</option>
 	  				  <option value="2">마케팅팀</option>
@@ -398,7 +398,7 @@
 		      	<tr>
 		      	  <td style="background-color: #e0ebeb;">직위</td>
 		      	  <td>
-		      	    <select name="FK_DEPARTMENTNO" id="FK_DEPARTMENTNO" class="form-control" style="width: 30%;">
+		      	    <select name="fk_positionno" id="fk_positionno" class="form-control" style="width: 30%;">
 		      	      <option>선택</option>
 	  				  <option value="1">사장</option>
 	  				  <option value="2">이사</option>
