@@ -85,36 +85,22 @@
 	    text-align: center;
 	}
 /* 	페이징	 */
-	.paging_area a {
-	    display: inline-block;
-	    margin: 0 2.5px;
-	    width: 25px;
-	    height: 25px;
-	    box-sizing: border-box;
-	    border: 1px solid #d2d2d2;
-	    background: #fff;
-	    line-height: 23px;
-	    vertical-align: top;
-	}
-	.paging_area b {
-	    display: inline-block;
-	    margin: 0 2.5px;
-	    width: 25px;
-	    height: 25px;
-	    box-sizing: border-box;
-	    background: #4bc5c3;
-	    vertical-align: top;
-	    line-height: 25px;
-	    color: #fff;
-	}
-	
+			
 	.paging_area {
 		text-align: center;
+		margin-top: 50px;
 	}
 	
-	.paging_area li {
-		display: inline-block;
+		
+	.pageBar > a {
+		font-family: 'Malgun Gothic', '맑은 고딕', 'Dotum', '돋움', sans-serif;
+		background: #007bff;
+		width: 20px;
+	    padding: 3px;
+	    color: #fff;
+	    vertical-align: middle;
 	}
+	
 /* 	페이징	 */
 /* 	글 목록 끝	 */
 	
@@ -132,12 +118,12 @@
 		
 		//캘린더 시작~~~~~~~~~~~~
 		$('#fromDate').datepicker({
-			showOn: "both",                     			// 달력을 표시할 타이밍 (both: focus or button)
+			showOn: "both",                     						// 달력을 표시할 타이밍 (both: focus or button)
 			buttonImage: "<%= ctxPath %>/resources/images/cal.jpg", 	// 버튼 이미지
-			buttonImageOnly : true,             			// 버튼 이미지만 표시할지 여부
-			buttonText: "날짜선택",             				// 버튼의 대체 텍스트
-			dateFormat: "yy-mm-dd",             			// 날짜의 형식
-			changeMonth: true,                  			// 월을 이동하기 위한 선택상자 표시여부
+			buttonImageOnly : true,             						// 버튼 이미지만 표시할지 여부
+			buttonText: "날짜선택",             							// 버튼의 대체 텍스트
+			dateFormat: "yy-mm-dd",             						// 날짜의 형식
+			changeMonth: true,                  						// 월을 이동하기 위한 선택상자 표시여부
 			onClose: function( selectedDate ) {    
 				$("#toDate").datepicker( "option", "minDate", selectedDate );
 			}                
@@ -156,11 +142,26 @@
 			}                
 		});  // 캘린더 종료--------------------------------------
 		
-				
+		
+		// 검색창 엔터키 입력
+		$("input[name=report_search_word]").keydown(function(event) {
+			if(event.keyCode == 13) {
+				goReportSearch();
+			}
+		});
+		
+		
+		// 검색 조건, 검색어 유지
+		if( ${paraMap != null} ) {
+			$("#search_select").val("${paraMap.search_select}");
+			$("#report_search_word").val("${paraMap.report_search_word}");
+		}
+		
+		
 						
 	});	// end of $(document).ready()-----------------------------------------
 	
-	
+		
 	function goReportSearch() {
 		
 		var frm = document.reportsearchFrm;
@@ -170,19 +171,17 @@
 		
 	}	// end of goReportSearch()--------------------------------------------
 	
-	function goSearchTime() {
+	// 날짜(기간) 검색 버튼
+	function goSearchTime(val) {
+			
+		var search_Time = val;
 		
-		var searchTime = $(".search_Condition").val();
+		$("#search_Time").val(search_Time);
 		
-		console.log("시간 타입은 ? = > " +searchTime);
-		
-		var test = $(".search_Time").val(searchTime);
-		
-	//	alert("시간 타입은? => " +test);
-		
-	//	goReportSearch();
-		
-	}	// end of goSerachTime()----------------------------------------------
+		goReportSearch();
+	}
+	
+	
 
 </script>
 
@@ -196,6 +195,7 @@
 	<%--	맨 위 부분 끝	--%>
 
 	<div class="col-md-12 archivebody" style="margin-left: 25px;">
+	
 		<%--	검색 부분	 --%>
 		<div class="reportsearch">
 			<form name="reportsearchFrm">
@@ -203,13 +203,15 @@
 					<tr>
 						<th>보고서 작성일</th>
 						<td>
-							<button type="button" class="search_Condition" name="today"  onclick="goSearchTime();">당일</button>
-							<span class="search_Condition" id="weekend" onclick="goSearchTime();">1주일</span>
-							<span class="search_Condition" id="onemonth" onclick="goSearchTime();">1개월</span>
-							<span class="search_Condition" id="threemonth" onclick="goSearchTime();">3개월</span>
-							<span class="search_Condition" id="sixmonth" onclick="goSearchTime();">6개월</span>
-							<span class="search_Condition" id="oneyear" onclick="goSearchTime();">1년</span>
-							<input type="hidden" name="search_Time" value=""/>
+							<button type="button" class="search_Condition" id="today" value="0" onclick="goSearchTime(this.value);">당일</button>
+							<button type="button" class="search_Condition" id="weekend" value="6" onclick="goSearchTime(this.value);">1주일</button>
+							<button type="button" class="search_Condition" id="onemonth" value="-1" onclick="goSearchTime(this.value);">1개월</button>
+							<button type="button" class="search_Condition" id="threemonth" value="-3" onclick="goSearchTime(this.value);">3개월</button>
+							<button type="button" class="search_Condition" id="sixmonth" value="-6" onclick="goSearchTime(this.value);">6개월</button>
+							<button type="button" class="search_Condition" id="oneyear" value="-12" onclick="goSearchTime(this.value);">1년</button>
+							
+							<input type="hidden" name="search_Time" id="search_Time" value=""/>
+							
 							
 							<div id="Datepicker" style="margin-top: 5px; margin-left: 10px; display: inline-block; ">
 		                        <label for="fromDate">작성 기간 : </label>
@@ -223,18 +225,14 @@
 					<tr>
 						<th>보고서 검색</th>
 						<td>
-							<select name="search_select" class="search_select">
+							<select name="search_select" id="search_select" class="search_select">
 								<option value="title">제목</option>
-								<option value="content">내용</option>
 							</select>
-							<input type="text" name="report_search_word" class="report_search_word"/>
+							<input type="text" name="report_search_word" id="report_search_word" class="report_search_word"/>
 							<button type="button" class="report_search_btn" onclick="goReportSearch();">검색</button>
 						</td>
 					</tr>
 				</table>
-				
-<!-- 				<input type="hidden" name="employeeno" value="2"/> -->
-				
 				
 			</form>
 		</div>
@@ -253,49 +251,54 @@
 						<th style="width: 15%;">문서분류</th>
 						<th>제목</th>
 						<th style="width: 20%;">작성일</th>
+						<th style="display: none;"></th>
 					</tr>
 				</thead>
 					
 				<tbody class="reportList_contents">
-				<c:forEach var="reportvo" items="${reportList}" varStatus="status">
-				<c:if test="${reportvo != null}">
-					<tr>
-						<td>
-							${reportvo.rno}
-						</td>
-												
-						<td>${reportvo.reportno}</td>
-						<td>
-							<c:if test="${reportvo.reporttype == 0}">
-								<span>일일보고</span>
-							</c:if>
-							<c:if test="${reportvo.reporttype == 1}">
-								<span>주간보고</span>
-							</c:if>
-						</td>
-						<td style="text-align: left; color: #2276BB;">${reportvo.title}</td>
-						<td>${reportvo.reportday}</td>
-					</tr>
-				</c:if>
 				
-				<c:if test="${reportvo == null}">
-					<tr>
-						<td colspan="5">내가 쓴 보고서가 없습니다.</td>
-					</tr>
-				</c:if>
+					<c:if test="${not empty requestScope.myReportList}">
+						<c:forEach var="reportList" items="${requestScope.myReportList}">
+							<tr>
+								<td>${reportList.rno}</td>
+								<td>${reportList.reportno}</td>
+								<td>
+									<c:if test="${reportList.reporttype == 0}">
+										<span>일일보고</span>
+									</c:if>
+									<c:if test="${reportList.reporttype == 1}">
+										<span>주간보고</span>
+									</c:if>
+								</td>
+								<td style="text-align: left; color: #2276BB;">${reportList.title}</td>
+								<td>${reportList.reportday}</td>
+		 					</tr>
+						</c:forEach>
+					</c:if>
+					
+					<c:if test="${empty requestScope.myReportList}">
+						<tr>
+							<td colspan="5"><span>내가 쓴 보고서가 없습니다.</span></td>
+						</tr>
+					</c:if>
 				
-				</c:forEach>
 				</tbody>
-				
 			</table>
+			
+			<form name="goViewFrm">
+				<input type="hidden" name="reportno"/>
+				<input type="hidden" name="goBackURL" value="${goBackURL}"/>
+			</form>
+			
 		<%--	페이징처리 시작	 --%>	
-		<div class="paging_area">
-			${pageBar}
-		</div>
+			<div class="paging_area">
+				${pageBar}
+			</div>
 		<%--	페이징처리 끝	 --%>
-		</div>
 		
+		</div>
 		<%--	글 목록 끝	 --%>
+		
 	</div>
 	
 	

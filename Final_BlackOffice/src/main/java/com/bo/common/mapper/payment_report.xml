@@ -6,6 +6,16 @@
 <!-- ==== #29. 루트 엘리먼트 & 네임스페이스 설정(프로젝트 전체내에서 유일해야 한다.) ==== -->
 <mapper namespace="payment_report"> 
 	
+	<!-- 부서명 가지고 오기 -->
+	<select id="departmentName" parameterType="String" resultType="String">
+		select E.DEPARTMENTNAME
+		from TBL_BO_DEPARTMENT E join TBL_BO_EMPLOYEES D
+		on E.DEPARTMENTNO = D.FK_DEPARTMENTNO
+		where D.employeeno = #{employeeno}
+	</select>
+	
+	
+
 	<!-- Modal ajax로 부서 넣어주기 -->
 	<resultMap type="HashMap" id="addAprrovalMap">
 		<result property="departmentname" column="DEPARTMENTNAME" javaType="String"/>
@@ -23,7 +33,7 @@
 		<result property="POSITIONNAME" column="POSITIONNAME" javaType="String"/>
 	</resultMap>
 	<select id="addModalSelect" parameterType="String" resultMap="addModalSelectMap">
-		select E.DEPARTMENTNAME, D.NAME, C.POSITIONNAME
+		select E.DEPARTMENTNAME, D.NAME, C.POSITIONNAME, D.EMPLOYEENO
 		from TBL_BO_DEPARTMENT E join TBL_BO_EMPLOYEES D
 		on E.DEPARTMENTNO = D.FK_DEPARTMENTNO
 		join TBL_BO_POSITION C
@@ -31,8 +41,98 @@
 		where E.DEPARTMENTNAME = #{departmentname}
 	</select>
 	
-	<!-- 부서 성명 직위 -->
+	
+	
+	
+	
+	<!-- 파일첨부가 없는 경우 exReport insert 하기 -->
+	<insert id="add" parameterType="com.bo.payment_report.model.ExReportVO">
+ 		insert into TBL_BO_EXPENDITURE(EXPENDITURENO, FK_EMPLOYEENO, WRITEDAY, EXPENDITUREDAY, EXPENDITUREMODE, TITLE, CONTENT, SHAREDEPARTMENTNO
+                                , STATUS, APPROVER, DEPARTMENTNAME, PAPERSNAME, EMPLOYEENAME, TEXTNUMBER, PAYMENT_MONEY, APPROVER_NAME)
+		values(SEQ_BO_PAYMENT.nextval, #{fk_employeeno}, default, #{expenditureday}, #{expendituremode}, #{title}, #{content}, default, default, #{approver}, #{departmentname}, default, #{employeename}, #{textnumber}, #{payment_money}, #{approver_name})
+	</insert>
+	
+	<!-- 파일첨부가 있는 경우 exReport insert 하기 -->
+	<insert id="add_withFile" parameterType="com.bo.payment_report.model.ExReportVO">
+ 		insert into TBL_BO_EXPENDITURE(EXPENDITURENO, FK_EMPLOYEENO, WRITEDAY, EXPENDITUREDAY, EXPENDITUREMODE, TITLE, CONTENT, SHAREDEPARTMENTNO
+                                , STATUS, APPROVER, DEPARTMENTNAME, FILENAME, ORGFILENAME, FILESIZE, PAPERSNAME, EMPLOYEENAME, TEXTNUMBER, PAYMENT_MONEY, APPROVER_NAME)
+		values(SEQ_BO_PAYMENT.nextval, #{fk_employeeno}, default, #{expenditureday}, #{expendituremode}, #{title}, #{content}, default, default, #{approver}, #{departmentname} ,#{fileName}, #{orgFilename}, #{fileSize}, default, #{employeename}, #{textnumber}, #{payment_money}, #{approver_name})
+	</insert> 
+	
+	
+	
+	
+	
+	<!-- 첨부파일이 없는 경우 leave inset 하기 -->
+	<insert id="addLeaveReport" parameterType="com.bo.payment_report.model.LeaveReportVO">
+		insert into TBL_BO_VACATION(VACATIONNO, FK_EMPLOYEENO, WRITEDAY, STARTDAY, ENDDAY, TITLE, REASON, EMERGENCYCONTACTNETWORK, SHAREDEPARTMENTNO, STATUS, APPROVER, DEPARTMENTNAME, RANK, PAPERSNAME, EMPLOYEENAME, TEXTNUMBER, APPROVER_NAME)
+		values(SEQ_BO_PAYMENT.nextval, #{fk_employeeno}, default, #{startday}, #{endday}, #{title}, #{reason}, #{emergencycontactnetwork}, default, default, #{approver}, #{departmentname}, #{rank}, default, #{employeename}, #{textnumber}, #{approver_name})
+	</insert>
+	<!-- 첨부파일이 있는 경우 leave inset 하기 -->
+	<insert id="addLeaveReport_withFile" parameterType="com.bo.payment_report.model.LeaveReportVO">
+		insert into TBL_BO_VACATION(VACATIONNO, FK_EMPLOYEENO, WRITEDAY, STARTDAY, ENDDAY, TITLE, REASON, EMERGENCYCONTACTNETWORK, SHAREDEPARTMENTNO, STATUS, APPROVER, DEPARTMENTNAME, RANK, fileName, orgFilename, fileSize, PAPERSNAME, EMPLOYEENAME, TEXTNUMBER, APPROVER_NAME)
+		values(SEQ_BO_PAYMENT.nextval, #{fk_employeeno}, default, #{startday}, #{endday}, #{title}, #{reason}, #{emergencycontactnetwork}, default, default, #{approver}, #{departmentname}, #{rank}, #{fileName}, #{orgFilename}, #{fileSize}, default, #{employeename}, #{textnumber}, #{approver_name})
+	</insert>
+	
+	
+	
+	
+	<!-- 지출결의서 문서번호 사용할 시퀀스 채번해오기 -->
+	<select id="textNumber" resultType="int">
+		select SEQ_BO_PAYMENT.nextval
+		from dual
+	</select>
+	
+	
+	
+	<!-- 지출결의서 제출시 결재자 테이블 insert -->
+	<insert id="addApprover">
+		insert into TBL_BO_APPROVER(APPROVERNO, FK_EMPLOYEENO, STATUS, EX_TEXTNUMBER)
+		values(SEQ_BO_APPROVER.nextval, #{approver}, default, #{textnumber})
+	</insert>
+	
+	<!-- 휴가신청서 제출시 결재자 테이블 insert -->
+	<insert id="addVactionApprover">
+		insert into TBL_BO_APPROVER(APPROVERNO, FK_EMPLOYEENO, STATUS, VC_TEXTNUMBER)
+		values(SEQ_BO_APPROVER.nextval, #{approver}, default, #{textnumber})
+	</insert>
+	
+	
+	
+	<!-- 미결재보관함 List select 하기 -->
+	<!-- <resultMap type="HashMap" id="addListMap">
+		<result property="VACATIONNO" column="VACATIONNO" javaType="String" />
+		<result property="TITLE" 	column="TITLE" 		javaType="String" />
+		<result property="STATUS" 	column="STATUS" 	javaType="String" />
+		<result property="DEPARTMENTNAME" column="DEPARTMENTNAME" javaType="String" />
+		<result property="FK_EMPLOYEENO"  column="FK_EMPLOYEENO" 	javaType="String" />
+		<result property="WRITEDAY" 	  column="WRITEDAY" 		javaType="String" />
+		<result property="PAPERSNAME"	  column="PAPERSNAME" 	javaType="String" />
+		<result property="EMPLOYEENAME"	  column="EMPLOYEENAME" 	javaType="String" />
+	</resultMap>
+	<select id="addList" parameterType="com.bo.payment_report.model.LeaveReportVO" resultMap="addListMap">
+		SELECT VACATIONNO, TITLE, STATUS, DEPARTMENTNAME, FK_EMPLOYEENO, WRITEDAY, PAPERSNAME, EMPLOYEENAME 
+		FROM TBL_BO_VACATION
+		WHERE REASON = #{reason} AND FK_EMPLOYEENO = #{fk_employeeno} AND ROWID IN (SELECT MAX(ROWID) FROM TBL_BO_VACATION GROUP BY REASON)
+	</select> -->
 	
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

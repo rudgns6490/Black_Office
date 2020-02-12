@@ -5,38 +5,593 @@
 
 <!-- ==== #29. 루트 엘리먼트 & 네임스페이스 설정(프로젝트 전체내에서 유일해야 한다.) ==== -->
 <mapper namespace="admin"> 
+
+	<!-- ///////////////////////////////////////////////////////////////////////////// -->
+	<!-- ///////////////////////////////   [ 메인화면 ]   /////////////////////////////// -->
+	<!-- ///////////////////////////////////////////////////////////////////////////// -->
+	<!-- 메인화면 공지게시판 목록가져오기 -->
+	<select id="mainboardListWithPaging" resultType="com.bo.board.model.BoardVO">
+		 select seq, fk_userid, name, subject, readCount, regDate, commentCount 
+       , fileName, orgFilename, fileSize 
+       from 
+       (
+	       select rownum AS rno
+	            , seq, fk_userid, name, subject, readCount, regDate, commentCount
+	            , fileName, orgFilename, fileSize 
+	       from   
+	       (  
+	         select seq, fk_userid, name, subject,  
+			        readCount, to_char(regDate, 'yyyy-mm-dd') as regDate,
+			        commentCount
+			        , fileName, orgFilename, fileSize 
+			 from TBL_BO_NOTICE
+			 where status = 1
+			 order by seq desc
+		   ) V  
+	   ) T 	   
+	   where rno <![CDATA[ <= ]]> 2
+	</select>
 	
-	<insert id="register" parameterType="com.bo.member.model.MemberVO">
-		insert into TBL_BO_EMPLOYEES(EMPLOYEENO, id, passwd, name, jubun, email, emailpw, phone, registerday)
-		values(SEQ_BO_EMPLOYEES.nextval, #{id}, #{passwd}, #{name}, #{jubun}, #{email}, #{emailpw}, #{phone}, default, 1, #{fk_positionno}, #{fk_departmentno})
-	</insert>
+	<!-- 메인화면 업무게시판 목록가져오기 -->
+	<select id="maindeptBoardListWithPaging" resultType="com.bo.board.model.DeptBoardVO">
+		 select seq, fk_userid, name, subject, readCount, regDate, commentCount 
+       , fileName, orgFilename, fileSize 
+       from 
+       (
+	       select rownum AS rno
+	            , seq, fk_userid, name, subject, readCount, regDate, commentCount
+	            , fileName, orgFilename, fileSize 
+	       from   
+	       (  
+	         select seq, fk_userid, name, subject,  
+			        readCount, to_char(regDate, 'yyyy-mm-dd') as regDate,
+			        commentCount
+			        , fileName, orgFilename, fileSize 
+			 from TBL_BO_DEPT_BOARD
+			 where status = 1
+			 order by seq desc
+		   ) V  
+	   ) T 	   
+	   where rno <![CDATA[ <= ]]> 2
+	</select>
 	
+	<!-- 보고서 데이터 메인에 보여주기 -->
+   <resultMap type="HashMap" id="textReportMap">
+      <result property="textnumber" column="TEXTNUMBER" javaType="String"/>
+      <result property="title" column="TITLE" javaType="String"/>
+      <result property="employeename" column="EMPLOYEENAME" javaType="String"/>
+      <result property="papersname" column="PAPERSNAME" javaType="String"/>
+   </resultMap>
+   <select id="textReportShow" parameterType="String" resultMap="textReportMap">
+      select rno, textnumber, title, employeename, PAPERSNAME
+      from
+      (
+      select rownum as rno, textnumber, title, employeename, PAPERSNAME
+      from 
+      (
+      select textnumber, title, employeename, PAPERSNAME
+         from 
+         ( 
+          select expenditureno as writeno, title, content, textnumber, employeename, PAPERSNAME
+          from tbl_bo_expenditure
+          where status = 0
+          union all            
+          select vacationno, title, reason, textnumber, employeename, PAPERSNAME  
+          from tbl_bo_vacation
+          where status = 0
+         ) T
+         where T.writeno in ( 
+                                 select max(no) as writeno  
+                                 from  
+                                 ( 
+                                  select expenditureno as no, title, content as bodycontent, textnumber, employeename, PAPERSNAME
+                                  from tbl_bo_expenditure
+                                  where status = 0 and APPROVER = #{employeeno}
+                                  union all            
+                                  select vacationno, title, reason, textnumber, employeename, PAPERSNAME         
+                                  from tbl_bo_vacation
+                                  where status = 0 and APPROVER = #{employeeno}
+                                 ) V
+                                 group by V.textnumber
+                             )
+      order by textnumber desc
+      ) W
+      order by rno
+      ) A
+      where rno <![CDATA[<=]]> 5
+   </select>
+	
+	
+	<!-- ///////////////////////////////////////////////////////////////////////////// -->
+	<!-- ///////////////////////////////   [ 로그인 ]   /////////////////////////////// -->
+	<!-- ///////////////////////////////////////////////////////////////////////////// -->
+
+
 	<!-- 로그인 처리 -->
 	<select id="getLoginMember" parameterType="HashMap" resultType="com.bo.member.model.MemberVO">
-		select employeeno, id, passwd, name, email, emailpw 
+		select employeeno, id, passwd, name, email, emailpw , fk_departmentno, fk_positionno, thumbnailFileName
 		from TBL_BO_EMPLOYEES 
 		where status = 1 and 
 		      id = #{id} and
 		      passwd = #{passwd}
 	</select>
 	
+	
+	<!-- ////////////////////////////////////////////////////////////////////////////// -->
+	<!-- /////////////////////////////// [ 통계(차트) ] /////////////////////////////// -->
+	<!-- ///////////////////////////////////////////////////////////////////////////// -->
+	
+	
+<!-- 지출결재 테이블 총 개수 가져오기 -->
+	<select id="getTotalCountExpenditure" resultType="int">
+		select count(*)
+		from TBL_BO_EXPENDITURE
+		where STATUS = 1 and PAPERSNAME = '지출 결의서'
+	</select>
+	
+	<!-- 지출결재 테이블 검색조건의 총 개수 가져오기 -->
+	<select id="getTotalCountExpenditureSearch" resultType="int" parameterType="HashMap">
+		select count(*)
+		from TBL_BO_EXPENDITURE
+		where STATUS = 1 and PAPERSNAME = '지출 결의서'
+		and EXPENDITUREDAY between #{fromDate} and #{toDate}
+		and DEPARTMENTNAME = #{expenditureDepartment}
+	</select>
+	
+	<!-- === 지출통계에 데이터 가져오기 (select) === -->
+	<resultMap type="HashMap" id="getadmintotalexpenditure">
+		<result property="EXPENDITURENO" 	 	column="EXPENDITURENO" 	javaType="String" />
+		<result property="FK_EMPLOYEENO" 	 	column="FK_EMPLOYEENO" 	javaType="String" />
+		<result property="DEPARTMENTNAME" 		column="DEPARTMENTNAME" javaType="String" />
+		<result property="FK_POSITIONNO" 	 	column="FK_POSITIONNO" 	javaType="String" />
+		<result property="EMPLOYEENAME" 	 	column="EMPLOYEENAME" 	javaType="String" />
+		<result property="PAYMENT_MONEY" 	 	column="PAYMENT_MONEY" 	javaType="String" />
+		<result property="PAPERSNAME" 	 		column="PAPERSNAME" 	javaType="String" />
+		<result property="STATUS" 	 			column="STATUS" 		javaType="String" />
+		<result property="EXPENDITUREDAY" 	 	column="EXPENDITUREDAY" javaType="String" />
+	</resultMap>
+	<select id="getadmintotalexpenditure" parameterType="HashMap" resultMap="getadmintotalexpenditure">
+		select EXPENDITURENO ,FK_EMPLOYEENO, DEPARTMENTNAME, FK_POSITIONNO, EMPLOYEENAME, PAYMENT_MONEY, PAPERSNAME, STATUS, EXPENDITUREDAY
+		from
+		    (
+		    select ROWNUM AS RNO
+		           ,EXPENDITURENO ,FK_EMPLOYEENO, DEPARTMENTNAME, FK_POSITIONNO, EMPLOYEENAME, PAYMENT_MONEY, PAPERSNAME, STATUS, EXPENDITUREDAY
+		    FROM
+		        (
+		        select A.EXPENDITURENO	 						        AS EXPENDITURENO
+		                ,A.FK_EMPLOYEENO   						            AS FK_EMPLOYEENO
+		                ,A.DEPARTMENTNAME  						        AS DEPARTMENTNAME
+		                ,B.FK_POSITIONNO   						            AS FK_POSITIONNO 
+		                ,A.EMPLOYEENAME    						        AS EMPLOYEENAME
+		                ,A.PAYMENT_MONEY   						        AS PAYMENT_MONEY
+		                ,A.PAPERSNAME      						            AS PAPERSNAME 
+		                ,A.STATUS          						                AS STATUS
+		                ,A.EXPENDITUREDAY	AS EXPENDITUREDAY
+		        from TBL_BO_EXPENDITURE A LEFT JOIN TBL_BO_EMPLOYEES B
+		        ON A.EMPLOYEENAME = B.NAME
+		        where A.STATUS = 1 and A.PAPERSNAME = '지출 결의서'
+		        and EXPENDITUREDAY between #{fromDate} and #{toDate}
+				and DEPARTMENTNAME = #{expenditureDepartment}
+		        ) V 
+		    ) T
+		where RNO between #{startRno} and #{endRno}
+	</select> 
+	
+	<!-- === 부서통계 테이블 데이터 가져오기 (select) === -->
+	<resultMap type="HashMap" id="getadmintotaldepartment">
+		<result property="FK_DEPARTMENTNO" 	 	column="FK_DEPARTMENTNO" 	javaType="String" />
+ 		<result property="COUNT"  				column="count" 				javaType="String" />
+	</resultMap>
+	<select id="getadmintotaldepartment" resultMap="getadmintotaldepartment">
+		select FK_DEPARTMENTNO
+        	  ,count (*) AS count
+		from TBL_BO_EMPLOYEES
+		group by FK_DEPARTMENTNO
+		order by FK_DEPARTMENTNO
+	</select>
+	
+	<!-- 부서통계 테이블에 트랜잭션으로 부서명 가져오기 -->
+	<select id="departmentList" resultType="String">
+		select DEPARTMENTNAME
+		from TBL_BO_DEPARTMENT
+		order by DEPARTMENTNO
+	</select>
+	
+	<!-- === 직위통계 테이블 데이터 가져오기 (select) === -->
+	<resultMap type="HashMap" id="getadmintotalposition">
+		<result property="FK_DEPARTMENTNO" 	 	column="FK_DEPARTMENTNO" 	javaType="String" />
+ 		<result property="COUNT"  				column="count" 				javaType="String" />
+	</resultMap>
+	<select id="getadmintotalposition" resultMap="getadmintotalposition">
+		select FK_POSITIONNO 
+        	  ,count (*) AS count
+		from TBL_BO_EMPLOYEES
+		group by FK_POSITIONNO
+		order by FK_POSITIONNO
+	</select>
+	
+	<!-- 직위통계 테이블에 트랜잭션으로 부서명 가져오기 -->
+	<select id="positionList" resultType="String">
+		select POSITIONNAME
+		from TBL_BO_POSITION
+		order by POSITIONNO
+	</select>
+
+	<!-- ▼ 차트만들기 -->
+	<!-- 부서별 인원통계 -->
+	<resultMap type="HashMap" id="departmentstatisticsMap"> <!-- property 가 HashMap 의 key 값이다. -->
+		<result property="department_chart"   	column="department_chart" 	javaType="String" ></result>  
+		<result property="CNT1" 			 	column="CNT"				javaType="String" ></result>
+		<result property="PERCENTAGE1"     	 	column="PERCENTAGE1" 		javaType="String" ></result>
+	</resultMap>
+	<select id="departmentstatistics" resultMap="departmentstatisticsMap"> <!-- resultMap 은 아무거나 써도된다. - 항상 위에 resultMap 태그를 만들어준다.-->
+		select FK_DEPARTMENTNO AS department_chart
+		      ,count(*) AS CNT
+		      ,round( (count(*)/(select count(*) from TBL_BO_EMPLOYEES)*100) , 2 ) AS PERCENTAGE1
+		from TBL_BO_EMPLOYEES
+		group by FK_DEPARTMENTNO
+		order by FK_DEPARTMENTNO
+	</select>
+	
+	<!-- 직위별 인원통계 -->
+	<resultMap type="HashMap" id="positionstatisticsMap"> 
+		<result property="position_chart"   	column="position_chart" 	javaType="String" ></result>  
+		<result property="CNT2" 			 	column="CNT2"				javaType="String" ></result>
+		<result property="PERCENTAGE"     	 	column="PERCENTAGE" 		javaType="String" ></result>
+	</resultMap>
+	<select id="positionstatistics" resultMap="positionstatisticsMap">
+		select FK_POSITIONNO AS position_chart
+		      ,count (*) AS CNT2
+		      ,round( (count(*)/(select count(*) from TBL_BO_EMPLOYEES)*100) , 2 ) AS PERCENTAGE
+		from TBL_BO_EMPLOYEES
+		group by FK_POSITIONNO
+		order by FK_POSITIONNO
+	</select>
+	<!-- ▲ 차트만들기 -->
+
+
+	<!-- ////////////////////////////////////////////////////////////////////////////// -->
+	<!-- /////////////////////////////  [ 입사처리/인사 ]  ///////////////////////////// -->
+	<!-- ///////////////////////////////////////////////////////////////////////////// -->
+	
+	
+	<!-- 신규 입사 등록 -->
+	<insert id="register" parameterType="com.bo.member.model.MemberVO">
+		insert into TBL_BO_EMPLOYEES(EMPLOYEENO, id, passwd, name, jubun, email, emailpw, phone, registerday, status, fk_positionno, fk_departmentno)
+		values(SEQ_BO_EMPLOYEES.nextval, #{id}, #{passwd}, #{name}, #{jubun}, #{email}, #{emailpw}, #{phone}, default, 1, #{fk_positionno}, #{fk_departmentno})
+	</insert>
+	
+	<!-- 사진 첨부 있는 신규 입사 등록 -->
+	<insert id="attach_register" parameterType="com.bo.member.model.MemberVO">
+		insert into TBL_BO_EMPLOYEES(EMPLOYEENO, id, passwd, name, jubun, email, emailpw, phone, registerday, status, fk_positionno, fk_departmentno, fileName, orgFilename, fileSize, thumbnailFileName)
+		values(SEQ_BO_EMPLOYEES.nextval, #{id}, #{passwd}, #{name}, #{jubun}, #{email}, #{emailpw}, #{phone}, default, 1, #{fk_positionno}, #{fk_departmentno},  #{fileName}, #{orgFilename}, #{fileSize}, #{thumbnailFileName})
+	</insert>
+	
+	<!-- 아이디 중복체크 -->
+	<select id="idDuplicateCheck" parameterType="String" resultType="boolean">
+		select *
+		from TBL_BO_EMPLOYEES
+		where ID = #{userid}
+	</select> 
+	
+	<!-- 내 정보 수정 2020/01/31/금 LBH -->
+	<update id="revision" parameterType="com.bo.member.model.MemberVO">
+		update TBL_BO_EMPLOYEES set email = #{email}, phone = #{phone}, address = #{address}, DETAILADDRESS = #{detailaddress}
+		where ID = #{id}
+	</update>
+	
+	<!-- 이미지 첨부한 내 정보 수정 2020/01/31/금 LBH -->
+	<update id="attach_revision" parameterType="com.bo.member.model.MemberVO">
+		update TBL_BO_EMPLOYEES set email = #{email}, phone = #{phone}, address = #{address}, DETAILADDRESS = #{detailaddress}, fileName = #{fileName}, orgFilename = #{orgFilename}, fileSize = #{fileSize}, thumbnailFileName = #{thumbnailFileName}
+		where ID = #{id}
+	</update>
+	
+	<!-- 직위 이름 구하기 -->
 	<select id="getPositionname" parameterType="int" resultType="String">
 		select POSITIONNAME
 		from TBL_BO_POSITION
 		where POSITIONNO = #{fk_positionno}
 	</select>
 	
+	<!-- 부서 이름 구하기 -->
 	<select id="getDepartmentname" parameterType="int" resultType="String">
 		select DEPARTMENTNAME
 		from TBL_BO_DEPARTMENT
 		where DEPARTMENTNO = #{fk_departmentno}
 	</select>
 	
-	<insert id="adressRegister" parameterType="com.bo.admin.model.AdressbookVO">
-		insert into TBL_BO_ADDRESSBOOK_PERSONAL(ADDRNO, NAME, EMAIL, PHONE, POSITIONNAME, DEPARTMENTNAME, adressmode)
-		values(SEQ_BO_ADDRESSBOOK_PERSONAL.nextval, #{name}, #{email}, #{phone}, #{positionname}, #{departmentname}, 2)
+	<!-- 신규 입사 등록 시 공용 주소록 추가하기 트랜잭션 처리 -->
+	<insert id="addressRegister" parameterType="com.bo.admin.model.AddressbookVO">
+		insert into TBL_BO_ADDRESSBOOK_PERSONAL(ADDRNO, NAME, EMAIL, PHONE, POSITIONNAME, DEPARTMENTNAME, adressmode, fk_employeeno)
+		values(SEQ_BO_ADDRESSBOOK_PERSONAL.nextval, #{name}, #{email}, #{phone}, #{positionname}, #{departmentname}, 2, #{fk_employeeno})
+	</insert>
+	
+	<!-- ////////////////////////////////////////////////////////////////////////////// -->
+	<!-- /////////////////////////  [ 주소록 ( 개인 / 공용 ) ]  ///////////////////////// -->
+	<!-- ///////////////////////////////////////////////////////////////////////////// -->	
+	
+	<!-- 검색어가 없는 공용 주소록 갯수 -->
+	<select id="getTotalCountWithNoSearch" resultType="int">
+		select count(*)
+		from TBL_BO_ADDRESSBOOK_PERSONAL
+		where adressmode = 2
+	</select>
+	
+	
+	<!-- === #121. 검색조건이 있을 경우의 총 게시물 건수(totalCount) ===  -->
+	<select id="getTotalCountWithSearch" resultType="int" parameterType="HashMap">
+		select count(*)
+		from TBL_BO_ADDRESSBOOK_PERSONAL
+		where adressmode = 2
+		and ${searchType} like '%' || #{searchWord} || '%'
+	</select>
+	
+	<!-- 페이징 처리한 공용 주소록 페이징 처리 -->
+	<select id="abvoListWithPaging" parameterType="HashMap" resultType="com.bo.admin.model.AddressbookVO"> 
+		select name, email, phone, positionname, departmentname
+		from 
+		(
+		    select rownum AS rno
+		         , name, email, phone, positionname, departmentname
+		    from
+		    (
+		        select name, email, phone, positionname, departmentname
+		        from TBL_BO_ADDRESSBOOK_PERSONAL
+		        where adressmode = 2
+		     <if test='searchWord != "" '>   
+		        and ${searchType} like '%'|| #{searchWord} ||'%'
+		     </if> 
+		    ) V
+		) T
+		where rno between #{startRno} and #{endRno}
+	</select>
+	
+	<!-- 검색어가 없는 개인 주소록 갯수 -->
+	<select id="getTotalCountWithNoSearch2" resultType="int" parameterType="String">
+		select count(*)
+		from TBL_BO_ADDRESSBOOK_PERSONAL
+		where adressmode = 1 and fk_employeeno = #{employeeno}
+	</select>
+	
+	
+	<!-- 검색어가 있는 개인 주소록 갯수 -->
+	<select id="getTotalCountWithSearch2" resultType="int" parameterType="HashMap">
+		select count(*)
+		from TBL_BO_ADDRESSBOOK_PERSONAL
+		where adressmode = 1 and fk_employeeno = #{employeeno}
+		and ${searchType} like '%' || #{searchWord} || '%'
+	</select>
+	
+	<!-- 페이징 처리한 개인 주소록 목록 구하기 -->
+	<select id="abvoListWithPaging2" parameterType="HashMap" resultType="com.bo.admin.model.AddressbookVO"> 
+		select name, email, phone, companyname, groupname, fk_employeeno
+		from 
+		(
+		    select rownum AS rno
+		         , name, email, phone, companyname, groupname, fk_employeeno
+		    from
+		    (
+		        select name, email, phone, companyname, groupname, fk_employeeno
+		        from TBL_BO_ADDRESSBOOK_PERSONAL
+		        <!-- 임시로 사원번호 1로 고정했음 추후 수정필요 2020/01/26 kkh -->
+		        where adressmode = 1 and fk_employeeno = #{employeeno}
+		     <if test='searchWord != "" '>   
+		        and ${searchType} like '%'|| #{searchWord} ||'%'
+		     </if> 
+		    ) V
+		) T
+		where rno between #{startRno} and #{endRno}
+	</select>
+	
+	<!-- 개인주소록 목록 -->
+	<select id="abvoList" parameterType="HashMap" resultType="com.bo.admin.model.AddressbookVO"> 
+		select name, email, phone, companyname, groupname, fk_employeeno
+		from TBL_BO_ADDRESSBOOK_PERSONAL
+		where adressmode = 1 and fk_employeeno = #{employeeno}
+		<if test='searchWord != "" '>   
+		and ${searchType} like '%'|| #{searchWord} ||'%'
+		</if> 
+	</select>
+	
+	<!-- 업체 주소록 추가 -->
+	<insert id="registerPersonal" parameterType="com.bo.admin.model.AddressbookVO">
+		insert into TBL_BO_ADDRESSBOOK_PERSONAL(ADDRNO, NAME, EMAIL, PHONE, COMPANYNAME, GROUPNAME, adressmode, FK_EMPLOYEENO )
+		values(SEQ_BO_ADDRESSBOOK_PERSONAL.nextval, #{name}, #{email}, #{phone}, #{companyname}, #{groupname}, 1, #{fk_employeeno})
 	</insert>
 
+	<!-- ////////////////////////////////////////////////////////////////////////////// -->
+	<!-- ///////////////////////////////  [ 인사이동 ]  //////////////////////////////// -->
+	<!-- ////////////////////////////////////////////////////////////////////////////// -->	
+	
+
+	<!-- 인사이동할 사원 목록 검색 (페이징안함) -->
+	<resultMap type="HashMap" id="selectSawon">
+		<result property="employeeno" column="employeeno" javaType="String"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="departmentname" column="departmentname" javaType="String"/>
+		<result property="positionname" column="positionname" javaType="String"/>
+		<result property="status" column="status" javaType="String"/>
+	</resultMap>
+	<select id="selectSawon" parameterType="HashMap" resultMap="selectSawon">
+		select to_char(E.employeeno) as employeeno, E.name as name, D.departmentname as departmentname, P.positionname as positionname, to_char(E.status) as status
+		from TBL_BO_EMPLOYEES E, TBL_BO_DEPARTMENT D, TBL_BO_POSITION P
+		where E.fk_departmentno = D.departmentno
+		and E.fk_positionno = P.positionno
+		and (E.status =1 or E.status = 2)
+		<if test='searchWord != "" '>   
+		and ${searchType} like '%'|| #{searchWord} ||'%'
+		</if> 
+	</select>
+	
+	<!-- 인사이동 목록에 퇴사 내역 추가 -->
+	<insert id="addListRetirement" parameterType="HashMap">
+		insert into tbl_bo_personnelAnnouncement(seq, employeeno, name, departmentname, positionname, ANNOUNCEMENTMODE, registerday)
+		values(SEQ_BO_PERSONNELANNOUNCEMENT.nextval, #{employeeno}, #{name}, #{departmentname}, #{positionname}, 1, sysdate)
+	</insert>
+	
+	<!-- 해당 사원 퇴사처리 하기 -->
+	<update id="retirementSawon" parameterType="HashMap">
+		update TBL_BO_EMPLOYEES set status = 0
+		where employeeno = #{employeeno}
+	</update>
+	
+	<!-- 인사이동 목록에 부서변경 내역 추가 -->
+	<insert id="addListMoveDepartment" parameterType="HashMap">
+		insert into tbl_bo_personnelAnnouncement(seq, employeeno, name, departmentname, movedepartmentname, ANNOUNCEMENTMODE, registerday)
+		values(SEQ_BO_PERSONNELANNOUNCEMENT.nextval, #{employeeno}, #{name}, #{departmentname}, #{movedepartmentno}, 2, sysdate)
+	</insert>
+	
+	<!-- 해당 사원 부서 변경 하기 -->
+	<update id="moveDepartment" parameterType="HashMap">
+		update TBL_BO_EMPLOYEES set fk_departmentno = #{movedepartmentno, jdbcType=INTEGER}
+		where employeeno = #{employeeno}
+	</update>
+	
+	<!-- 인사이동 목록에 진급 내역 추가 -->
+	<insert id="addListMovePosition" parameterType="HashMap">
+		insert into tbl_bo_personnelAnnouncement(seq, employeeno, name, departmentname, positionname, movepositionname, ANNOUNCEMENTMODE, registerday)
+		values(SEQ_BO_PERSONNELANNOUNCEMENT.nextval, #{employeeno}, #{name}, #{departmentname}, #{positionname}, #{movepositionno}, 3, sysdate)
+	</insert>
+	
+	<!-- 해당 사원 진급 하기 -->
+	<update id="moveposition" parameterType="HashMap">
+		update TBL_BO_EMPLOYEES set fk_positionno = #{movepositionno, jdbcType=INTEGER}
+		where employeeno = #{employeeno}
+	</update>
+	
+	<!-- 인사이동 목록에 휴직 내역 추가 -->
+	<insert id="addListleaveofabsence" parameterType="HashMap">
+		insert into tbl_bo_personnelAnnouncement(seq, employeeno, name, departmentname, positionname, leaveofabsence, ANNOUNCEMENTMODE, registerday)
+		values(SEQ_BO_PERSONNELANNOUNCEMENT.nextval, #{employeeno}, #{name}, #{departmentname}, #{positionname}, #{leaveofabsence}, 4, sysdate)
+	</insert>
+	
+	<!-- 해당 사원 휴직  하기 -->
+	<update id="leaveofabsence" parameterType="HashMap">
+		update TBL_BO_EMPLOYEES set status = 2
+		where employeeno = #{employeeno}
+	</update>
+	
+	<!-- 인사이동 목록에 복직 내역 추가 -->
+	<insert id="addListreappoint" parameterType="HashMap">
+		insert into tbl_bo_personnelAnnouncement(seq, employeeno, name, departmentname, positionname, ANNOUNCEMENTMODE, registerday)
+		values(SEQ_BO_PERSONNELANNOUNCEMENT.nextval, #{employeeno}, #{name}, #{departmentname}, #{positionname}, 5, sysdate)
+	</insert>
+	
+	<!-- 해당 사원 복직  하기 -->
+	<update id="reappoint" parameterType="HashMap">
+		update TBL_BO_EMPLOYEES set status = 1
+		where employeeno = #{employeeno}
+	</update>
+
+	<!-- 퇴사 내역 조회 (페이징안함) -->
+	<resultMap type="HashMap" id="retirementList">
+		<result property="employeeno" column="employeeno" javaType="String"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="departmentname" column="departmentname" javaType="String"/>
+		<result property="positionname" column="positionname" javaType="String"/>
+		<result property="registerday" column="registerday" javaType="String"/>
+	</resultMap>
+	<select id="retirementList" parameterType="HashMap" resultMap="retirementList">
+		select employeeno, name, departmentname, positionname, to_char(registerday, 'yyyymmdd') as registerday
+		from TBL_BO_PERSONNELANNOUNCEMENT
+		where announcementmode = 1
+		<if test='searchWord != "" '>   
+		and ${searchType} like '%'|| #{searchWord} ||'%'
+		</if> 
+		order by registerday desc
+	</select>
+	
+	<!-- 부서 이동 내역 조회 -->
+	<resultMap type="HashMap" id="movedepartmentList">
+		<result property="employeeno" column="employeeno" javaType="String"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="departmentname" column="departmentname" javaType="String"/>
+		<result property="movedepartmentname" column="movedepartmentname" javaType="String"/>
+		<result property="registerday" column="registerday" javaType="String"/>
+	</resultMap>
+	<select id="movedepartmentList" parameterType="HashMap" resultMap="movedepartmentList">
+		select employeeno, name, departmentname, movedepartmentname, to_char(registerday, 'yyyymmdd') as registerday
+		from TBL_BO_PERSONNELANNOUNCEMENT
+		where announcementmode = 2
+		<if test='searchWord != "" '>   
+		and ${searchType} like '%'|| #{searchWord} ||'%'
+		</if> 
+		order by registerday desc
+	</select>
+	
+	<!-- 진급 내역 조회 -->
+	<resultMap type="HashMap" id="movePositionList">
+		<result property="employeeno" column="employeeno" javaType="String"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="departmentname" column="departmentname" javaType="String"/>
+		<result property="positionname" column="positionname" javaType="String"/>
+		<result property="movepositionname" column="movepositionname" javaType="String"/>
+		<result property="registerday" column="registerday" javaType="String"/>
+	</resultMap>
+	<select id="movePositionList" parameterType="HashMap" resultMap="movePositionList">
+		select employeeno, name, departmentname, positionname, movepositionname, to_char(registerday, 'yyyymmdd') as registerday
+		from TBL_BO_PERSONNELANNOUNCEMENT
+		where announcementmode = 3
+		<if test='searchWord != "" '>   
+		and ${searchType} like '%'|| #{searchWord} ||'%'
+		</if> 
+		order by registerday desc
+	</select>
+	
+	<!-- 휴직 내역 조회 -->
+	<resultMap type="HashMap" id="leaveofAbsenceList">
+		<result property="employeeno" column="employeeno" javaType="String"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="departmentname" column="departmentname" javaType="String"/>
+		<result property="positionname" column="positionname" javaType="String"/>
+		<result property="leaveofabsence" column="leaveofabsence" javaType="String"/>
+		<result property="registerday" column="registerday" javaType="String"/>
+	</resultMap>
+	<select id="leaveofAbsenceList" parameterType="HashMap" resultMap="leaveofAbsenceList">
+		select employeeno, name, departmentname, positionname, leaveofabsence, to_char(registerday, 'yyyymmdd') as registerday
+		from TBL_BO_PERSONNELANNOUNCEMENT
+		where announcementmode = 4
+		<if test='searchWord != "" '>   
+		and ${searchType} like '%'|| #{searchWord} ||'%'
+		</if> 
+		order by registerday desc
+	</select>
+	
+	<!-- 복직 내역 조회 -->
+	<resultMap type="HashMap" id="reappointList">
+		<result property="employeeno" column="employeeno" javaType="String"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="departmentname" column="departmentname" javaType="String"/>
+		<result property="positionname" column="positionname" javaType="String"/>
+		<result property="registerday" column="registerday" javaType="String"/>
+	</resultMap>
+	<select id="reappointList" parameterType="HashMap" resultMap="reappointList">
+		select employeeno, name, departmentname, positionname, to_char(registerday, 'yyyymmdd') as registerday
+		from TBL_BO_PERSONNELANNOUNCEMENT
+		where announcementmode = 5
+		<if test='searchWord != "" '>   
+		and ${searchType} like '%'|| #{searchWord} ||'%'
+		</if> 
+		order by registerday desc
+	</select>
+	
+	<!-- 사원번호 얻어오기 -->
+	<select id="getFk_epmplyeeno" parameterType="String" resultType="int"> 
+		select employeeno
+		from TBL_BO_EMPLOYEES
+		where id = #{id}
+	</select>
+	
+	<delete id="removeOpenAddressbookList" parameterType="HashMap">
+		delete from TBL_BO_ADDRESSBOOK_PERSONAL
+		where adressmode = 2 and fk_employeeno = #{employeeno}
+	</delete>
+	
+	<!-- 선택 된 개인 주소록 삭제하기 -->
+	<delete id="deleteaddressbookList" parameterType="String">
+		delete from TBL_BO_ADDRESSBOOK_PERSONAL
+		where adressmode = 1 and name = #{name}
+	</delete>
 </mapper>
 
 

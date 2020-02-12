@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    
 <%@ page import="java.net.InetAddress"%>
 
 <% 
@@ -11,7 +13,7 @@
 	InetAddress inet = InetAddress.getLocalHost();
 	String serverIP = inet.getHostAddress(); 		// IP 주소를 얻어온 것
 	
-// 	System.out.println("serverIP : " + serverIP);
+ 	//System.out.println("serverIP : " + serverIP);
 	// serverIP : 192.168.50.39
 
 	serverIP = "192.168.150.69";						// 본인의 IP 를 넣어줘야 한다.
@@ -37,11 +39,22 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-folder"></i>
+          <span>회사소개</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <h5 style="font-weight: bold;" class="dropdown-header">조직</h5>
+          <a class="dropdown-item" href="<%= ctxPath%>/organizationChart.action">조직도</a>
+          <div class="dropdown-divider"></div>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-fw fa-folder"></i>
           <span>게시판</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="<%= ctxPath%>/noticeBoardList.action">공지게시판</a>
-          <a class="dropdown-item" href="<%= ctxPath%>/deptBoard.action">업무게시판</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/deptBoardList.action">업무게시판</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>
@@ -86,7 +99,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="<%= ctxPath%>/individualSchedule.action">개인 일정</a>
-          <a class="dropdown-item" href="">공유된 일정</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/departmentSchedule.action">부서 일정</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>
@@ -96,8 +109,8 @@
           <span>주소록</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="http://localhost:9090/controller/addressBook.action">개인 주소록</a>
-          <a class="dropdown-item" href="http://localhost:9090/controller/addressOpenBook.action">공용 주소록</a>
+          <a class="dropdown-item" href="http://localhost:9090/controller/addressBook.action">업체 주소록</a>
+          <a class="dropdown-item" href="<%= ctxPath %>/addressOpenBookList.action">공용 주소록</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>
@@ -107,19 +120,25 @@
           <span>채팅</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="<%= serverName%><%=ctxPath%>/chatting.action">채팅</a>
+          <a class="dropdown-item" href="<%= serverName%><%=ctxPath%>/chatting/multichat.action">채팅1</a>
+          <a class="dropdown-item" href="<%=ctxPath%>/internetchat.action">채팅2</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>
-      <!-- 관리자로 로그인 했을 경우에만 관리자 메뉴가 보이도록 수정해야됨
-        	  추후 AOP로 로그인 처리후 작업할 예정 2020/01/03 kkh -->
+      <!-- 관리자로 로그인 했을 경우에만 관리자 메뉴가 보이도록 수정해야됨 
+      	     추후 AOP로 로그인 처리후 작업할 예정 2020/01/03 kkh -->
+      <c:if test="${sessionScope.loginuser != null && sessionScope.loginuser.id == 'admin'}">
+        	  
 	  <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-folder"></i>
           <span>통계</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="<%= ctxPath%>/admintotalexpenditure.action">지출통계</a>
+          <h5 style="font-weight: bold;" class="dropdown-header">목록</h5>
+          <a class="dropdown-item" href="<%= ctxPath%>/admintotalexpenditure.action">지출내역검색</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/admintotaldepartment.action">부서통계</a>
+          <a class="dropdown-item" href="<%= ctxPath%>/admintotalposition.action">직위통계</a>
           <div class="dropdown-divider"></div>
         </div>
       </li>
@@ -129,8 +148,6 @@
           <span>전사관리</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <h5 style="font-weight: bold;" class="dropdown-header">조직관리</h5>
-          <a class="dropdown-item" href="<%= ctxPath%>/positionmanagement.action">직위관리</a>
           <h5 style="font-weight: blod;" class="dropdown-header">인사관리</h5>
           <a class="dropdown-item" href="<%= ctxPath%>/joinSawon.action">입사처리</a>
           <a class="dropdown-item" href="<%= ctxPath%>/personnelAnnouncement.action">인사이동</a>
@@ -138,4 +155,5 @@
           <div class="dropdown-divider"></div>
         </div>
       </li>
+      </c:if>
     </ul>

@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+label {
+/* 	border: solid 1px gray; */
+	margin: 0px auto;
+	text-align: left;
+}
+
+th {
+	margin: 0px auto;
+}
+
+td {
+	margin: 0px auto;
+	
+}
+	
+#wrapper {
+	padding: 0px;
+	margin: 0 auto;
+	width: 100%;	
+}
+
+#content {
+	border : solid 1px black;
+	
+}
+
+#content-wrapper {
+	padding: 0px;
+	margin: 0 auto;
+}

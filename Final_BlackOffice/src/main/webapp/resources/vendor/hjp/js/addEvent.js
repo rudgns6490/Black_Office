@@ -38,13 +38,11 @@ var newEvent = function (start, end, eventType) {
     	
     	
         var eventData = {
-       		user_no: '1', 		//	사원db 만들어지면 연동하기 
        		schedule_title: editTitle.val(),
        		schedule_start: editStart.val(),
        		schedule_end: editEnd.val(),
             schedule_content : editDesc.val(),
             schedule_type: editType.val(),
-            // username: "사장1",				// 사원db 만들어지면 연동하기 
             schedule_color: editColor.val(),
             allDay: false
         };

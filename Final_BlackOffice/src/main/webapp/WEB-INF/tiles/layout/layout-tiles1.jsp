@@ -32,6 +32,7 @@
   <link href="<%= ctxPath %>/resources/css/sb-admin.css" rel="stylesheet">
   
   <!-- Bootstrap core JavaScript-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="<%= ctxPath %>/resources/vendor/jquery/jquery.min.js"></script>
   <script src="<%= ctxPath %>/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -53,6 +54,9 @@
   <!-- 차트 js 경우 차트를 만들지 않을경우에 있으면 null error 가 발생하므로 주석
   	    추후에 차트를 사용하는 부분에서만 추가해서 사용하면 된다. 2020/01/03 kkh -->
   <%-- <script src="<%= ctxPath %>/resources/js/demo/chart-area-demo.js"></script> --%>
+  
+  <!-- 스마트 에디터 사용 -->
+  <script type="text/javascript" src="<%= ctxPath %>/resources/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 
 </head>
 <body id="page-top">

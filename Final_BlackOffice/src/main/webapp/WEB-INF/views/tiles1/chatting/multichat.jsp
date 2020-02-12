@@ -3,8 +3,6 @@
 	
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 
-<%-- //=== (웹채팅관련5) ===  --%>
-
 <script type="text/javascript" src="/controller/resources/js/json2.js"></script>
 <!-- JSON.stringify() 는 값을 그 값을 나타내는 JSON 표기법의 문자열로 변환해주는 것인데 이것을 사용하기 위해서는 json2.js 가 필요하다. -->
 
@@ -29,7 +27,7 @@
     //	alert("root : " + root);
     //  결과값   root : 172.30.1.23:9090/controller			
    	
-    	var wsUrl = "ws://"+root+".action";		// ws = 웹소켓
+    	var wsUrl = "ws://"+root+"/multichatstart.action";		// ws = 웹소켓
     //	alert("wsUrl : " + wsUrl);				//ws://172.30.1.23:9090/controller.action
        	var websocket = new WebSocket(wsUrl);  //  /WEB-INF/web.xml 에 가서 appServlet 의 contextConfigLocation 을 수정한다.
 //        	alert("websocket : " + websocket); // websocket : [object WebSocket]
@@ -116,8 +114,8 @@
                 websocket.send(JSON.stringify(messageObj));
                 // JSON.stringify() 는 값을 그 값을 나타내는 JSON 표기법의 문자열로 변환한다
                 
-//                 $("#chatMessage").append("<span style='color:navy; font-weight:bold;'>[나] ▷ " + messageVal + "</span><br/>");
-                $("#chatMessage").prepend("<span style='color:navy; font-weight:bold;'>[나] ▷ " + messageVal + "</span><br/>");
+                $("#chatMessage").append("<span style='color:navy; font-weight:bold;'>[나] ▷ " + messageVal + "</span><br/>");
+//                 $("#chatMessage").prepend("<span style='color:navy; font-weight:bold;'>[나] ▷ " + messageVal + "</span><br/>");
                 
                 
                 
@@ -129,71 +127,45 @@
         });
         
         
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // 시계만들기
-		function showNowTime() {
-			
-			var now = new Date();
-		
-			var strNow = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
-			
-			var hour = "";
-		    if(now.getHours() >= 12) {
-		    	hour = "오후 " + (now.getHours() - 12); 
-		    } 
-		    else {
-		    	hour = "오전 " + now.getHours();
-		    }
-			
-			var minute = "";
-			if(now.getMinutes() < 10) {
-				minute = "0"+now.getMinutes();
-			} else {
-				minute = now.getMinutes();
-			}
-			
-			var second = "";
-			if(now.getSeconds() < 10) {
-				second = "0"+now.getSeconds();
-			} else {
-				second = now.getSeconds();
-			}
-			
-			strNow += " "+hour + ":" + minute + ":" + second;
-			
-			$("#clock").html("<span style='color:skyblue; font-weight:bold;'>"+strNow+"</span>");
-		
-		}// end of function showNowTime() -----------------------------
         
         
     }); // end of $(document).ready(function(){
 </script>
 </head>
 <body>
-	
-<div id="content-wrapper" style="padding: 0px;">
-	<div class="container-fluid text-center">
-	
-					<!-- 채팅 -->
-					
-				    
-				    
-				    
-				    <div style="border: solid 1px black;">
-				    	<div id="chatMessage" style="overFlow: auto; max-height: 500px;"></div>
-				    	<div id="clock" style="display:inline;"></div>
-    				</div>
-    				
-    				<div id="chatStatus"></div><br/>
-					<input type="text" id="to" placeholder="귓속말대상 ( IP주소 )"/><br/>
-					<input type="text" id="message" size="50" placeholder="메시지 내용"/>
-			    	<input type="button" id="sendMessage" value="보내기" />
-				    <input type="button" onClick="javascript:location.href='<%=request.getContextPath() %>/main.action'" value="채팅방나가기" />
+	<div id="content-wrapper" style="padding-top: 0;">
+    <div class="container-fluid text-center">
     
-	</div>
-	<!-- /.container-fluid -->
+      <!-- 메인 본문 내용 소스 작업은 여기서 수정 2020/01/03 kkh -->
+      <div class="row content">
+        <div class="col-sm-12" style="padding: 5%;">
+		  <fieldset>
+		    <legend>채팅</legend>
+		  
+		<!-- 채팅 --> 
+	    <div style="height: 600px; border: solid 1px black;">
+	    	<div id="chatMessage" style=" overFlow: auto; max-height: 500px;"></div>
+	    	<div id="clock" style="display:inline;"></div>
+		</div>
+ 				
+ 				<div id="chatStatus"></div><br/>
+		<input type="text" id="to" placeholder="귓속말대상 ( IP주소 )"/><br/>
+		<input type="text" id="message" size="50" placeholder="메시지 내용"/>
+    	<input type="button" id="sendMessage" value="보내기" />
+	    <input type="button" onClick="javascript:location.href='<%=request.getContextPath() %>/main.action'" value="채팅방나가기" />
+    
+		</div>
+
+		  </fieldset>
+        </div>
+      </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-wrapper -->
 </div>
-<!-- /.content-wrapper -->    
+	
+					
+	<!-- /.container-fluid -->
     
 </body>
 </html>    

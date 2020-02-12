@@ -7,6 +7,32 @@
 
 <link rel="stylesheet" type="text/css" href="<%=ctxPath%>/resources/css/login.css">
 <script type="text/javascript">
+
+	$(document).ready(function(){
+		
+		// Endter & button click -> 로그인
+		$("#btnSubmit").click(function(){
+			goLogin();// (button 으로)로그인 시도한다.
+		});
+		
+		$("#passwd").keydown(function(event){  // 누르자마자
+			if(event.keyCode == 13) { // 암호입력란에 엔터(13)를 했을 경우
+				goLogin();// 로그인 시도한다.
+				
+			}
+		});
+		
+		// === 로컬 스토리지(localStorage)를 사용하여 userid 값 저장시키기 === //
+		var id = localStorage.getItem("saveid");
+	
+		if(id != null) {
+			$("#id").val(id);
+			$("#saveid").prop("checked", true);
+		} 
+		///////////////////////////////////////////////////////////////
+		
+	}); // end of $(document).ready(function(){ ~~~~~~~~~
+
 	function goLogin(){
 		
 		var id = $("#id").val(); 
@@ -26,6 +52,32 @@
 			 return;
 		 }
 		
+		// === 로컬 스토리지(localStorage)를 사용하여 userid 값 저장시키기 === //
+		if( $("#saveid").is(":checked")) { // 아이디 저장 checkbox 에 체크가 되면 true 안되면 false 로 나온다.
+			var id = localStorage.getItem("saveid");
+			//var id = sessionStorage.getItem("saveid");
+			
+			if( id != null && id != $("#id").val() ) { // local안에 null 이 아닐때 내가 입력한 값이 id 와 다를 때
+				localStorage.clear();
+				localStorage.setItem("saveid", $("#id").val());
+			}
+			
+			if(id == null) { // null 이라면 localStorage 에 저장시키겠다.
+				
+				localStorage.setItem("saveid", $("#id").val());
+				//sessionStorage.setItem("saveid", $("#id").val());
+			}
+		}
+		else { // 아이디 저장 checkbox 에 체크가 안될 때
+			
+			var id = localStorage.getItem("saveid");
+		
+			if(id != null) { // null 이 아니라면 localStorage 에 지우겠다. removeItem("키값") 키값만 없앰 / clear() 전체삭제
+				localStorage.removeItem("saveid", $("#id").val());
+			}
+			
+		} 
+		 
 		var frm = document.login;
 		
 		frm.action = "<%= ctxPath%>/loginEnd.action";
@@ -81,8 +133,7 @@
 			           				<div class="writelogin" style="width: 400px; text-align: center;">
 			           					<label for="id"><img src="<%= ctxPath %>/resources/images/myinforpicture.PNG"></label>
 			           					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-			           					<input type="text" name="id" id="id" class="myinput" size="20" maxlength="20"
-										required placeholder="아이디" autocomplete="off">
+			           					<input type="text" id="id" name="id" class="myinput" size="20" maxlength="20" required placeholder="아이디" autocomplete="off">
 			           				
 			           				</div>
 			           				
@@ -96,8 +147,8 @@
 		           					</div>
 			           				
 			           				<div id="idsavecheckbox">
-				           				<input type="checkbox" name="hobby" id="hobby1" value="1">
-			           					<label for="hobby1" class="hobby">&nbsp;아이디 저장</label>
+				           				<input type="checkbox" id="saveid" name="saveid" style="vertical-align: text-top;" value="1">
+		           						<label for="saveid" style="margin-right: 20px; vertical-align: middle;"> &nbsp;아이디저장</label>
 			           				</div>
 			           				
 			           				<button class="buttons bluebutton" onclick="goLogin()">로그인</button>

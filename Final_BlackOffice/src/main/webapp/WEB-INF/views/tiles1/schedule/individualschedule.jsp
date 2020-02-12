@@ -45,7 +45,7 @@
         </div>
 		
 		
-        <div id="wrapper1">
+        <div id="wrapper1" style="width: 100%">
         	<h2 align="center" style="padding: 30px;">개인일정</h2>
             <div id="loading"></div>
             	<div id="calendar" class="col-sm-11"></div>
@@ -57,8 +57,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                         <h4 class="modal-title"></h4>
                     </div>
                     <div class="modal-body">
@@ -91,16 +90,6 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
-                                <label class="col-xs-4" for="edit-type">구분</label>
-                                <select class="inputModal" type="text" name="edit-type" id="edit-type">
-                                    <option value="0">개인일정</option>
-                                    <option value="1">회사일정</option>
-                                    <option value="2">부서일정</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
                                 <label class="col-xs-4" for="edit-color">색상</label>
                                 <select class="inputModal" name="color" id="edit-color">
                                     <option value="#D25565" style="color:#D25565;">빨간색</option>
@@ -123,16 +112,18 @@
                             </div>
                         </div>
                         
-                        
+                       <!--   중요설정 제외할 예정 
+                       
                         <div class="row">
                             <div class="col-xs-12">
                                 <label class="col-xs-4" for="schedule_importance">중요설정</label>
                                 <span class="star star_left"><input type="checkbox" id="starbool" style="display: none;"></span>
-                                <!-- <input class='allDayNewEvent' id="schedule_importance" name="schedule_importance"type="checkbox"> -->
+                                <input class='allDayNewEvent' id="schedule_importance" name="schedule_importance"type="checkbox">
                                 </label>
                             </div>
                         </div>
                         
+                         -->
                         
                         
                     </div>
@@ -157,7 +148,7 @@
             </div>
 
             <div class="panel-body">
-
+<!-- 
                 <div class="col-lg-6">
                     <label for="calendar_view">구분별</label>
                     <div class="input-group">
@@ -169,22 +160,14 @@
                     </div>
                 </div>
 
-
+ -->
 
 				
                 <div class="col-lg-6">
                     <label for="calendar_view">등록자별</label>
                     <div class="input-group">
-                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="사장1"
+                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="${sessionScope.loginuser.name}"
                                 checked>1</label>
-                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="다현"
-                                checked>2</label>
-                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="사나"
-                                checked>3</label>
-                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="나연"
-                                checked>4</label>
-                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="지효"
-                                checked>5</label>
                     </div>
                 </div>
                 

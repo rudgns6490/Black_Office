@@ -34,6 +34,7 @@
 	.radioCursor:hover { cursor: pointer; }
 	/*----------------------------------------------------------------------------------------------  */
    
+   .headertable { margin-right: 30px; }
    .headertable th,td{
 		border: solid 1px #639c9c;
 		border-collapse: collapse;  
@@ -50,9 +51,10 @@
 	.approvalImg { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
 	.headertable {float: right; margin-top:20px;}
 	
-	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:150px; height: 35px; font-size: 15pt; }
+	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:300px; height: 35px; font-size: 15pt; }
 	.approval th{ background-color: #e0ebeb; font-size: 13pt; font-weight: bold; }
 	.approvalImg:hover { cursor: pointer; }
+	.minus:hover { cursor: pointer; }
 	
 	.titleLine { clear: both; border: solid 0px #639c9c; height: 35px; }  /* 야매로 줄바꿈 해주기위한것 */
 	.title2, .title3 { clear: both; border: solid 1px #639c9c; border-bottom: none;  width: 100%;}
@@ -66,7 +68,10 @@
 		background: url(<%= request.getContextPath() %>/resources/images/체크이미지.png) no-repeat 3px center; 
 		padding-left: 20px; 
 	} 
-	
+	.purpose {
+		background: url(<%= request.getContextPath() %>/resources/images/체크이미지.png) no-repeat 3px center; 
+		padding-left: 20px; 
+	} 
 	
 	.reason {
 		background: url(<%= request.getContextPath() %>/resources/images/체크이미지.png) no-repeat 3px center; 
@@ -80,8 +85,70 @@
 	.save { float: right; margin-right: 90px; }
 	.saveBtn { border: solid 1px #0099cc; border-radius:3px; padding: 5px 20px; background-color: #0099cc; color: #fff; }
 	.saveBtn2 {padding: 5px 20px; border: solid 1px #bfbfbf; border-radius:3px;}  
+	
+	/* 	결재라인추가 modal css	  */ 
+	.add_search {background: white; width: 97%; margin-bottom: 10px;}
+	
+	.add_search_table {border: none; width: 100%}
+	
+	.add_search th {
+		font-family: 'Malgun Gothic', '맑은 고딕', 'Dotum', '돋움', sans-serif;
+		background: #639c9c;
+	    min-width: 50px;
+	    width: 100px;
+	    padding: 10px;
+	    font-size: 15px;
+	    line-height: 17px;
+	    color: #fff;
+	    vertical-align: middle;
+	    text-align: center; 
+	}
+		
+	.add_search td {padding: 10px; vertical-align: text-top;}
+	
+	.add_search_name {font-size: 12pt; width: 220px; margin-right: 12px;}
+	
+	.add_search_btn {
+		width: 80px;
+		height: 30px;
+		border: solid 1px #639c9c;
+	    border-radius: 3px;
+	    box-sizing: border-box;
+	    background: #639c9c;      /* #0083e7 */
+	    color: #fff;
+	    font-size: 12pt;
+	}
+	
+	.add_result_List {background: white; border: 1px solid #e6e6e6; width: 97%;}
+	
+	.add_result_List_title {
+		border-bottom: 1px solid #e6e6e6;
+	    background: #0000b3;
+	    font-weight: bold;
+	    font-size: 15px;
+	    line-height: 15px;
+	    color: #fff;
+	    text-align: center;
+	}
+	.add_result_List th {padding: 15px 0;}
+	
+	.add_result_List_contents td {
+		padding: 7px 0;
+	    background: #fff;
+	    font-size: 14px;
+	    line-height: 17px;
+	    color: #777777;
+	    text-align: center;
+	}
+	
+	.modalAddEmployees { cursor: pointer; } /* Modal 안에 td  */
+	
    
 </style>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script type="text/javascript">
 	
@@ -138,20 +205,240 @@ $(document).ready(function(){
 			});	
 		});// end of $("input:radio[name=radio]").click(function(){})----------	
 		
-		// 결재란 td 클릭시 이미지 넣어주기
-		$(".approvalImg").click(function(){
-			var hiddenVal = $("input:hidden[name=approvalHidden]").val();
+		// 결재라인 추가시 <select> <option> 부서 넣어주기
+		$(".addApproval").append("");
+		$.ajax({
+			url:"<%= ctxPath%>/addAprroval.action",
+			type:"GET",
+			dataType:"JSON",
+			success:function(json){
+				var html = "";
+				$.each(json,function(index, item){
+					html += "<option>"+item.departmentname+"</option>"			
+				}); 
+				$(".addApproval").append(html); 
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		}); // end of ajax({})-------------------------------------------------
+		
+		
+		/* ---------------------------------------------------------------------------------------------------- */
+		// 결재라인 부서에 따른 사원 select 
+		$(".addApproval").on('change',function(event){ 
+		//	alert( $(this).val() );	
+			if($(this).val() != null && $(this).val() != "0") {
+				
+				$.ajax({
+					url:"<%= ctxPath%>/addModalVal.action",
+					type:"GET",
+					data:{"modalDepartmentName":$(this).val()},
+					dataType:"JSON",
+					success:function(json){
+						var html = "";
+						$.each(json,function(index, item){
+							html += "<tr class='modalAddEmployees'>"
+							html += "<td class='DEPARTMENTNAME'>"+item.DEPARTMENTNAME+"</td>";
+							html += "<td class='NAME'>"+item.NAME+"</td>";
+							html += "<td class='POSITIONNAME'>"+item.POSITIONNAME+"<input class='employeeno' type='hidden' value='"+item.EMPLOYEENO+"' /></td>";
+							html += "</tr>";	
+						}); 
+						$(".modalTrLength").html(html);
+						
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				}); // end of ajax({})-------------------------------------------------
+			}
 			
-			if(hiddenVal == "0") {
-				$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/뭐.png'>"); 
-				$("input:hidden[name=approvalHidden]").val("1");
+		});// end of $(".addApproval").on('change',function(event){})--------------------------------
+		
+		
+		/* ---------------------------------------------------------------------------------------------------- */
+	
+		
+		$(document).on("click",".modalAddEmployees",function(){
+			var valHtml0 = ""; 
+			var valHtml1 = "";
+			var valHtml2 = "";
+			var valHidden = "";
+			var employeeno = $(this).find('.employeeno').val();
+		//	var modalAddLength = $(".modalAddEmployees").length;
+		//	alert(modalAddLength);
+			/*
+			//	alert($(this).index());
+			var index = $(this).index();
+			//	alert($(".NAME").text());
+		//	alert($(index).find('.NAME').val());
+			alert($(index).children().first().val()); */
+			
+		//	alert($(this).find('.NAME').val());
+			
+		//	console.log($(".addApproval").val());
+		//	console.log( $(this).text() );
+		
+		//  console.log($(this).html());
+		    
+		    var html = $(this).html();
+	     // <td class="DEPARTMENTNAME">개발2팀</td><td class="NAME">박시준</td><td class="POSITIONNAME">부장</td>
+	        var index = html.indexOf('class="NAME"');
+	        html = html.substring(index);
+	     // console.log(html);
+	     // class="NAME">박시준</td><td class="POSITIONNAME">부장</td>
+	        	        
+	        index = html.indexOf(">");
+	        html = html.substring(index);
+	     // console.log(html);
+	     // >박시준</td><td class="POSITIONNAME">부장</td>
+	        
+	        index = html.indexOf(">");
+	        html = html.substring(index);
+	     // console.log(html);
+	     // >박시준</td><td class="POSITIONNAME">부장</td>
+	        
+	        index2 = html.indexOf("<");
+	        // index2 ==> 4
+	        
+	     //   console.log(html.substring(1,4));
+	        var name = html.substring(1,4);
+	        
+			/* 
+			var totalText = $(this).text();
+			var deptName = $(".addApproval").val();
+			var beginIndex = totalText.length - deptName.length - 1;
+			console.log( totalText.substr(beginIndex, 3)); */
+
+	// ----------------------------- 결재라인 추가 -------------------------------------- //	
+			 
+		//	var count = $(this).index();
+			var hdtdLength = $(".th").length;
+			if(hdtdLength < 3){
+				
+				valHtml0 += "<th class='hdth hdth"+hdtdLength+" th'>결재자</th>";
+				$(".modaladdTh").append(valHtml0);
+				
+				valHtml1 += "<td class='hdtd hdtd"+hdtdLength+" td'>"+name+"&nbsp;<img class='minus"+hdtdLength+" minus' style='width:20px; height:20px; position: relative; top: -2.5px;'  src='<%= ctxPath%>/resources/images/빼기이미지.png'></td> ";
+				$(".modaladdTd").append(valHtml1);
+				
+				valHidden += "<input type='hidden' class='approverhidden approverhidden"+hdtdLength+"' name='approverhidden"+hdtdLength+"' value='"+employeeno+"' />";
+				valHidden += "<input type='hidden' style='border:none; width:70px;' class='approverName approverName"+hdtdLength+"' name='approver"+hdtdLength+"' value='"+name+"' readonly/>";
+				$("#formHidden").append(valHidden);
+							
+				valHtml2 = "<td class='approvalImg approvalImg"+hdtdLength+"'></td>";
+				$("#test").append(valHtml2); 
 			}
 			else {
-				$(this).html("");
-				$("input:hidden[name=approvalHidden]").val("0");
+				alert("더이상 추가할 수 없습니다.");
 			}
 			
+	// --------------------------------------------------------------------------- //		
+		}); // $(document).on("click",".modalAddEmployees",function(){})-----------------------
+		
+	// --------------------------------------------------------------------------- //	
+		// 결재란 이미지 넣기
+		$(document).on("click",".approvalImg",function(){			
+			alert("결재가 불가 합니다.");
+		}); // end of $(document).on("click",".approvalImg",function(){})-------------------------------
+		
+		
+		// 결재란 비우기
+		$(document).on("click",".minus",function(){
+		//	alert($(this).parent().text());
+		//	$(this).parent().text("");
+			var idx = $(this).parents().index();
+		//	alert(idx);
+			/* $(".hdth"+index+"").remove();
+			$(this).parent().remove();
+			$(".approvalImg"+index+"").remove(); */
+		//	var class_by_class = $(this).parent().parent().html();
+		
+		//------------------------------------------------------------//
+		//	alert(idx);
+		//	alert((".approvalImg").length);
+			 /* for(var i=0; i<$(".td").length; i++) {
+				var hdthInedx = $(".hdth"+i+"").index();
+				hdthInedx = $(".hdth"+i+"").index()-1;
+			//	alert(hdthInedx);
+				var imgIndex = $(".approvalImg"+i+"").index();
+				if(idx == $(this).parents().index() && hdthInedx == idx && imgIndex == idx ) {
+				//	alert("ddd");
+					$(".hdth"+i+"").remove();
+					$(this).parent().remove();
+					$(".approvalImg"+i+"").remove();
+					break;
+				}  
+				} // end of for()---------------*/
+				
+			//	alert($(this).parent().text());	
+				/* var idx = $(this).parent().index();
+				var thText = $(this).parents().parents().find(".hdth"+idx+"").text();
+				var imgText = $(this).parents().parents().find(".approvalImg"+idx+"").text(); */
+				
+				
+				var approvalHtml = $(this).parents().html();
+				// 박시준&nbsp;<img class="minus0 minus" style="width:20px; height:20px; position: relative; top: -2.5px;" src="/controller/resources/images/빼기이미지.png">
+					var str_appHtml = approvalHtml.indexOf('class');
+					approvalHtml = approvalHtml.substring(str_appHtml);
+				//	console.log(approvalHtml);
+				//	class="minus1 minus" style="width:20px; height:20px; position: relative; top: -2.5px;" src="/controller/resources/images/빼기이미지.png">
+					str_appHtml = approvalHtml.indexOf('m');
+					approvalHtml = approvalHtml.substring(str_appHtml);
+				//	console.log(approvalHtml);
+				//	minus2 minus" style="width:20px; height:20px; position: relative; top: -2.5px;" src="/controller/resources/images/빼기이미지.png">
+					var index = approvalHtml.indexOf('0');
+				//	console.log(index);
+				//	index = 5
+				//	console.log(approvalHtml.substring(5,6));
+			    	var count = approvalHtml.substring(5,6);
+			    
+		    	$(".hdth"+count+"").remove();
+				$(this).parent().remove();
+				$(".approverhidden"+count+"").remove(); 
+				$(".approvalImg"+count+"").remove();
+				$(".approverName"+count+"").remove();
+	
+		}); // end of $(document).on("click",".minus",function(){})----------------------------
+	// --------------------------------------------------------------------------- //
+		
+		// 결재란 취소
+		$(".reset").click(function(){
+			$(".td").remove();
+			$(".approvalImg").remove();
+			$(".approverhidden").remove();
+			$(".approverName").remove();
+			$(".th").remove();
+			
 		});
+		
+		//캘린더 시작~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	      $('#fromDate').datepicker({
+	         showOn: "both",                                       // 달력을 표시할 타이밍 (both: focus or button)
+	         buttonImage: "<%= ctxPath %>/resources/images/cal.jpg",    // 버튼 이미지
+	         buttonImageOnly : true,                               // 버튼 이미지만 표시할지 여부
+	         buttonText: "날짜선택",                                  // 버튼의 대체 텍스트
+	         dateFormat: "yy-mm-dd",                               // 날짜의 형식
+	         changeMonth: true,                                    // 월을 이동하기 위한 선택상자 표시여부
+	         onClose: function( selectedDate ) {    
+	            $("#toDate").datepicker( "option", "minDate", selectedDate );
+	         }                
+	      });
+	      
+	      //종료일
+	      $('#toDate').datepicker({
+	         showOn: "both", 
+	         buttonImage: "<%= ctxPath %>/resources/images/cal.jpg", 
+	         buttonImageOnly : true,
+	         buttonText: "날짜선택",
+	         dateFormat: "yy-mm-dd",
+	         changeMonth: true,
+	         onClose: function( selectedDate ) {
+	            $("#fromDate").datepicker( "option", "maxDate", selectedDate );
+	         }                
+	      });  // 캘린더 종료--------------------------------------
+		
 		
 		
 		
@@ -260,20 +547,47 @@ $(document).ready(function(){
 	
 	// 제출하기 버튼의 onclick
 	function save() {
+		var modaladdTd = $(".modaladdTd").text();
+		var title = $(".title").val();
+		var reason = $(".reason").val();
+		var phone = $(".purpose").val();
+		var rank = $(".rank").val();
+
+		if(modaladdTd.trim() == "") {
+			alert("결재자를 선택해 주세요");
+			return;
+		} 
+		
+		else if(rank.trim() == "선택") {
+			alert("직급을 선택해 주세요");
+			return;
+		}
+		
+		else if(title.trim() == "") {
+			alert("제목을 입력해 주세요");
+			return;
+		}
+		else if(reason.trim() == "") {
+			alert("사유를 입력해 주세요");
+			return;
+		}
+ 		else if(phone.trim() == "" || phone.trim().length > 11) {
+			alert("연락처를 옳바르게 입력해 주세요");		
+			return;
+		}
+	
+			
+		var td = $(".modaladdTd").find('td').text();
+		var count = $(".th").length;
+		$("input:hidden[id = tdCount]").val(count);
+		
 		var frm = document.submitFrm;
 		frm.method = "POST";
-		frm.action = "<%= ctxPath%>/maintest.action";
-		frm.submit();
+		frm.action = "<%= ctxPath%>/addLeaveReport.action";
+		frm.submit();		
+		
 	}
 	
-	
-	// 저장하기 버튼의 onclick
-	function temporary() {
-		var frm = document.submitFrm;
-		frm.method = "POST";
-		frm.action = "<%= ctxPath%>/maintest.action";
-		frm.submit();
-	}
 </script>
 
 </head>
@@ -328,44 +642,96 @@ $(document).ready(function(){
 			<div class="col-md-12 " style="background-color: #fff;">
 	    		<h2 style="border-bottom: solid 1px blue; color:#3399ff; padding: 18px; 0px;">휴가 신청서</h2>
 	    		
-	    		<form name="submitFrm">
+	    		<form name="submitFrm" enctype="multipart/form-data">
 	    		<table class="headertable">
-	    			
-	    				<tr>
-	    					<th rowspan="2" class="hdth">결재</th> 
-	    					<th class="hdth">결재자</th>
-	    					<th class="hdth"></th>
-	    					<th class="hdth"></th>
-	    					<th class="hdth"></th>
-	    				</tr>	
-	    			
-	    				<tr>
-	    					<td class="hdtd"></td> 
-	    					<td class="hdtd"></td> 
-	    					<td class="hdtd"></td>
-	    					<td class="hdtd"></td>
-	    				</tr>
-	    			
-	    		<tr>
-	    					<th rowspan="2" class="hdth">결재란</th>  
-	    				</tr>
-	    				
-	    				<tr>
-	    					<td class="approvalImg">	    						
-	    					</td>
-	    					<td class="approvalImg">	    						
-	    					</td>
-	    					<td class="approvalImg">	    						
-	    					</td>
-	    					<td class="approvalImg">	    						
-	    					</td>
-	    				</tr>
+	    			<thead>
+	                   <tr class ="modaladdTh">
+	                      <th rowspan="2" class="hdth">결재</th> 
+	                      <%-- <th class="hdth">결재자</th> --%>
+	                   </tr> 
+	                   
+	                   <tr class ="modaladdTd"></tr>   
+                   </thead>
+
+                   <tbody>
+	                   <tr>
+	                      <th rowspan="2" class="hdth">결재란</th>
+	                   </tr>
+	                   
+	                   <tr id="test"></tr>
+                   </tbody>
 	    		</table>
 	    		
 	    		
-	    		<div id="ptLineAdd">
-	    			<div><button type="button" style="color: #333333; border-radius: 5px;">결재라인 추가</button></div><br/>
-	    		</div>
+	  <!------ 	결재라인추가 modal 시작	-------------------------------	 -->
+		
+				<div class="container" id="ptLineAdd" > 
+					<!-- Trigger the modal with a button -->
+					<button type="button" class="btn" data-toggle="modal" data-target="#myModal" style="background-color: #0099cc; color: white;">결재라인 추가</button>
+					<button type="button" class="btn reset" style="background-color: #0099cc; color: white;">결재란 취소</button>
+					
+					<!-- Modal -->
+					<div class="modal fade" id="myModal" role="dialog">
+						<div class="modal-dialog">
+						
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" style="font-weight: bold;">결재자추가</h4>
+								<button type="button" class="close" data-dismiss="modal" >&times;</button><%--	x로 닫기 버튼   --%>
+							</div>
+							<div class="modal-body" style="background-color: #e6e6e6;">
+							
+								<div class="add_search">
+										<table class="add_search_table">
+											<tr>
+												<th>부서</th>
+												<td>
+													<select class="addApproval">
+														<option value="0"> -- 부서 선택 -- </option> 
+													</select>
+												</td>
+											</tr>
+											
+											<tr>
+												<th>성명</th>
+												<td>
+													<input type="text" name="name" class="add_search_name" />
+													<button type="button" class="add_search_btn">검색</button>
+													<input type="text" style="display: none;" />
+													
+												</td>
+											</tr>
+										</table>
+								</div>
+								
+								<div class="add_result_List">
+									<table style="width: 100%;">
+										<thead>
+											<tr class="add_result_List_title"  style=' height: 20px; overflow: auto;'>
+												<th>부서</th>
+												<th>성명</th>
+												<th>직위</th>
+											</tr>
+										</thead>
+										<tbody class="add_result_List_contents modalTrLength">
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+						  
+						</div>
+					</div>
+				  
+				</div>
+		<!-- -----------	결재라인추가 modal 끝	------------------------------------------------------------	 -->
+	    		
+	    		
 	    		<br/><br/>
 	    		
 	    		<div class="row titleLine"> <!-- 라인을 띄우기위해 야매로 해온것이다. -->
@@ -379,39 +745,45 @@ $(document).ready(function(){
 		 			<tbody>
 		 				<tr>
 		 					<td class="title2Td1">제출일자</td>
-		 					<td class="title2Td">&nbsp;<input id="" name="" readonly style="border: none;" value="${sysYear}" /></td>
+		 					<td class="title2Td">&nbsp;<input id="" name="writeday" readonly style="border: none;" value="${sysYear}" /></td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">제출자</td>
-		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" /></td>
+		 					<td class="title2Td">
+		 						<input id="" name="employeename" value="${requestScope.userName}" readonly style="border: none; margin-left: 10px;" />
+		 						<input type="hidden" id="" name="fk_employeeno" value="${requestScope.employeeno}" readonly style="border: none;" />
+		 					</td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">소속</td>
-		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" /></td>
+		 					<td class="title2Td"><input id="" name="departmentname" value="${requestScope.deptName}" readonly style="border: none; margin-left: 10px;" /></td>
 		 				</tr>
 		 				
 		 				
 		 				<tr>
 		 					<td class="title2Td1">직급</td>
 		 					<td class="title2Td">
-		 						&nbsp;&nbsp;<select id="" name="" style="width: 80px;">
-		 							<option value="">사원</option>
-		 							<option value="">대리</option>
-		 							<option value="">과장</option>
-		 							<option value="">부장</option>
-		 						</select>
+		 						&nbsp;&nbsp;<select name="rank" id="rank" class="rank" style="width: 30%;">
+					      	      <option>선택</option>
+				  				  <option value="1">사장</option>
+				  				  <option value="2">이사</option>
+				  				  <option value="3">부장</option>
+				  				  <option value="4">차장</option>
+				  				  <option value="5">과장</option>
+				  				  <option value="6">대리</option>
+				  				  <option value="7">사원</option>
+								</select>
 		 					</td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">요청 기간</td>
 		 					<td class="title2Td">
-		 						&nbsp;&nbsp;<span>시작일</span>&nbsp;<input type="date" name="btperiod" />&nbsp;
+		 						&nbsp;&nbsp;<span>시작일</span>&nbsp;<input id="fromDate" type="text" name="startday" value="${fromDate }" />&nbsp;
 		 						<span>~</span>
-		 						&nbsp;<span>종료일</span>&nbsp;<input type="date" name="btperiod" />&nbsp;&nbsp;
-		 						<span>( 총</span>&nbsp;&nbsp;<span>0</span>&nbsp;&nbsp;<span>일 )</span>
+								<span>종료일</span>&nbsp;<input type="text" id="toDate" name="endday" value="${toDate }"/>
 		 					</td>
 		 				</tr>
 		 				
@@ -425,7 +797,7 @@ $(document).ready(function(){
 		 				<tr>
 		 					<td class="title2Td1">사유</td>
 		 					<td class="title2Td">
-		 						&nbsp;<textarea name="" class="reason" rows="5" cols="150"></textarea> 
+		 						&nbsp;<textarea name="reason" class="reason" rows="5" cols="150"></textarea> 
 		 					</td>
 		 				</tr>
 		 				
@@ -433,31 +805,28 @@ $(document).ready(function(){
 		 			 	<tr>
 		 					<td class="title2Td1">연락처</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="text" name="purpose" class="purpose" style="width: 99%;" />
+		 						&nbsp;<input type="text" name="emergencycontactnetwork" class="purpose" style="width: 99%;" placeholder=" - 를 생략하고 입력해 주세요." />
 		 					</td>
 		 				</tr>
 		 			 	
-		 			 	<tr>
-		 					<td class="title2Td1">부서공유</td>
-		 					<td class="title2Td">&nbsp;&nbsp;
-		 						<input type="checkbox" name="checkbox" style="width: 20px; height: 20px; position: relative; top: 6.5px;" id="use"/>&nbsp;
-		 						<label for="use" style="font-size: 13pt; color:#4c4c4c; position: relative; top: 3.0px;">사용</label>&nbsp;
-		 						<span style="color: red; position: relative; top: 1.5px;">[선택 시 문서가 작성자의 소속 부서원들에게 공유되며, 해당문서는 부서결재함에서 확인이 가능합니다.]</span>
-		 					</td>
-		 				</tr>
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	 				 
 		 				 <tr>
 		 					<td class="title2Td1">파일첨부</td>
 		 					<td class="title2Td">
-		 						<button type="button" style="border:solid 1px #0099cc; margin : 6px 30px; width: 80px; background-color: #0099cc; color: #fff; border-radius:3px;">파일</button>
-		 						<span class="fileName">파일명 :</span>&nbsp;&nbsp; 
+		 						<input type="file" class="attach" name="attach" style="margin : 6px 30px;" />
 		 					</td>
 		 				</tr>
 		 			</tbody>
 		 		</table>
+		 		
 		 		<table class="title3">
-		
 		 		</table>  
+		 		
+		 		<div id="formHidden"> <!-- 결재란 td 개수를 가지고 넘어가기 위해 숨겨둔다. -->
+					<input type="hidden" id="tdCount" name="tdCount" value="" />
+					<input type="hidden" id="tdCount" name="tdCount" value="" />
+				</div>
+		 		
 		 		</form>
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	 		
 	    	</div>	
@@ -477,3 +846,7 @@ $(document).ready(function(){
 	</div>
 </body>
 </html>
+
+
+
+

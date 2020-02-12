@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
 	String ctxPath = request.getContextPath();
@@ -9,12 +11,91 @@
 
 <script type="text/javascript">
 
-	function goRegister() {
-		var frm = document.registerPersonal
-		frm.method = "POST";
-		frm.action = "<%= ctxPath%>/registerPersonal.action";
-		frm.submit();
-	}
+	$(document).ready(function(){
+		
+/* 		var searchType = sessionStorage.getItem("searchType_ab");
+		var searchWord = sessionStorage.getItem("searchWord_ab");
+		
+ 		if(searchType != null && searchWord != null) {
+			$("select[name=searchType]").val(searchType);
+			$("#searchWord").val(searchWord);
+		}
+		 */
+		
+	 	if( ${paraMap != null}){
+			$("#searchType").val("${paraMap.searchType}");
+			$("#searchWord").val("${paraMap.searchWord}");
+		}
+		 
+		$("#searchWord").keydown(function(event) {
+	        if(event.keycode == 13) {
+	        	// 엔터를 했을 경우
+/* 	        	sessionStorage.removeItem("searchType_ab");
+				sessionStorage.removeItem("searchWord_ab");
+		    	
+		    	sessionStorage.setItem("searchType_ab", $("select[name=searchType]").val().trim());
+		    	sessionStorage.setItem("searchWord_ab", $("#searchWord").val().trim()); */
+	        	
+		    	var frm = document.searchFrm;
+			      frm.method = "GET";
+			      frm.action = "<%= request.getContextPath()%>/addressBook.action";
+			      frm.submit();
+	        }
+	    });
+	           
+		
+	    $("#register").on('click', function(){
+        	
+	    	var frm = document.abRegisterFrm;
+	    	frm.method = "POST";
+	    	frm.action = "<%= request.getContextPath()%>/registerPersonal.action"
+	    	frm.submit();
+        });
+	    
+	 	// ▼ 검색어 유지
+	    $("#goSearch").on("click", function() {
+	    	
+	    	/* sessionStorage.removeItem("searchType_ab");
+			sessionStorage.removeItem("searchWord_ab");
+	    	
+	    	sessionStorage.setItem("searchType_ab", $("select[name=searchType]").val().trim());
+	    	sessionStorage.setItem("searchWord_ab", $("#searchWord").val().trim()); */
+	    	
+	    	var frm = document.searchFrm;
+		      frm.method = "GET";
+		      frm.action = "<%= request.getContextPath()%>/addressBook.action";
+		      frm.submit();
+	    });
+		 // ▲ 검색어 유지
+	      
+		$("#exceldownload").click(function(){
+			var frm = document.searchFrm;
+		    frm.method = "GET";
+		    frm.action = "<%= request.getContextPath()%>/downloadAddressBook.action";
+		    frm.submit();
+		});
+		 
+		// 선택 된 행의 데이터를 삭제한다.
+		$("#deleteList").click(function(){ 
+			
+			var name = "";
+			var checkbox = $("input[name=user_CheckBox]:checked");
+			
+			checkbox.each(function(i){
+				var tr = checkbox.parent().parent().eq(i);
+				var td = tr.children();
+				
+				name = name + td.eq(1).text()+",";
+			});
+		
+			name = name.substring(0,name.lastIndexOf( ",")); //맨끝 콤마 지우기
+			
+			location.href="<%= request.getContextPath()%>/deleteaddressbookList.action?name="+name;
+			
+		});
+		 
+	});
+	
 	
 </script>
 
@@ -31,62 +112,77 @@
 					src="<%=ctxPath%>/resources/images/addressbook.PNG"></a>
 				<div class="displayline">
 					<h4>
-						<strong>개인주소</strong>
+						<strong>업체 주소록</strong>
 					</h4>
 				</div>
-				0 / 0
 			</div>
 
 			<div class="col-sm-12 displayline"
 				style="margin: 0px; background-color: #ebf0f3; padding: 15px 0 15px 30px;">
-				<button class="addressbutton">복사</button>
-				<button class="addressbutton">공유</button>
-				<button class="addressbutton">삭제</button>
+				<button class="addressbutton" id="exceldownload">변환하기</button>
+				<button class="addressbutton" id="deleteList">삭제</button>
 			</div>
 
-			<div class="col-sm-12 displayline textline bordertopline" style="height: 65px; padding: 15px 0 15px 30px;">
-				<input class="inputboxcolor" type="text" placeholder="이름">
-				<input class="inputboxcolor" type="text" placeholder="전화번호">
-				<input class="inputboxcolor" type="text" placeholder="이메일">
-				<input class="inputboxcolor" type="text" placeholder="회사">
-				&nbsp;&nbsp;
-				
-				<button class="btn1" style="position: relative; top: -2px;" onclick="searchAlert()">검색</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<button style="position: relative; top: -2px;" type="button"
-					class="btn1 btn2 btn-primary" onclick="writeAddress()"
+			<div class="col-sm-12 displayline textline" style="height: 65px; padding: 15px 0 15px 30px;">
+			  <form style="display: inline-block;" name="searchFrm">
+      			<select name="searchType" id="searchType" style="height: 26px;">
+         		  <option value="name">이름</option>
+         		  <option value="departmentname">부서이름</option>
+         		  <option value="positionname">직위</option>
+      			</select>
+      			<input type="text" name="searchWord" id="searchWord" size="40" autocomplete="off" /> 
+      			<button type="button" id="goSearch" >검색</button>
+   			  </form>
+				<button id="add" style="display: inline-block;" type="button" class="btn1 btn2 btn-primary"
 					data-toggle="modal" data-target="#myModal" data-backdrop="static">추가</button>
-					
 					
 			</div>
 
 			<div class="col-sm-12 displayline textline bordertopline" style="height: 65px; padding: 15px 0 10px 20px;">
 				<div class="displayline">페이지당 줄수</div>
 				<select>
-					<option>10</option>
-					<option>20</option>
-					<option>30</option>
-					<option>All</option>
+					<option value="10">10</option>
+					<option value="20">20</option>
 				</select>
 
 			</div>
 			
 			<div class="col-sm-12 bordertopline" style="padding: 15px 0px; " >
-				<div class="displayline checkboxline">
-					<input type="checkbox">&nbsp;&nbsp;&nbsp;
-				</div>
-				<div class="table1" style="width: 100px;">이름</div>
-				<div class="table1" style="width: 250px;">이메일</div>
-				<div class="table1" style="width: 150px;">전화번호</div>
-				<div class="table1" style="width: 100px;">직책</div>
-				<div class="table1" style="width: 150px;">부서</div>
-				<div class="table1" style="width: 200px;">회사</div>
-				<div class="table1" style="width: 200px;">그룹</div>
-				<div class="table1" style="width: 100px;">수정</div>
+			  
+			  <table>
+			    <tr>
+			      <th style="width: 7%"><input type="checkbox" id="allSelect"/></th>
+			      <th style="width: 10%" align="center">이름</th>
+			      <th style="width: 15%" align="center">이메일</th>
+			      <th style="width: 15%" align="center">전화번호</th>
+			      <th style="width: 7%" align="center">회사</th>
+			      <th style="width: 7%" align="center">그룹</th>
+			    </tr>
+			    
+			    <c:forEach var="abvo" items='${abvoList}' varStatus="status">
+			  	  <tr>
+			  	    <td style="width: 7%"><input type="checkbox" id="status" name="user_CheckBox" /></td>
+			  	    <td style="width: 10%" align="center" class="name">${abvo.name}</td>
+			  	    <td style="width: 15%" align="center">${abvo.email}</td>
+			  	    <td style="width: 15%" align="center">${abvo.phone}</td>
+			  	    <td style="width: 7%" align="center">${abvo.companyname}</td>
+			  	    <td style="width: 7%" align="center">${abvo.groupname}</td>
+			  	  </tr>
+			  	</c:forEach>
+			    
+			  </table>
 			</div>
 
-
-			<div class="col-sm-12" style="border-top: solid 1px #cccccc; border-bottom: solid 1px #cccccc; padding: 20px;">데이터가 없습니다</div>
-
+			<form name="goViewFrm">
+			  <input type="hidden" name="addrno" > 
+			  <input type="hidden" name="gobackURL" value="${gobackURL}" >
+			</form>
+			  
+			<!-- === #126. 페이지바 만들기 === -->
+			<div class="col-sm-12" align="center">
+			  ${pageBar}
+			</div>
+			
 		</div>
 	</div>
 	<!-- /.container-fluid -->
@@ -112,8 +208,7 @@
         <div class="modal-body">
 			<div class="row content">
 		        <div class="col-sm-12" style="padding: 5%;">
-				  <fieldset>
-				    <form name="registerPersonal" method="post">
+		          <form name="abRegisterFrm">
 				      <table class="table table-bordered">
 
 				      	<tr>
@@ -145,67 +240,36 @@
 				      	
 				      	<tr>
 				      	  <td style="background-color: #e0ebeb;">
-				      	  	<label for="company">회사</label>
+				      	  	<label for="companyname">회사</label>
 				      	  </td>
 				      	  <td>
-				      	    <input type="text" name="company" id="company" value="" maxlength="20" required style="width: 200px;"/>
+				      	    <input type="text" name="companyname" id="companyname" value="" maxlength="20" required style="width: 200px;"/>
 				      	  </td>
 				      	</tr>
 				      	
 				      	<tr>
 				      	  <td style="background-color: #e0ebeb;">
-				      	  	<label for="group">그룹</label>
+				      	  	<label for="groupname">그룹</label>
 				      	  </td>
 				      	  <td>
-				      	    <input type="text" name="group" id="group" value="" maxlength="20" required style="width: 200px;"/>
+				      	    <input type="text" name="groupname" id="groupname" value="" maxlength="20" required style="width: 200px;"/>
 				      	  </td>
 				      	</tr>
 				      	
-				      	<tr>
-				      	  <td style="background-color: #e0ebeb;">
-				      	  	<label for="positionname">직책</label>
-				      	  </td>
-				      	  <td>
-				      	    <select name="positionname" id="positionname" class="form-control" style="width: 30%;">
-				      	    	  <option></option>
-								  <option value="1">사장</option>
-								  <option value="2">이사</option>
-								  <option value="3">부장</option>
-								  <option value="3">차장</option>
-								  <option>과장</option>
-								  <option>대리</option>
-								  <option>사원</option>
-							</select>
-				      	  </td>
-				      	</tr>
-				      	
-				      	<tr>
-				      	  <td style="background-color: #e0ebeb;">
-				      	  	<label for="departmentname">부서</label>
-				      	  </td>
-				      	  <td>
-				      	    <select name="departmentname" id="departmentname" class="form-control" style="width: 30%;">
-				      	    	  <option></option> 
-								  <option>인사팀</option>
-								  <option>마케팅팀</option>
-								  <option>개발1팀</option>
-								  <option>개발2팀</option>
-								  <option>영업팀</option>
-							</select>
-				      	  </td>
-				      	</tr>
-				      	
-				      </table>
+				        </table>
+				     </form> 
+				      <!-- Modal footer -->
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-primary" id="register">등록</button>
+				        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+				      </div>
 				      
-				      <div style="float: right; margin-top: 10px; padding: 5%;">
-				        <button type="button" id="register" class="btn btn-primary" onclick="goRegister();">등록</button>
-				        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					  </div>
-				          
-				    </form>
-				  </fieldset>
+				     
 		        </div>
 			</div>
         </div> 
+      </div>
+    </div>
+  </div>
         
 <!-- 추가 버튼을 누를시의 Modal 창 -->

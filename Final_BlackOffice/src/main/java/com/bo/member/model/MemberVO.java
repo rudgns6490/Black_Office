@@ -1,5 +1,7 @@
 package com.bo.member.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class MemberVO {
 	
 	private int employeeno;			// 사원번호
@@ -18,6 +20,54 @@ public class MemberVO {
 	private int fk_positionno;		// 참조 키 직위번호
 	private int fk_departmentno;	// 참조 키 부서번호
 	
+	//사진 첨부를 위한 추가 2020/01/15 KKH
+	private String fileName;      // WAS(톰캣)에 저장될 파일명(20190725092715353243254235235234.png)
+	private String orgFilename;   // 진짜 파일명(강아지.png)  // 사용자가 파일을 업로드 하거나 파일을 다운로드 할때 사용되어지는 파일명 
+	private String fileSize;      // 파일크기 
+	private String thumbnailFileName; // 썸네일이미지 파일명
+	
+	public String getThumbnailFileName() {
+		return thumbnailFileName;
+	}
+
+	public void setThumbnailFileName(String thumbnailFileName) {
+		this.thumbnailFileName = thumbnailFileName;
+	}
+
+	private MultipartFile attach; // 진짜 파일 ==> WAS(톰캣) 디스크에 저장됨.
+	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getOrgFilename() {
+		return orgFilename;
+	}
+
+	public void setOrgFilename(String orgFilename) {
+		this.orgFilename = orgFilename;
+	}
+
+	public String getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(String fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	public MultipartFile getAttach() {
+		return attach;
+	}
+
+	public void setAttach(MultipartFile attach) {
+		this.attach = attach;
+	}
+
 	public MemberVO() {}
 
 	public MemberVO(int employeeno, String name, String id, String passwd, String jubun, String email, String emailpw,

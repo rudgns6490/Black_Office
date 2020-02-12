@@ -47,11 +47,6 @@ var editEvent = function (event, element, view) {
             return false;
         }
         
-        
-        if(editType.val() == null) {
-        	alert("일정 구분은 필수입니다."); 
-        	return false; 
-        }
 
         var statusAllDay;
         var startDate;
@@ -85,7 +80,6 @@ var editEvent = function (event, element, view) {
         
         var eventData = {
         		
-        		user_no: '1', 		//	사원db 만들어지면 연동하기 
            		schedule_title : editTitle.val(),
            		schedule_start: startDate,
            		schedule_end: displayDate,
@@ -142,7 +136,7 @@ var editEvent = function (event, element, view) {
         //삭제시
         $.ajax({
             type: "get",
-            url: "/controller/calendarDrop.action",
+            url: "/controller/calendarDelete.action",
             dataType : "json", 
             data: {
             	"eventData" : eventData

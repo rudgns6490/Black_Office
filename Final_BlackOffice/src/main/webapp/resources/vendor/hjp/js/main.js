@@ -3,43 +3,6 @@ var activeInactiveWeekends = true;
 
 
 
-// 내가 만든 function 
-
-
-function goPrint(title){
-	
-    var sw=screen.width;
-    var sh=screen.height;
-    var popw=800; //팝업창 가로길이
-    var poph=600; //세로길이
-    var xpos=(sw-popw)/2; //화면중앙에띄우도록한다 
-    var ypos=(sh-poph)/2; //화면중앙에띄우도록한다 
-
-    var popHeader="<html><head><title>"+title+"</title></head><body>";
-    
-    var popContent=document.getElementById("printarea").innerHTML + "<br/>";
-    //innerHTML을 이용하여 Div로 묶어준 부분을 가져온다.
-    
-    var popFooter="</body></html>";
-    
-    popContent=popHeader + popContent + popFooter; 
-     
-    var popWin=window.open("","print","width=" + popw +",height="+ poph +",top=" + ypos + ",left="+ xpos +",status=yes,scrollbars=yes"); 
-    // 일단 내용이 없는 팝업윈도창을 만든다.
-   
-    popWin.document.open(); // 팝업윈도창에 내용을 넣을 수 있도록 오픈한다.
-    popWin.document.write(popContent); // 새롭게 만든 html소스를 팝업윈도창에 문서에 쓴다.
-    popWin.document.close(); // 팝업윈도창 문서를 클로즈
-    popWin.print(); // 팝업윈도창에 대한 인쇄 창 띄우고
-    popWin.close(); // 인쇄를 하던가 또는 취소를 누르면 팝업윈도창을 닫는다.
-}
-
-
-
-
-
-// 내가 만든 fucion --------------------
-
 
 
 
@@ -73,12 +36,12 @@ function filtering(event) {
   var show_username = true;
   var show_type = true;
 
-  var username = $('input:checkbox.filter:checked').map(function () {
+  var fillter = $('input:checkbox.filter:checked').map(function () {   // 필터링 되는 체크박스 
     return $(this).val();
   }).get();
   var types = $('#type_filter').val();
 
-  show_username = username.indexOf(event.username) >= 0;
+  show_username = fillter.indexOf(event.username) >= 0;  // 필터 되는곳 username
 
   if (types && types.length > 0) {
     if (types[0] == "all") {
@@ -88,9 +51,6 @@ function filtering(event) {
     }
   }
   
-  // console.log(show_username && show_type); 
-  // false; 
-
   return show_username && show_type;
 }
 
@@ -176,7 +136,7 @@ var calendar = $('#calendar').fullCalendar({
       content: $('<div />', {
           class: 'popoverInfoCalendar'
         }).append('<p><strong>등록자:</strong> ' + event.username + '</p>')										// db에서 유저 아이 넣어오기 
-        .append('<p><strong>구분:</strong> ' + event.type + '</p>')										// db에서 구분에서 한글로 바꿔주기 
+        .append('<p><strong>구분:</strong> ' + event.type + '</p>')											// db에서 구분에서 한글로 바꿔주기 
         .append('<p><strong>시간:</strong> ' + getDisplayEventDate(event) + '</p>')						 
         .append('<div class="popoverDescCalendar"><strong>설명:</strong> ' + event.description + '</div>'),	
       delay: {
@@ -187,7 +147,7 @@ var calendar = $('#calendar').fullCalendar({
       trigger: 'hover',
       placement: 'top',
       html: true,
-      container: 'body'
+      container: 'wrapper1'
     	  
     }); // popover event ----------------------------------------------------------
 
@@ -254,21 +214,20 @@ var calendar = $('#calendar').fullCalendar({
    * ************** */
 
   
-  
   // 일정을 받아오는 곳  json 데이터 ------------------------------------
   events: 
 	  function (start, end, timezone, callback) {
-	  
-	  
+
 	  	  // 일정을 올린 db에서 가져온 경우  
 		  $.ajax({
 		      type: "get",
-		      dataType : "json", 
+		      dataType : "JSON", 
 		      url: "/controller/individualScheduleJSONList.action",
 		      data: {
 		    	  
 		      },
 		      success: function (response) {   
+		    	  
 		        var fixedDate = response.map(function (array) {
 		          if (array.allDay && array.start !== array.end) {
 		            // 이틀 이상 AllDay 일정인 경우 달력에 표기시 하루를 더해야 정상출력
@@ -277,32 +236,12 @@ var calendar = $('#calendar').fullCalendar({
 		          return array;
 		        })
 		        callback(fixedDate); 
+		        console.log(fixedDate);
 		      }, 
 		      error: function(request, status, error){
 					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 				}
 		    });
-		    
-		  
-//	        $.ajax({
-//	        	type: "get",
-//	        	dataType : "json", 
-//	        	url: "holiday_daty.json",
-//	        	data: {
-//			    	  
-//			    },
-//			    success: function (response) {   
-//			        var fixedDate = response.map(function (array) {
-//			          if (array.allDay && array.start !== array.end) {
-//			            // 이틀 이상 AllDay 일정인 경우 달력에 표기시 하루를 더해야 정상출력
-//			            array.end = moment(array.end).add(1, 'days');
-//			          }
-//			          return array;
-//			        })
-//			        callback(fixedDate); 
-//			      }
-//		    }); 
-		  
 		  },
 
 		  
@@ -319,28 +258,29 @@ var calendar = $('#calendar').fullCalendar({
       $(".fc-time").remove();
       $(".fc-content").css('height', 'auto');
       
+      // 휴일 부분 
       $.ajax({
 	      type: "get",
-	      dataType : "json", 
-	      url: "/controller/individualScheduleJSONList.action",
+	      dataType : "JSON", 
+	      url: "/controller/resources/vendor/hjp/holiday_daty.json",
 	      data: {
 	    	  
 	      },
 	      success: function (response) {   
-	    	  if ( $(".fc-day-top").getAttribute('data-date') ==  response.start)
 	    	  
-	        var fixedDate = response.map(function (array) {
-	          if (array.allDay && array.start !== array.end) {
-	            // 이틀 이상 AllDay 일정인 경우 달력에 표기시 하루를 더해야 정상출력
-	            array.end = moment(array.end).add(1, 'days');
-	          }
-	          return array;
-	        })
-	        callback(fixedDate); 
-	      }
+	    	  $(".holiday").empty();
+	    	  
+	    	  $.each(response,function(key, value) {
+	    		  $("td[data-date ="+ value.start +"]").css('color', 'red').append("</br>" +
+	    					"<span class='holiday' style='text-align: center;'>"+value.dateName +"</span>"); 
+	    		});
+	       
+	      }, 
+	      error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
 	    });
-      
-      
+	    
       
       
     }
@@ -372,7 +312,7 @@ var calendar = $('#calendar').fullCalendar({
         //....
       },
       success: function (response) {
-        alert('수정: ' + newDates.startDate + ' ~ ' + newDates.endDate);
+        alert('수정 ~~ : ' + newDates.startDate + ' ~ ' + newDates.endDate);
       }
     });
 
@@ -421,7 +361,10 @@ var calendar = $('#calendar').fullCalendar({
       },
       success: function (response) {
     	  
+    	  $(".holiday").empty();
+    	  
     	  if(response.result == true) {
+    		  
       		javascript:history.go(0);
     	  	alert('수정: ' + newDates.startDate + ' ~ ' + newDates.endDate);
       	}
@@ -522,7 +465,6 @@ var calendar = $('#calendar').fullCalendar({
   
   eventLimitClick: 'week', //popover
   navLinks: true,
-  // defaultDate: moment('2019-05'), defaultDate가 필요 없으면 삭제하면 된다. 
   timeFormat: 'HH:mm',
   
 

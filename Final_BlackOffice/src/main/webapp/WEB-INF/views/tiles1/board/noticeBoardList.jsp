@@ -10,28 +10,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-
 <script type="text/javascript">
-
-// 로딩된 테이블내에서 이름으로 검색
-/* function myFunction() {
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("myTable");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1]; ///////[0]글번호 [1]제목 [2]작성자
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }       
-  }
-} */
 
 $(document).ready(function(){
 	
@@ -44,8 +23,7 @@ $(document).ready(function(){
 		var $target = $(event.target);
 		$target.removeClass("subjectStyle");
 	});
-	
-	
+		
 	$("#searchWord").keydown(function(event){
 		if(event.keyCode == 13) {
 			// 엔터를 했을 경우
@@ -60,7 +38,7 @@ $(document).ready(function(){
 		$("#searchWord").val("${paraMap.searchWord}");
 	}
 	
-	<%-- === #108. 검색어 입력시 자동글 완성하기 2 === --%>
+	<%-- ===  검색어 입력시 자동글 완성하기 2 === --%>
 	$("#displayList").hide();
 	
 	$("#searchWord").keyup(function(){
@@ -144,9 +122,8 @@ $(document).ready(function(){
 		goSearch();
 		
 	});
-	
-	
-}); // end of $(document).ready()------------------
+		
+});  /* end of $(document).ready()------------------ */
 
 function goView(seq) {
 	/* 게시물을 클릭 했을때 게시물 내용 받아오고 세부 게시물로 이동  */
@@ -163,10 +140,9 @@ function goSearch() {
 	/* 검색후 검색결과를 리스트로 보냄 */
 	var frm = document.searchFrm;
 	frm.method = "GET";
-	frm.action = "<%= request.getContextPath()%>/noticeDetailList.action"; 
+	frm.action = "<%= request.getContextPath()%>/noticeBoardList.action"; 
 	frm.submit();
 }
-
 
 </script>
 
@@ -179,70 +155,48 @@ function goSearch() {
 		  <fieldset>
 		    <legend>공지사항</legend>
 			<form name="searchFrm"><!-- 글검색폼 시작 -->
-		      <table class="table table-bordered">
+		      <table class="table table-bordered" style="position: relative; z-index: 1;">
 		      	<tr>
-		      	  <td class="table-active" style="width: 15%;">검색조건</td>
+		      	  <td class="table-active" style="width: 15%;" >검색조건</td>
 		      	  <td>
 		      	    <select name="searchType" id="searchType" class="form-control" style="width: 15%; display: inline-block;">
 	  				  <option value="subject">제목</option>
-	  				  <option value="contents">내용</option>
+	  				  <option value="content">내용</option>
 	  				  <option value="name">작성자</option>
 	  				</select>
-					<input type="text"  name="searchWord" id="searchWord" size="40" maxlength="20" required style="width: 30%; display: inline-block;" autocomplete="off" />
-					<button type="button" class="btn btn-primary" onclick="goSearch();" style="width: 10%; display: inline-block;">검색</button>
+					<input type="text"  name="searchWord" id="searchWord" size="40" style="width: 30%;" autocomplete="off" />
+					<div id="displayList" style=" position: relative; z-index: 2; width: 314px; height: 100px; overflow: auto; margin-left: 70px; margin-top: -1px; border-top: 0px; border: solid 1px gray;">                         
+					</div>
+					<button type="button" class="btn btn-primary" onclick="goSearch()" style="width:10%; display: inline-block;">검색</button>
 		      	  </td>
 		      	</tr>
 		      </table>
 		    </form><!-- 글검색폼 끝 -->
 		    <%-- 검색어 입력시 자동글 완성하기 --%>
-			<div id="displayList" style="width: 314px; height: 100px; overflow: auto; margin-left: 70px; margin-top: -1px; border-top: 0px; border: solid 1px gray;">                         
-			</div>
+			
 		  </fieldset> <!-- 제목, 검색조건, 검색버튼 -->
 
 		<table id="myTable" class="table table-hover">	
 		
 			<thead style="background-color: navy; color: #fff;" class="boardHeader" >
 			    <tr>
-				    <th id="boardHeaderNo">No.</th>
-				    <th id="boardHeaderTitle">제목</th>
-				    <th id="boardHeaderWriter">작성자</th>
-				    <th id="boardHeaderWriteDate">작성일</th>
-				    <th id="boardHeaderReadCount">조회수</th>
-					<th style="text-align: center;">파일</th>
-					<th style="text-align: center;">크기(bytes)</th>
-				
-				<!--<th id="boardHeaderComment">댓글수</th> //공지사항에서는 비활성
-				    <th id="boardHeaderAddFile">파일</th>  //공지사항에서는 비활성 -->
+				    <th id="boardHeaderNo" width="100">No.</th>
+				    <th id="boardHeaderTitle" width="600" >제목</th>
+				    <th id="boardHeaderWriter" width="100">작성자</th>
+				    <th id="boardHeaderWriteDate" width="200">작성일</th>
+				    <th id="boardHeaderReadCount" width="100">조회수</th>
+					<th style="text-align: center;" width="50">파일</th>
+					<th style="text-align: center;" width="100">크기(bytes)</th>
+		
 			    </tr>
 		  	</thead>
-			<tbody id="boardBody">
-			<c:forEach var="boardvo" items="${boardList}" varStatus="status">
+			<tbody style="cursor:pointer" id="boardBody">
+			<c:forEach var="boardvo" items="${noticeBoardList}" varStatus="status">
 				<tr>
 				<td align="center">${boardvo.seq}</td>
 				<td align="left"> 
 				 <span class="subject" onclick="goView('${boardvo.seq}');">${boardvo.subject}</span>
-				<!--    ui 구성을 위한 예시
-				  <td id="boardNo">1</td>
-				  <td id="boardTitle">단합대회</td>
-				  <td id="boardWriter">김부장</td>
-				  <td id="boardWriteDate">2019-12-10</td>
-				  <td id="boardReadCount">30</td> 
-				</tr>
-				<tr>
-				    <td id="boardNo">2</td>
-				    <td id="boardTitle">종무식일정</td>
-				    <td id="boardWriter">이사장</td>
-				    <td id="boardWriteDate">2019-12-20</td>
-				    <td id="boardReadCount">50</td>
-				</tr>
-				<tr>
-				    <td id="boardNo">3</td>
-				    <td id="boardTitle">시무식일정</td>
-				    <td id="boardWriter">이사장</td>
-				    <td id="boardWriteDate">2019-12-30</td>
-				    <td id="boardReadCount">60</td>
-				</tr>
-				-->
+				</td>
 				<td align="center">${boardvo.name}</td>
 				<td align="center">${boardvo.regDate}</td>
 				<td align="center">${boardvo.readCount}</td>
@@ -250,12 +204,18 @@ function goSearch() {
 				<%-- 파일과 크기를 보여주도록  /Board/src/main/webapp/resources/images/disk.gif 이미지 파일을 사용하여 첨부파일의 유무를 보여주도록 한다. --%>
 				<td align="center">
 					<c:if test="${not empty boardvo.fileName}">
-						<img src="<%= request.getContextPath()%>/resources/images/disk.gif" /><!-- 디스크모양 아이콘 -->
+						<img style="width: 20px" src="<%= request.getContextPath()%>/resources/images/disk.gif" /><!-- 디스크모양 아이콘 -->
+					</c:if>
+					<c:if test="${empty boardvo.fileName}">
+						X
 					</c:if>
 				</td>
 				<td align="center">
 					<c:if test="${not empty boardvo.fileSize}">
 						${boardvo.fileSize} <%-- 파일크기 --%>
+					</c:if>
+					<c:if test="${empty boardvo.fileSize}">
+						-
 					</c:if>
 				</td>
 				</tr>
@@ -273,21 +233,14 @@ function goSearch() {
 		<div align="center" style="">
 			${pageBar}
 		</div>
-		<div class="row" style="margin: 0 auto;">
-			<b class="pageNo" id="btn_pageNo"  style="float:none; margin:0 auto;">1</b>
-		</div>
-				
+		
 		<div align="right" style="margin-right: 50px;" >
-			<button type="button" class="btn btn_write btn-primary" id="btnWrite" style="width: 10%; display: inline-block;">쓰기</button>
-			
+			<button type="button" class="btn btn_write btn-primary" id="btnWrite" onClick="javascript:location.href='<%= request.getContextPath() %>/noticeBoardWrite.action'" style="width: 10%; display: inline-block;">쓰기</button> 
 		</div>
 		
 		</div>
 	</div>
         
-	
-
- 	
 	</div>
 	 <!-- /.container-fluid -->
 </div>

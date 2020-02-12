@@ -5,7 +5,7 @@ public class ScheduleVO {
 	
 
 	private int schedule_no ;			// 일정번호
-	private int fk_employeeno ; 				// 유저no
+	private int fk_employeeno ; 		// 유저no
 	private String schedule_title; 		// 일정제목
 	private String schedule_content;	// 일정내용
 	private String schedule_start; 		// 시작날짜
@@ -18,9 +18,50 @@ public class ScheduleVO {
 	private int schedule_type ; 		// 일정종류  (개일일정 0, 회사전체일정 1, 부서일정 2)
 	private boolean allday; 
 	private String type; 
+	private int department;  			 // 부서번호 
+	private String departmentname; 		 // 부서명 
 	
 	
 	
+	
+	
+	public int getDepartment() {
+		return department;
+	}
+
+
+	public void setDepartment(int department) {
+		this.department = department;
+	}
+
+
+
+
+
+	public String getDepartmentname(int departmentno) {
+		
+		if( departmentno == 1)
+			departmentname =  "인사팀";
+		
+		if( departmentno == 2)
+			departmentname =  "마케팅팀";
+		
+		if( departmentno == 3)
+			departmentname =  "개발1팀";
+		
+		if( departmentno == 4)
+			departmentname =  "개발2팀";
+		
+		if( departmentno == 5)
+			departmentname =  "영업팀";
+		
+		return departmentname;
+	}
+
+
+
+
+
 	public String getType() {
 		if( schedule_type == 0)
 			return "개인일정"; 

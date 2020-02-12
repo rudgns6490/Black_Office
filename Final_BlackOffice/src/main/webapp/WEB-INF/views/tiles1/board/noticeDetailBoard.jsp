@@ -11,6 +11,26 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+<style type="text/css">
+	.move {cursor: pointer;} 						/* 이전글 다음글을 꾸며주는 css */
+	.moveColor {color: #660029; font-weight: bold;} /* 이전글 다음글을 꾸며주는 css */
+</style>
+
+<script type="text/javascript">
+    
+	$(document).ready(function(){
+		/* 이전글 다음글 클릭시 이동하는 기능 구현 시작*/
+		$(".move").hover(function(){
+			   $(this).addClass("moveColor");	
+			 },
+	         function(){
+			   $(this).removeClass("moveColor");
+		});
+		/* 이전글 다음글 클릭시 이동하는 기능 구현 끝*/
+				
+	});// end of $(document).ready()----------------------
+	
+</script>
 
 <div id="content-wrapper" style="padding-top: 0;">
 <div class="container-fluid text-center">
@@ -22,48 +42,89 @@
 					<table class="table table-bordered">
 						<tbody>
 						<tr>
-							<th class="" style="background-color: #e0ebeb;" >작성자</th>
-							<td id="boardWriter">관리자</td>
-							<th class="" style="background-color: #e0ebeb;">작성일</th>
+							<th class="" style="background-color: #e0ebeb;" width="200">작성자</th>
+							<td id="boardWriter" width="500" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${boardvo.name}</td>
+							<th class="" style="background-color: #e0ebeb;" width="200">작성일</th>
 							<td id="boardWriteDate" style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${boardvo.regDate}</td>
 						</tr>
 						<tr>
 							<th id="boardTitle" class="" style="background-color: #e0ebeb;">제목</th>
-							<td id="boardContent" colspan="3" style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;공지사항 이용시 주의점</td>
+							<td id="boardContent" colspan="3" style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${boardvo.subject}</td>
 												
 						</tr>
 						<tr>
 							<th class="" style="background-color: #e0ebeb;" >첨부파일</th>
-							<td id="boardAddFile" colspan="3"style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;
-								<a href="javascript:download('공지서식.jpg', '/2019/11/15746346776566248.jpg', 'IMAGE')">공지 서식.jpg</a>&nbsp;[826.11KB]<br>
+							<td>
+							<!-- 파일 유무에 따른 표시 -->							
+							<c:if test="${not empty boardvo.orgFilename}">
+								<a href="<%= request.getContextPath()%>/download.action?seq=${boardvo.seq}">  
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${boardvo.orgFilename}
+								</a>
+							</c:if>
+							<c:if test="${empty boardvo.orgFilename}">
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-
+							</c:if>
+								<%-- 로그인 유무에 따른 파일 다운로드 기능 활성화
+								<c:if test="${sessionScope.loginuser != null}">
+									<a href="<%= request.getContextPath()%>/download.action?seq=${boardvo.seq}">  
+										${boardvo.orgFilename}
+									</a>
+								</c:if>
+								<c:if test="${sessionScope.loginuser == null}">
+									${boardvo.orgFilename}
+								</c:if>
+								 --%>
+							</td>
+														
+							<th style="background-color: #e0ebeb;">파일크기</th>
+							<td colspan="2">
+							<c:if test="${not empty boardvo.fileSize}">
+								 
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${boardvo.fileSize}&nbsp;(bytes)
+				
+							</c:if>
+							<c:if test="${empty boardvo.fileSize}">
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-
+							</c:if>
 							</td>
 						</tr>
 						<tr id="boardContent" width="500" height="500" style="text-align: left;">					
 							<td colspan="4" >
-								내용 공지 작성시 업무 양식에 맞추어 작성해주시길 바랍니다.
+								${boardvo.content}
 							</td>
 						</tr>
 						
 						</tbody>
 					</table>
-					<div align="right" style="margin-right: 50px;" >
-						<button type="button" class="btn btn_modify btn-primary" id="btnUpdate" style="width: 10%; display: inline-block;">수정</button>
-						<button type="button" class="btn btn_delete btn-primary" id="btn_delete" style="width: 10%; display: inline-block;">삭제</button>
-						<button type="button" class="btn btn_write btn-primary" style="width: 10%; display: inline-block;" onclick="javascript:history.back();">취소</button>
-					</div>
 					
-					<!-- <div class="commentSection row" style="margin-top: 50px;" > 공지사항에서는 댓글 비활성화
-						<div id="boardComment" class="boardComment col-sm-10"style="float:none; margin:0 auto">
-							<textarea name="commentcontent" id="commentcontent" rows="3" maxlength="1000" style="width:100%;" onkeyup="byteCheckTextLength(this,commentcounter);" onblur="onkeyup();"></textarea>
-							
-						</div>			
-							
-						<span id="commentcounter" class="col-sm-1 my-auto" align="left" style="background: #fff; border-radius: 0.2em; padding: 0 .2em 0 .2em; font-size: 0.75em;">0/1000</span> 댓글 글자제한 1000자 			
-						
-						<div class="col-sm-1 my-auto" style="float:none; margin:0 auto" >
-							<button type="button" class="btn btn_commentsave btn-primary" id="btn_commentsave" style="width: 100%; display: inline-block;">저장</button>
-						</div>
-					</div>-->
+					<br/>
+					<div style="margin-bottom: 1%;">이전글 : 
+						<c:if test="${boardvo.previousseq != null}">
+							<span class="move" onClick="javascript:location.href='noticeDetailBoard.action?seq=${boardvo.previousseq}'">${boardvo.previoussubject}</span>
+						</c:if>
+						<c:if test="${boardvo.previousseq == null}">
+							이전글 없음
+						</c:if>
+					</div>							
+					<div style="margin-bottom: 1%;">다음글 : 
+						<c:if test="${boardvo.nextseq != null}">
+							<span class="move" onClick="javascript:location.href='noticeDetailBoard.action?seq=${boardvo.nextseq}'">${boardvo.nextsubject}</span>
+						</c:if>
+						<c:if test="${boardvo.nextseq == null}">
+							다음글 없음
+						</c:if>
+					</div>
+					<br/>
+					
+					<div align="right" style="margin-right: 50px;" >
+						<button type="button" class="btn btn_modify btn-primary" id="btnUpdate" style="width: 10%; display: inline-block;" onClick="javascript:location.href='<%= request.getContextPath() %>/noticeBoardEdit.action?seq=${boardvo.seq}'">수정</button>
+					<!-- 구현실폐 <button type="button" class="btn btn_delete btn-primary" id="btnDelete" style="width: 10%; display: inline-block;" >삭제</button> -->
+				
+						<%-- <button type="button" class="btn btn_delete btn-primary" id="btn_delete" style="width: 10%; display: inline-block;" onClick="javascript:location.href='<%= request.getContextPath() %>/noticeBoardDeleteEnd.action'">삭제</button> --%>
+						<button type="button" class="btn btn_delete btn-primary" id="btn_delete" style="width: 10%; display: inline-block;" onClick="javascript:location.href='<%= request.getContextPath() %>/noticeBoardDelete.action?seq=${boardvo.seq}'">삭제</button>					
+						<button type="button" class="btn btn_write btn-primary" style="width: 10%; display: inline-block;" onClick="javascript:location.href='<%= request.getContextPath() %>/noticeBoardList.action'">목록</button>
+					</div>
+
 					</fieldset>
 				</div>				
 			</div>

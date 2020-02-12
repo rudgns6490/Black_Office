@@ -2,11 +2,11 @@ package com.bo.archive.model;
 
 public class ReportVO {
 	
-	private int rno;			// 행번호(게시판에 글 No. 나타내기)
-	private int reportno;		// 보고서 번호
-	private int fk_employeeno;	// 참조키 사원번호
+	private String rno;				// 행번호(게시판에 글 No. 나타내기)
+	private String reportno;		// 보고서 번호
+	private String fk_employeeno;	// 참조키 사원번호
 	private String reportday;		// 보고 일자
-	private int reporttype;		// 일일보고는 0, 주간보고는 1, 월간보고 2
+	private String reporttype;		// 일일보고는 0, 주간보고는 1, 월간보고 2
 	private String title;			// 제목
 	private String content;			// 보고서 내용
 	private String memo;			// 메모
@@ -17,7 +17,7 @@ public class ReportVO {
 	
 	public ReportVO() { }
 	
-	public ReportVO(int rno, int reportno, int fk_employeeno, String reportday, int reporttype, String title,
+	public ReportVO(String rno, String reportno, String fk_employeeno, String reportday, String reporttype, String title,
 			String content, String memo, String addressee) {
 		this.rno = rno;
 		this.reportno = reportno;
@@ -30,24 +30,24 @@ public class ReportVO {
 		this.addressee = addressee;
 	}
 //--------------------------------------------------------------------------
-	public int getRno() {
+	public String getRno() {
 		return rno;
 	}
-	public void setRno(int rno) {
+	public void setRno(String rno) {
 		this.rno = rno;
 	}
 	
-	public int getReportno() {
+	public String getReportno() {
 		return reportno;
 	}
-	public void setReportno(int reportno) {
+	public void setReportno(String reportno) {
 		this.reportno = reportno;
 	}
 
-	public int getFk_employeeno() {
+	public String getFk_employeeno() {
 		return fk_employeeno;
 	}
-	public void setFk_employeeno(int fk_employeeno) {
+	public void setFk_employeeno(String fk_employeeno) {
 		this.fk_employeeno = fk_employeeno;
 	}
 
@@ -58,10 +58,10 @@ public class ReportVO {
 		this.reportday = reportday;
 	}
 
-	public int getReporttype() {
+	public String getReporttype() {
 		return reporttype;
 	}
-	public void setReporttype(int reporttype) {
+	public void setReporttype(String reporttype) {
 		this.reporttype = reporttype;
 	}
 

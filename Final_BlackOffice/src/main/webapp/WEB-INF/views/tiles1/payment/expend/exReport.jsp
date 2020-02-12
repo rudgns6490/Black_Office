@@ -34,7 +34,7 @@
 	.radioCursor:hover { cursor: pointer; }
 	/* ----------------------------------------------------------------------------------------------  */
 	
-	.headertable { margin-right: 70px; }
+	.headertable { margin-right: 30px; }
 	.headertable th,td {
 		border: solid 1px #639c9c;
 		border-collapse: collapse;  
@@ -51,7 +51,7 @@
 	.approvalImg { width: 100px; text-align: center; font-size: 17pt; font-weight: normal; color:#595959;}
 	.headertable {float: right; margin-top:20px;}
 	
-	#ptLineAdd {  clear: both; float: right; margin-top:20px; width:300px; height: 35px; font-size: 15pt; }
+	#ptLineAdd {  clear: both; float: right; display:inline-block; margin-top:20px; width:300px; height: 35px; font-size: 15pt; }
 	.approval th{ background-color: #e0ebeb; font-size: 13pt; font-weight: bold; }
 	.approvalImg:hover { cursor: pointer; }
 	.minus:hover { cursor: pointer; }
@@ -69,12 +69,16 @@
 		background: url(<%= request.getContextPath() %>/resources/images/체크이미지.png) no-repeat 3px center; 
 		padding-left: 20px; 
 	}
+	.payment_money {
+		background: url(<%= request.getContextPath() %>/resources/images/체크이미지.png) no-repeat 3px center; 
+		padding-left: 20px;
+	}
 	
 	
 	#tableRadio, #tableRadio1, .radioSpan { position: relative; top: 4.5px; } 
 	
 	
-	/* --- 아래 저장버튼 --------------------------------------------------------------------------------  */
+	/* --- 아래 제출버튼 --------------------------------------------------------------------------------  */
 	.save { float: right; margin-right: 90px; }
 	.saveBtn { border: solid 1px #0099cc; border-radius:3px; padding: 5px 20px; background-color: #0099cc; color: #fff; }
 	.saveBtn2 {padding: 5px 20px; border: solid 1px #bfbfbf; border-radius:3px;}  
@@ -139,14 +143,52 @@
 	
 </style>
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
 
+	//전역변수
+	var obj = [];
 
 	$(document).ready(function(){
 		
 		$(".modaladdTd").append("");
-		$(".title").focus();
+		$(".payment_money").focus();
 		$("input:radio[id=tableRadio]").prop("checked",true);
+		
+		$('#expenditureday').datepicker({
+	         showOn: "both",                                       // 달력을 표시할 타이밍 (both: focus or button)
+	         buttonImage: "<%= request.getContextPath()%>/resources/images/cal.jpg",    // 버튼 이미지
+	         buttonImageOnly : true,                               // 버튼 이미지만 표시할지 여부
+	         buttonText: "날짜선택",                                  // 버튼의 대체 텍스트
+	         dateFormat: "yy-mm-dd",                               // 날짜의 형식
+	         changeMonth: true,                                    // 월을 이동하기 위한 선택상자 표시여부
+	         onClose: function( selectedDate ) {    
+	            $("#toDate").datepicker( "option", "minDate", selectedDate );
+	         }                
+	     });
+
+		<%-- === #153. 스마트에디터 구현 시작 === --%>
+	    //스마트에디터 프레임생성
+	    nhn.husky.EZCreator.createInIFrame({
+	        oAppRef: obj,
+	        elPlaceHolder: "content",
+	        sSkinURI: "<%= ctxPath%>/resources/smarteditor/SmartEditor2Skin.html",
+	        htParams : {
+	            // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+	            bUseToolbar : true,            
+	            // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+	            bUseVerticalResizer : true,    
+	            // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+	            bUseModeChanger : true,
+	        }
+	    });
+		<%-- === 스마트에디터 구현 끝 === --%>
+		<%-- === 스마트에디터 구현 시작 === --%>	
+		//id가 content인 textarea에 에디터에서 대입
+    	// obj.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+    	<%-- === 스마트에디터 구현 끝 === --%>
 		
 		var radioVal ="${radioVal}";
 		for(var i=1; i<4; i++){
@@ -220,7 +262,7 @@
 							html += "<tr class='modalAddEmployees' class='close'>"
 							html += "<td class='DEPARTMENTNAME'>"+item.DEPARTMENTNAME+"</td>";
 							html += "<td class='NAME'>"+item.NAME+"</td>";
-							html += "<td class='POSITIONNAME'>"+item.POSITIONNAME+"</td>";
+							html += "<td class='POSITIONNAME'>"+item.POSITIONNAME+"<input class='employeeno' type='hidden' value='"+item.EMPLOYEENO+"' /></td>";
 							html += "</tr>";	
 						}); 
 						$(".modalTrLength").html(html);
@@ -243,6 +285,8 @@
 			var valHtml1 = "";
 			var valHtml2 = "";
 			var valHidden = "";
+			var employeeno = $(this).find('.employeeno').val();
+			
 		//	var modalAddLength = $(".modalAddEmployees").length;
 		//	alert(modalAddLength);
 			/*
@@ -282,7 +326,7 @@
 	     //   console.log(html.substring(1,4));
 	        var name = html.substring(1,4);
 	        
-			/* 
+		/* 
 			var totalText = $(this).text();
 			var deptName = $(".addApproval").val();
 			var beginIndex = totalText.length - deptName.length - 1;
@@ -292,20 +336,29 @@
 			 
 		//	var count = $(this).index();
 			var hdtdLength = $(".th").length;
+			var random = Math.floor(Math.random()*100);
+			
 			if(hdtdLength < 3){
 				
-				valHtml0 += "<th class='hdth hdth"+hdtdLength+" th'>결재자</th>";
+				valHtml0 += "<th class='hdth hdth"+random+" th'>결재자</th>";
 				$(".modaladdTh").append(valHtml0);
 				
+				
+				
 				<%-- valHtml1 += "<td class='hdtd hdtd"+hdtdLength+" td'>"+name+"&nbsp;<img class='minus' style='width:20px; height:20px; position: relative; top: -2.5px;'  src='<%= ctxPath%>/resources/images/빼기이미지.png'></td> "; --%>
-				valHtml1 += "<td class='hdtd hdtd"+hdtdLength+" td' name='approver"+hdtdLength+"' value='1'>"+name+"&nbsp;<img class='minus"+hdtdLength+" minus' style='width:20px; height:20px; position: relative; top: -2.5px;'  src='<%= ctxPath%>/resources/images/빼기이미지.png'></td> ";
-				$(".modaladdTd").append(valHtml1);
-				valHidden += "<input type='text' class='approverhidden' name='approverhidden"+hdtdLength+"' value='"+name+"' />";
+				valHtml1 += "<td class='hdtd hdtd"+random+" td' >"+name+"&nbsp;<img class='minus"+random+" minus' style='width:20px; height:20px; position: relative; top: -2.5px;'  src='<%= ctxPath%>/resources/images/빼기이미지.png'></td> ";
+				$(".modaladdTd").append(valHtml1); 
+				 
+				
+				
+				valHidden += "<input type='hidden' class='approverhidden approverhidden"+random+"' name='approverhidden"+hdtdLength+"' value='"+employeeno+"' />";
+				valHidden += "<input type='hidden' style='border:none; width:70px;' class='approverName approverName"+random+"' name='approver"+hdtdLength+"' value='"+name+"' readonly/>";
 				$("#formHidden").append(valHidden);
+							
 				
 				
-				valHtml2 = "<td class='approvalImg approvalImg"+hdtdLength+"'>";
-				$("#test").append(valHtml2);
+				valHtml2 = "<td class='approvalImg approvalImg"+random+"'></td>";
+				$("#test").append(valHtml2); 
 			}
 			else {
 				alert("더이상 추가할 수 없습니다.");
@@ -317,28 +370,6 @@
 	// --------------------------------------------------------------------------- //	
 		// 결재란 이미지 넣기
 		$(document).on("click",".approvalImg",function(){
-			<%-- var clickIndex = $(this).index(); 
-			
-			 if($(".hdtd"+clickIndex+"").text().length > 1) { 
-				var appr_length = $("input:hidden[name = approvalHidden]").length;
-				 
-					var hiddenVal = $("input:hidden[class=approvalHidden"+clickIndex+"]").val();
-					
-					if(hiddenVal == "0") {
-						$(this).html("<img style='width:80%; height:91%;' src='<%= ctxPath%>/resources/images/뭐.png'>"); 
-						$("input:hidden[class=approvalHidden"+clickIndex+"]").val("1");	
-						
-					}
-					else {
-						$(this).html("");
-						$("input:hidden[class=approvalHidden"+clickIndex+"]").val("0");
-						
-					}	
-			}
-			
-			 else {
-				alert("결재자가 비어 있습니다.");
-			} --%>
 			
 			alert("결재가 불가 합니다.");
 		}); // end of $(document).on("click",".approvalImg",function(){})-------------------------------
@@ -377,7 +408,6 @@
 				var thText = $(this).parents().parents().find(".hdth"+idx+"").text();
 				var imgText = $(this).parents().parents().find(".approvalImg"+idx+"").text(); */
 				
-				
 				var approvalHtml = $(this).parents().html();
 				// 박시준&nbsp;<img class="minus0 minus" style="width:20px; height:20px; position: relative; top: -2.5px;" src="/controller/resources/images/빼기이미지.png">
 					var str_appHtml = approvalHtml.indexOf('class');
@@ -391,19 +421,29 @@
 					var index = approvalHtml.indexOf('0');
 				//	console.log(index);
 				//	index = 5
-				//	console.log(approvalHtml.substring(5,6));
-			    	var count = approvalHtml.substring(5,6);
+					console.log(approvalHtml.substring(5,7));
+			    	var count = approvalHtml.substring(5,7);
 			    
 		    	$(".hdth"+count+"").remove();
 				$(this).parent().remove();
+				$(".approverhidden"+count+"").remove(); 
 				$(".approvalImg"+count+"").remove();
+				$(".approverName"+count+"").remove();
+				
 	
 		}); // end of $(document).on("click",".minus",function(){})----------------------------
 	// --------------------------------------------------------------------------- //	
 		
-	
+		// 결재란 취소
+		$(".reset").click(function(){
+			$(".td").remove();
+			$(".approvalImg").remove();
+			$(".approverhidden").remove();
+			$(".approverName").remove();
+			$(".th").remove();
+			
+		});
 		
-
 	});// end of $(document).ready(function(){})------------------------------------
 	
 	
@@ -450,28 +490,73 @@
 		<%-- window.location.href = "<%= ctxPath%>/business_return.action" --%>
 	}
 	
+	
+	
 	// 제출하기 버튼의 onclick
 	function save() {
-	   
+		
+		<%-- === 스마트에디터 구현 시작 === --%>	
+		//id가 content인 textarea에 에디터에서 대입
+        obj.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+	    <%-- === 스마트에디터 구현 끝 === --%> 
+			   
 		var modaladdTd = $(".modaladdTd").text();
+		var title = $(".title").val();
+		var contentval = $("#content").val();
+		var payment_money = $(".payment_money").val();
 		
 		if(modaladdTd.trim() == "") {
 			alert("결재자를 선택해 주세요");
 			return;
 		} 
-		else {
+		else if(payment_money.trim() == "") {
+			alert("금액을 입력해 주세요");
+			return;
+		}
+		else if(title.trim() == "") {
+			alert("제목을 입력해 주세요");
+			return;
+		}
+		
+		
+	
+	<%-- === 스마트에디터 구현 시작 === --%>
+		// 스마트에디터 사용시 무의미하게 생기는 p태그 제거하기전에 먼저 유효성 검사를 하도록 한다.
+        // 글내용 유효성 검사 
+        else if(contentval == "" || contentval == "<p>&nbsp;</p>") {
+        	alert("글내용을 입력하세요!!");
+        	return;        
+        }
+     // 스마트에디터 사용시 무의미하게 생기는 p태그 제거하기
+        contentval = $("#content").val().replace(/<p><br><\/p>/gi, "<br>"); //<p><br></p> -> <br>로 변환
+    /*    
+              대상문자열.replace(/찾을 문자열/gi, "변경할 문자열");
+        ==> 여기서 꼭 알아야 될 점은 나누기(/)표시안에 넣는 찾을 문자열의 따옴표는 없어야 한다는 점입니다. 
+                     그리고 뒤의 gi는 다음을 의미합니다.
+
+        	g : 전체 모든 문자열을 변경 global
+        	i : 영문 대소문자를 무시, 모두 일치하는 패턴 검색 ignore
+    */    
+        contentval = contentval.replace(/<\/p><p>/gi, "<br>"); //</p><p> -> <br>로 변환  
+        contentval = contentval.replace(/(<\/p><br>|<p><br>)/gi, "<br><br>"); //</p><br>, <p><br> -> <br><br>로 변환
+        contentval = contentval.replace(/(<p>|<\/p>)/gi, ""); //<p> 또는 </p> 모두 제거시
+    
+        $("#content").val(contentval);
+     // alert(contentval);
+	
+        
+	<%-- === 스마트에디터 구현 끝 === --%>
+		
 			var td = $(".modaladdTd").find('td').text();
 		//	alert(td);
 			var count = $(".th").length;
 			$("input:hidden[id = tdCount]").val(count);
 		//	alert($("#tdCount").val());
 		
-				
 			frm = document.submitFrm;
 			frm.method = "POST";
 			frm.action = "<%= ctxPath%>/addreport.action";
 			frm.submit();
-		}	
 	}
 	
 	////////////////////////////////////////////////////
@@ -522,7 +607,7 @@
 	    	<div class="col-md-12 " style="background-color: #fff;">
 	    		<h2 style="border-bottom: solid 1px blue; color:#3399ff; padding: 18px; 0px;">지출결의서</h2>
 	    		
-	    		<form name="submitFrm">
+	    		<form name="submitFrm"  enctype="multipart/form-data">
 	    		<table class="headertable">
 					<thead>
                    
@@ -551,11 +636,11 @@
 	    		
 
 	 <!------ 	결재라인추가 modal 시작	-------------------------------	 -->
-		
+				
 				<div class="container" id="ptLineAdd" > 
 					<!-- Trigger the modal with a button -->
-					<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" style="background-color: #0099cc;">결재라인 추가</button>
-					
+					<button type="button" class="btn" data-toggle="modal" data-target="#myModal" style="background-color: #0099cc; color: white;">결재라인 추가</button>
+					<button type="button" class="btn reset" style="background-color: #0099cc; color: white;">결재란 취소</button>
 					<!-- Modal -->
 					<div class="modal fade" id="myModal" role="dialog">
 						<div class="modal-dialog">
@@ -613,8 +698,11 @@
 						  
 						</div>
 					</div>
-				  
-				</div>
+				  	
+				</div> 
+					
+				
+				
 				<!-- -----------	결재라인추가 modal 끝	------------------------------------------------------------	 -->
 
 	    		<br/><br/>
@@ -630,26 +718,31 @@
 		 			<tbody>
 		 				<tr>
 		 					<td class="title2Td1">제출일자</td>
-		 					<td class="title2Td">&nbsp;<input id="" name="writeday" readonly style="border: none;" value="${sysYear}" /></td>
+		 					<td class="title2Td">&nbsp;<input name="writeday" readonly style="border: none;" value="${sysYear}" /></td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">제출자</td>
-		 					<td class="title2Td"><input id="" name="employeename" readonly style="border: none;" /></td>
+		 					<td class="title2Td">
+		 						<input name="employeename" value="${requestScope.userName}" readonly style="border: none; margin-left: 10px;" />
+		 						<input type="hidden" id="" name="fk_employeeno" value="${requestScope.employeeno}" readonly style="border: none;" />
+		 					</td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">소속</td>
-		 					<td class="title2Td"><input id="" name="department" readonly style="border: none;" /></td>
+		 					<td class="title2Td">
+		 						<input id="department" name="departmentname" value="${requestScope.deptName}" readonly style="border: none; margin-left: 10px;" />
+		 					</td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">지출 선택</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="radio" name="ex_expend_ch" id="tableRadio" />&nbsp;
+		 						&nbsp;<input type="radio" name="expendituremode" id="tableRadio" value="0" />&nbsp;
 		 						<span><label for="tableRadio" class="radioSpan">개인지출 경비</label></span>&nbsp;&nbsp;
 		 						
-		 						<input type="radio" name="ex_expend_ch" id="tableRadio1" />&nbsp;
+		 						<input type="radio" name="expendituremode" id="tableRadio1" value="1"/>&nbsp;
 		 						<span><label for="tableRadio1" class="radioSpan">법인지출 경비</label></span>
 		 					</td>
 		 				</tr>
@@ -657,7 +750,14 @@
 		 				<tr>
 		 					<td class="title2Td1">지출일자</td>
 		 					<td class="title2Td">
-		 						&nbsp;<input type="date" name="expenditureday" />
+		 						&nbsp;<input type="text" id="expenditureday" name="expenditureday" />
+		 					</td>
+		 				</tr>
+		 				
+		 				<tr>
+		 					<td class="title2Td1">지출금액</td> 
+		 					<td class="title2Td">
+		 						&nbsp;<input type="text" class="payment_money" name="payment_money" style="width: 15%;" placeholder=" ex) 2,000,000" />&nbsp;원
 		 					</td>
 		 				</tr>
 		 				
@@ -672,25 +772,16 @@
 		 					<td class="title2Td1">내용</td>
 		 					<td>
 		 						<div >
-	    							<textarea class="content" name="content" style="width: 100%; height: 400px;"></textarea>
+	    							<textarea id="content" name="content" style="width: 100%; height: 400px;"></textarea>
 	    						</div>
 	    					</td>	
 		 				</tr> 
-		 				
-		 				<tr>
-		 					<td class="title2Td1">부서공유</td>
-		 					<td class="title2Td">&nbsp;&nbsp;
-		 						<input type="checkbox" name="ex_share" style="width: 20px; height: 20px; position: relative; top: 6.5px;" id="use"/>&nbsp;
-		 						<label for="use" style="font-size: 13pt; color:#4c4c4c; position: relative; top: 3.0px;">사용</label>&nbsp;
-		 						<span style="color: red; position: relative; top: 1.5px;">[선택 시 문서가 작성자의 소속 부서원들에게 공유되며, 해당문서는 부서결재함에서 확인이 가능합니다.]</span>
-		 					</td>
-		 				</tr>
+
 <!--  --------------------------------------------------------------------------------------------------------------------                    -->	 				 
 		 				 <tr>
 		 					<td class="title2Td1">파일첨부</td>
 		 					<td class="title2Td">
-		 						<button type="button" style="border:solid 1px #0099cc; margin : 6px 30px; width: 80px; background-color: #0099cc; color: #fff; border-radius:3px;">파일</button>
-		 						<span class="fileName">파일명 :</span>&nbsp;&nbsp; 
+		 						<input type="file" class="attach" name="attach" style="margin : 6px 30px;" />
 		 					</td>
 		 				</tr>
 		 			</tbody>
@@ -698,13 +789,12 @@
 		 		
 		 		
 		 		<table class="title3">
-		
-		 			</tbody>
 		 		</table>
 		 		
 		 		<div id="formHidden"> <!-- 결재란 td 개수를 가지고 넘어가기 위해 숨겨둔다. -->
 					<input type="hidden" id="tdCount" name="tdCount" value="" />
 				</div>
+
 		 		</form>
 		 		<br/>
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	 		
@@ -715,7 +805,7 @@
 		</div>	
 			<br/> <!-- 아래여백을 주기위함  -->
 		<div class="save">
-			<button type="button" class="saveBtn" onclick="save()">제출하기</button>&nbsp;
+			<button type="button" class="saveBtn"  onclick="save()">제출하기</button>&nbsp;
 			<button type="button" class="saveBtn2" onclick="javascript:history.go(0);">취소</button>&nbsp;
 		</div>
 	

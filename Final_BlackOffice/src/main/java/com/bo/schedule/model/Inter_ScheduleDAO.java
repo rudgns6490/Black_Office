@@ -5,7 +5,7 @@ import java.util.List;
 public interface Inter_ScheduleDAO {
 	
 	// 개인일정 불러오기 
-	List<ScheduleVO> individualScheduleJSONList();
+	List<ScheduleVO> individualScheduleJSONList(int no);
 
 	// 일정추가하기 
 	int addCalendaraddSchedule(ScheduleVO schedulevo);
@@ -18,5 +18,14 @@ public interface Inter_ScheduleDAO {
 
 	// 일정삭제 2020/01/13 hjp
 	int calendarDelete(ScheduleVO schedulevo);
+
+	// 부서일정 JSON 데이터 2020/01/20 hjp
+	List<ScheduleVO> departmentcalendarJSONList(int employeeno);
+	
+	// 부서일정 추가하기 
+	int departmentAddSchedule(ScheduleVO schedulevo);
+
+	// 개인일정
+	List<ScheduleVO> mainScheduleJSONList(int employeeno);
 
 }

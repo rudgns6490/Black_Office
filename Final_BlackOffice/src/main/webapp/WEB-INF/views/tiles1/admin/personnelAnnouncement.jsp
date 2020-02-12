@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+        
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
 <%
 	String ctxPath = request.getContextPath();
@@ -12,37 +14,100 @@
 
 <script type="text/javascript">
   
-  $(document).ready(function(){
-	 
-	//캘린더 시작~~~~~~~~~~~~
-	$('#fromDate').datepicker({
-      showOn: "both",                     // 달력을 표시할 타이밍 (both: focus or button)
-      buttonImage: "<%= ctxPath %>/images/cal.jpg", // 버튼 이미지
-      buttonImageOnly : true,             // 버튼 이미지만 표시할지 여부
-      buttonText: "날짜선택",             // 버튼의 대체 텍스트
-      dateFormat: "yy-mm-dd",             // 날짜의 형식
-      changeMonth: true,                  // 월을 이동하기 위한 선택상자 표시여부
-      onClose: function( selectedDate ) {    
-        $("#toDate").datepicker( "option", "minDate", selectedDate );
-      }                
-    });
+	$(document).ready(function(){
+		 
+		var searchType = sessionStorage.getItem("searchType_pa");
+		var searchWord = sessionStorage.getItem("searchWord_pa");
+		
+		if(searchType != null && searchWord != null) {
+			$("select[name=searchType]").val(searchType);
+			$("#searchWord").val(searchWord);
+		}
+		
+		$("#searchWord").keydown(function(event) {
+	        if(event.keycode == 13) {
+	        	// 엔터를 했을 경우
+	        	sessionStorage.removeItem("searchType_pa");
+				sessionStorage.removeItem("searchWord_pa");
+		    	
+		    	sessionStorage.setItem("searchType_pa", $("select[name=searchType]").val().trim());
+		    	sessionStorage.setItem("searchWord_pa", $("#searchWord").val().trim());
+			
+				var frm = document.searchFrm;
+			    frm.method = "GET";
+			    frm.action = "<%= request.getContextPath()%>/personnelAnnouncement.action";
+			    frm.submit();
+	        }
+	    });
+		
+		$("#goSearch").on("click", function() {
+			sessionStorage.removeItem("searchType_pa");
+			sessionStorage.removeItem("searchWord_pa");
+	    	
+	    	sessionStorage.setItem("searchType_pa", $("select[name=searchType]").val().trim());
+	    	sessionStorage.setItem("searchWord_pa", $("#searchWord").val().trim());
+		
+			var frm = document.searchFrm;
+		    frm.method = "GET";
+		    frm.action = "<%= request.getContextPath()%>/personnelAnnouncement.action";
+		    frm.submit();
+		});
 
-    //종료일
-    $('#toDate').datepicker({
-      showOn: "both", 
-      buttonImage: "<%= ctxPath %>/images/cal.jpg", 
-      buttonImageOnly : true,
-      buttonText: "날짜선택",
-      dateFormat: "yy-mm-dd",
-      changeMonth: true,
-      onClose: function( selectedDate ) {
-        $("#fromDate").datepicker( "option", "maxDate", selectedDate );
-      }                
-    });  // 캘린더 종료-------------------------------------- 
-    
-  });//end of $(document).ready(function(){ --------------------------
-  
-  
+	    var employeeno = "";
+	    var name = "";
+	    var departmentname = "";
+	    var positionname= "";
+		
+		$(document).on("click", ".memberVO", function(){
+			
+			employeeno = $(this).data("employeeno");
+			name = $(this).data("name");
+			departmentname = $(this).data("departmentname");
+			positionname = $(this).data("positionname");
+			
+			$(".employeeno").val(employeeno);
+			$(".name").val(name);
+			$(".departmentname").val(departmentname);
+			$(".positionname").val(positionname);
+			
+		});
+		
+		$("#goRetirement").on('click', function(){
+	    	var frm = document.retirementFrm;
+	    	frm.method = "GET";
+	    	frm.action = "<%= request.getContextPath()%>/retirement.action"
+	    	frm.submit();
+        });
+		
+		$("#moveDepartment").on('click', function(){
+			var frm = document.moveDepartmentFrm;
+	    	frm.method = "GET";
+	    	frm.action = "<%= request.getContextPath()%>/moveDepartment.action"
+	    	frm.submit();
+		});
+		
+		$("#moveposition").on('click', function(){
+			var frm = document.movePositionFrm;
+	    	frm.method = "GET";
+	    	frm.action = "<%= request.getContextPath()%>/moveposition.action"
+	    	frm.submit();
+		});
+		
+		$("#leaveofabsence").on('click', function(){
+			var frm = document.leaveofabsenceFrm;
+	    	frm.method = "GET";
+	    	frm.action = "<%= request.getContextPath()%>/leaveofabsence.action"
+	    	frm.submit();
+		});
+		
+		$("#reappoint").on('click', function(){
+			var frm = document.reappointFrm;
+	    	frm.method = "GET";
+	    	frm.action = "<%= request.getContextPath()%>/reappoint.action"
+	    	frm.submit();
+		});
+	}); 
+	//end of $(document).ready(function(){ --------------------------
 </script>
 
   <div id="content-wrapper" style="padding-top: 0;">
@@ -54,20 +119,19 @@
 		  <fieldset>
 		    <legend>인사이동</legend>
 		    
-		    <form name="registerSawon" method="post">
+		    <form name="searchFrm" method="post">
 		      <table class="table table-bordered">
 		      	<tr>
 		      	  <td style="width: 15%; background-color: #e0ebeb;">검색조건</td>
 		      	  <td>
-		      	    <select class="form-control" style="width: 15%; display: inline-block;">
-	  				  <option>1</option>
-	  				  <option>2</option>
-	  				  <option>3</option>
-	  				  <option>4</option>
-	  				  <option>5</option>
+		      	    <select name="searchType" id="searchType" class="form-control" style="width: 15%; display: inline-block;">
+	  				  <option value="name">이름</option>
+	  				  <option value="employeeno">사원번호</option>
+	  				  <option value="fk_departmentno">부서번호</option>
+	  				  <option value="fk_positionno">직위번호</option>
 					</select>
 					<input type="text"  name="searchWord" id="searchWord" value="" maxlength="20" required style="width: 30%; display: inline-block;" />
-					<button type="button" class="btn btn-primary" onclick="goSearch();" style="width: 10%; display: inline-block;">검색</button>
+					<button type="button" class="btn btn-primary" id="goSearch" style="width: 10%; display: inline-block;">검색</button>
 		      	  </td>
 		      	</tr>
 		      </table>
@@ -83,9 +147,20 @@
       	      <th>상태</th>
       	    </thead>
       	    <tbody>
-      	      <tr data-toggle="modal" data-target="#myModal" data-backdrop="static">
-      	        <td colspan="5">입력된 정보가 없습니다.</td>
-      	      </tr>
+      	      <c:forEach var="map" items='${mapList}' varStatus="status">
+			  	  <tr data-toggle="modal" data-target="#myModal"
+			  	   data-employeeno="${map.employeeno}"
+			  	   data-name="${map.name}"
+			  	   data-departmentname="${map.departmentname}"
+			  	   data-positionname="${map.positionname}"
+			  	   data-backdrop="static" class="memberVO">
+			  	    <td>${map.employeeno}</td>
+			  	    <td>${map.name}</td>
+			  	    <td>${map.departmentname}</td>
+			  	    <td>${map.positionname}</td>
+			  	    <td>${map.status}</td>
+			  	  </tr>
+			  </c:forEach>
       	    </tbody>
       	  </table>
       	
@@ -123,25 +198,6 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- 검색한 사원 클릭 시 해당 사원 인사이동 창이 뜬다. 2020/01/06 kkh --> 
   <!-- The Modal -->
   <div class="modal" id="myModal">
@@ -159,19 +215,19 @@
           <!-- Nav tabs -->
   		  <ul class="nav nav-tabs">
     		<li class="nav-item">
-      		  <a class="nav-link active" data-toggle="tab" href="#retirement">퇴사</a>
+      		  <a class="personnelAnnouncement nav-link active" data-toggle="tab" href="#retirement">퇴사</a>
     		</li>
     		<li class="nav-item">
-      		  <a class="nav-link" data-toggle="tab" href="#departmentmove">부서이동</a>
+      		  <a class="personnelAnnouncement nav-link" data-toggle="tab" href="#departmentmove">부서이동</a>
     		</li>
     		<li class="nav-item">
-      		  <a class="nav-link" data-toggle="tab" href="#updateposition">승진</a>
+      		  <a class="personnelAnnouncement nav-link" data-toggle="tab" href="#updateposition">승진</a>
     		</li>
     		<li class="nav-item">
-      		  <a class="nav-link" data-toggle="tab" href="#leaveofAbsence">휴직</a>
+      		  <a class="personnelAnnouncement nav-link" data-toggle="tab" href="#leaveofAbsence">휴직</a>
     		</li>
     		<li class="nav-item">
-      		  <a class="nav-link" data-toggle="tab" href="#reinstate">복직</a>
+      		  <a class="personnelAnnouncement nav-link" data-toggle="tab" href="#reinstate">복직</a>
     		</li>
   		  </ul>
 
@@ -180,169 +236,221 @@
     		<div id="retirement" class="container tab-pane active"><br>
       		  <h3>퇴사</h3>
       		  <div>
+      		    <form name="retirementFrm">
       		    <table class="table">
       		      <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">사원번호</td>
-      		        <td>사번1</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="employeeno" class="employeeno" />
+      		        </td>
       		      </tr> 
       		      <tr>
-      		        <td style="width: 20%; background-color: #e0ebeb;">대상자</td>
-      		        <td>사원1</td>
+      		        <td style="width: 20%; background-color: #e0ebeb;">이름</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="name" class="name" />
+      		        </td>
       		      </tr>
       		      <tr>
-      		        <td style="width: 20%; background-color: #e0ebeb;">소속</td>
-      		        <td>부서명</td>
+      		        <td style="width: 20%; background-color: #e0ebeb;">부서명</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="departmentname" class="departmentname" />
+      		        </td>
+      		      </tr>
+      		      <tr>
+      		        <td style="width: 20%; background-color: #e0ebeb;">직위명</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="positionname" class="positionname" />
+      		        </td>
       		      </tr>
       		      <tr>
       		        <td colspan="2">
-      		          <button type="button" class="btn btn-primary" onclick="goRetirement()" >확인</button>
+      		          <button type="button" class="btn btn-primary" id="goRetirement" >확인</button>
       		        </td>
       		      </tr>
       		    </table>
+      		    </form>
       		  </div>
     		</div>
     		<div id="departmentmove" class="container tab-pane fade"><br>
       		  <h3>부서이동</h3>
       		  <div>
+      		    <form name="moveDepartmentFrm">
       		    <table class="table">
       		      <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">사원번호</td>
-      		        <td>사번1</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="employeeno" class="employeeno" />
+      		        </td>
       		      </tr>  
       		      <tr>
-      		        <td style="width: 20%; background-color: #e0ebeb;">대상자</td>
-      		        <td>사원1</td>
+      		        <td style="width: 20%; background-color: #e0ebeb;">이름</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="name" class="name" />
+      		        </td>
       		      </tr>
       		      <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">부서명</td>
-      		        <td>부서명1</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="departmentname" class="departmentname" />
+      		        </td>
       		      </tr>
       		      <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">이동할 부서명</td>
       		        <td>
-      		          <select class="form-control" style="width: 30%;">
-	  				    <option>1</option>
-	  				    <option>2</option>
-	  				    <option>3</option>
-	  				    <option>4</option>
-	  				    <option>5</option>
+      		          <select name="movedepartmentno" class="form-control" style="width: 30%;">
+	  				    <option value="1">인사팀</option>
+	  				  	<option value="2">마케팅팀</option>
+	  				  	<option value="3">개발1팀</option>
+	  				  	<option value="4">개발2팀</option>
+	  				  	<option value="5">영업팀</option>
 					  </select>
       		        </td>  
       		      </tr>
       		      <tr>
       		        <td colspan="2">
-      		          <button type="button" class="btn btn-primary" onclick="goRetirement()" >확인</button>
+      		          <button type="button" class="btn btn-primary" id="moveDepartment" >확인</button>
       		        </td>
       		      </tr>
       		    </table>
+      		    </form>
       		  </div>
     		</div>
     		<div id="updateposition" class="container tab-pane fade"><br>
       		  <h3>직위변경</h3>
       		  <div>
+      		    <form name="movePositionFrm">
       		    <table class="table">
       		      <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">사원번호</td>
-      		        <td>사번1</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="employeeno" class="employeeno" />
+      		        </td>
       		      </tr>  
       		      <tr>
-      		        <td style="width: 20%; background-color: #e0ebeb;">대상자</td>
-      		        <td>사원1</td>
+      		        <td style="width: 20%; background-color: #e0ebeb;">이름</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="name" class="name" />
+      		        </td>
       		      </tr>
       		      <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">부서명</td>
-      		        <td>부서명1</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="departmentname" class="departmentname" />
+      		        </td>
       		      </tr>
       		      <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">직위명</td>
-      		        <td>직위명1</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="positionname" class="positionname" />
+      		        </td>
       		      </tr>
       		      <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">변경할 직위명</td>
       		        <td>
-      		          <select class="form-control" style="width: 30%;">
-	  				    <option>1</option>
-	  				    <option>2</option>
-	  				    <option>3</option>
-	  				    <option>4</option>
-	  				    <option>5</option>
+      		          <select name="movepositionno" class="movepositionno" class="form-control" style="width: 30%;">
+	  				    <option value="1">사장</option>
+	  				  	<option value="2">이사</option>
+	  				  	<option value="3">부장</option>
+	  				  	<option value="4">차장</option>
+	  				  	<option value="5">과장</option>
+	  				  	<option value="6">대리</option>
+	  				  	<option value="7">사원</option>
 					  </select>
       		        </td>  
       		      </tr>
       		      <tr>
       		        <td colspan="2">
-      		          <button type="button" class="btn btn-primary" onclick="goRetirement()" >확인</button>
+      		          <button type="button" class="btn btn-primary" id="moveposition" >확인</button>
       		        </td>
       		      </tr>
       		    </table>
+      		    </form>
       		  </div>
     		</div>
     		<div id="leaveofAbsence" class="container tab-pane fade"><br>
       		  <h3>휴직</h3>
       		  <div>
+      		    <form name="leaveofabsenceFrm">
       		    <table class="table">
       		      <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">사원번호</td>
-      		        <td>사번1</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="employeeno" class="employeeno" />
+      		        </td>
       		      </tr>  
       		      <tr>
-      		        <td style="width: 20%; background-color: #e0ebeb;">대상자</td>
-      		        <td>사원1</td>
+      		        <td style="width: 20%; background-color: #e0ebeb;">이름</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="name" class="name" />
+      		        </td>
+      		      </tr>
+      		      <tr>
+      		        <td style="width: 20%; background-color: #e0ebeb;">부서명</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="departmentname" class="departmentname" />
+      		        </td>
+      		      </tr>
+      		      <tr>
+      		        <td style="width: 20%; background-color: #e0ebeb;">직위명</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="positionname" class="positionname" />
+      		        </td>
       		      </tr>
 				  <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">휴직종류</td>
       		        <td>
-      		          <select class="form-control" style="width: 30%;">
-	  				    <option>1</option>
-	  				    <option>2</option>
-	  				    <option>3</option>
-	  				    <option>4</option>
-	  				    <option>5</option>
+      		          <select name="leaveofabsence" class="form-control leaveofabsence" style="width: 30%;">
+	  				    <option value="parentalleave">육아휴직</option>
+	  				    <option value="paidleave">유급휴직</option>
+	  				    <option value="unpaidleave">무급휴직</option>
 					  </select>
       		        </td>  
       		      </tr>
       		      <tr>
-      		        <td style="width: 20%; background-color: #e0ebeb;">휴직기간</td>
-      		        <td>
-      		          <div id="Datepicker" style="margin-top: 5px;" style="float: right;">     
-                        <label for="fromDate">시작일</label>
-                        <input type="text" name="fromDate" id="fromDate" value="${fromDate}">
-                         ~
-                        <label for="toDate" >종료일</label>
-                        <input type="text" name="toDate" id="toDate" value="${toDate}"> 
-               		  </div>
-      		        </td>
-      		      </tr>
-      		      <tr>
       		        <td colspan="2">
-      		          <button type="button" class="btn btn-primary" onclick="goRetirement()" >확인</button>
+      		          <button type="button" class="btn btn-primary" id="leaveofabsence" >확인</button>
       		        </td>
       		      </tr>
       		    </table>
+      		    </form>
       		  </div>
     		</div>
     		<div id="reinstate" class="container tab-pane fade"><br>
       		  <h3>복직</h3>
       		  <div>
+      		    <form name="reappointFrm">
       		    <table class="table">
       		      <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">사원번호</td>
-      		        <td>사번1</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="employeeno" class="employeeno" />
+      		        </td>
       		      </tr>  
       		      <tr>
-      		        <td style="width: 20%; background-color: #e0ebeb;">대상자</td>
-      		        <td>사원1</td>
+      		        <td style="width: 20%; background-color: #e0ebeb;">이름</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="name" class="name" />
+      		        </td>
       		      </tr>
       		      <tr>
       		        <td style="width: 20%; background-color: #e0ebeb;">부서명</td>
-      		        <td>부서명1</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="departmentname" class="departmentname" />
+      		        </td>
+      		      </tr>
+      		      <tr>
+      		        <td style="width: 20%; background-color: #e0ebeb;">직위명</td>
+      		        <td>
+      		          <input style="border: none;" type="text" name="positionname" class="positionname" />
+      		        </td>
       		      </tr>
       		      <tr>
       		        <td colspan="2">
-      		          <button type="button" class="btn btn-primary" onclick="goRetirement()" >확인</button>
+      		          <button type="button" class="btn btn-primary" id="reappoint" >확인</button>
       		        </td>
       		      </tr>
       		    </table>
+      		    </form>
       		  </div>
     		</div>
   		  </div>

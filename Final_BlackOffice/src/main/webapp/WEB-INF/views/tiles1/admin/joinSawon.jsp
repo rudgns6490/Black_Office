@@ -10,10 +10,41 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
+		$(".userid_error").hide();
 		
+		$("#id").bind("keyup", function(){
+			alert("아이디중복확인 버튼을 클릭하여 ID중복 검사를 하세요!!");
+			$(this).val("");
+		}); // end of $("#userid").bind()----------
 		
-		// ajax
+		//아이디검사
+		$("input#id").blur(function(){
+			var regExp = /^[A-Za-z0-9]{4,}$/; // 4글자이상 가능
+		    var bool = regExp.test($(this).val()); 
+		    if(!bool) {
+		    	$("span.userid_error").css('display','');
+		    	$(":input").attr("disabled", true);
+		        $(this).attr("disabled", false);
+		        $(this).val("");
+		        $(this).focus();
+		    }
+		    else {
+		    	$("span.userid_error").css('display','none');
+		    	$(":input").attr("disabled", false);
+		    	$("input#passwd").focus();
+		    }
+		});// end of $("input#userid").blur()--------
 		
+		/// **** ID중복확인하기 위한 팝업창 띄우기 ****///
+		$("#idcheck").click(function() {
+			
+			// 팝업창 띄우기
+			var url = "idDuplicateCheck.action";
+			window.open(url, "idcheck",
+					    "left=500px, top=100px, width=300px, height=270px");
+			// 기본적으로 아무런 조건없이 그냥 어떤 창을 띄우면 method 는 GET 방식으로 움직인다. 
+			
+		});// end of $("#idcheck").click()------------
 		
 		// 비밀번호 확인하기
 		$("input#passwdCheck").blur(function(){
@@ -265,25 +296,37 @@
       <!-- 메인 본문 내용 소스 작업은 여기서 수정 2020/01/03 kkh -->
       <div class="row content">
         <div class="col-sm-12" style="padding: 5%;">
-		  <fieldset>
-		    <legend>입사처리</legend>
+        <form name="registerSawon" id="registerSawon" enctype="multipart/form-data">
+		  <fieldset form="registerSawon">
+		    <legend style="font-size: 24pt; text-align: left;">입사처리</legend>
 		    
-		    <form name="registerSawon" method="post">
 		      <table class="table table-bordered">
+		        <tr>
+				<th style="background-color: #e0ebeb;">
+					<label>사진 첨부</label>
+				</th>
+				  <td>
+					<input type="file" name="attach"  />
+				  </td>
+				</tr>
+		      
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">
+		      	  <th style="background-color: #e0ebeb; height: 10px;">
 		      	  	<label for="id">아이디</label>
-		      	  </td>
+		      	  </th>
 		      	  <td>
-		      	    <input type="text" name="id" id="id" value="" maxlength="20" required autofocus autocomplete="off" style="width: 200px;"/>@blackoffice.com
+		      	    <input type="text" name="id" id="id" value="" maxlength="20" required autofocus autocomplete="off" style="width: 200px;"/>@blackoffice.com &nbsp;
+		      	    <!-- 아이디중복체크 -->
+			    	<img id="idcheck" style="display: inline-block; cursor:pointer;" src="<%=ctxPath%>/resources/images/b_id_check.gif" style="vertical-align: middle;" />
+		      	    <span id="error" class="userid_error" style="color: red; font-size: 12pt; font-weight: bold;">4글자 이상 아이디를 입력하세요!</span><br><br>
 		      	  </td>
 		      	</tr>
 		      	
 		      	
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">
+		      	  <th style="background-color: #e0ebeb;">
 		      	  	<label for="passwd">비밀번호</label>
-		      	  </td>
+		      	  </th>
 		      	  <td>
 		      	    <input type="password" name="passwd" id="passwd" value="" maxlength="20" required style="width: 200px;"/>
 		      	  </td>
@@ -291,9 +334,9 @@
 		      	
 		      	
 	      		<tr>
-		      	  <td style="background-color: #e0ebeb;">
+		      	  <th style="background-color: #e0ebeb;">
 		      	  	<label for="passwdCheck">비밀번호 확인</label>
-		      	  </td>
+		      	  </th>
 		      	  <td>
 		      	    <input type="password" name="passwdCheck" id="passwdCheck" value="" maxlength="20" required style="width: 200px;"/>
 		      	    <span class="error passwdCheck_error"></span>
@@ -302,9 +345,9 @@
 		      	
 		      	
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">
+		      	  <th style="background-color: #e0ebeb;">
 		      	  	<label for="name">성명</label>
-		      	  </td>
+		      	  </th>
 		      	  <td>
 		      	    <input type="text" name="name" id="name" value="" maxlength="20" required autofocus autocomplete="off" style="width: 200px;"/>
 		      	  </td>
@@ -312,9 +355,9 @@
 		      	
 		      	
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">
+		      	  <th style="background-color: #e0ebeb;">
 		      	   	<label for="jubun1">주민번호</label>
-		      	  </td>
+		      	  </th>
 		      	  <td>
 		      	    <input type="text" name="jubun1" id="jubun1" value="" maxlength="6" required autofocus autocomplete="off" placeholder="6자리 숫자" style="width: 93px;"/> - 
 		      	    <input type="text" name="jubun2" id="jubun2" value="" maxlength="7" required autofocus autocomplete="off" placeholder="7자리 숫자" style="width: 93px;"/>
@@ -327,9 +370,9 @@
 		      	
 		      	
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">
+		      	  <th style="background-color: #e0ebeb;">
 		      	  	<label for="email">이메일</label>
-		      	  </td>
+		      	  </th>
 		      	  <td>
 		      	    <input type="text" name="email" id="email" value="" maxlength="30" required autofocus autocomplete="off" placeholder="형식 - ***@***.***" style="width: 200px;"/>
 		      	    
@@ -342,9 +385,9 @@
 		      	
 		      	
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">
+		      	  <th style="background-color: #e0ebeb;">
 		      	  	<label for="emailpw">이메일 비밀번호</label>
-		      	  </td>
+		      	  </th>
 		      	  <td>
 		      	    <input type="password" name="emailpw" id="emailpw" value="" maxlength="20" required autofocus autocomplete="off" style="width: 200px;"/>
 		      	  </td>
@@ -352,9 +395,9 @@
 		      	
 		      	
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">
+		      	  <th style="background-color: #e0ebeb;">
 		      	  	<label for="emailpwCheck">이메일 비밀번호 확인</label>
-		      	  </td>
+		      	  </th>
 		      	  <td>
 		      	    <input type="password" name="emailpwCheck" id="emailpwCheck" value="" maxlength="20" required style="width: 200px;"/>
 		      	    
@@ -367,9 +410,9 @@
 		      	
 		      	
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">
+		      	  <th style="background-color: #e0ebeb;">
 		      	  	<label for="phone">전화번호</label>
-		      	  </td>
+		      	  </th>
 		      	  <td>
 		      	    <input type="text" name="phone" id="phone" value="" maxlength="11" required placeholder="-는 제외하고 입력" style="width: 200px;"/>
 		      	    
@@ -382,7 +425,9 @@
 		      	
 		      	
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">부서</td>
+		      	  <th style="background-color: #e0ebeb;">
+		      	  	<label>부서</label>
+		      	  </th>
 		      	  <td>
 		      	    <select name="fk_departmentno" id="fk_departmentno" class="form-control" style="width: 30%;">
 		      	      <option>선택</option>
@@ -396,7 +441,10 @@
 		      	  </td>
 		      	</tr>
 		      	<tr>
-		      	  <td style="background-color: #e0ebeb;">직위</td>
+		      	  <th style="background-color: #e0ebeb;">
+		      	  	<label>직위</label>
+		      	  </th>
+		      	  
 		      	  <td>
 		      	    <select name="fk_positionno" id="fk_positionno" class="form-control" style="width: 30%;">
 		      	      <option>선택</option>
@@ -412,14 +460,12 @@
 		      	</tr>
 		      </table>
 		      
-		      <div style="float: right; margin-top: 10px; padding: 5%;">
+		      <div style="float: right; argin-top: 10px;">
 		        <button type="button" id="register" class="btn btn-primary" onclick="goRegister();">등록</button>
 		      	<button type="reset" class="btn btn-secondary" onclick="goCancle();">취소</button>
 		      </div>
-		      
-		    </form>
-		  
-		  </fieldset>
+		 </fieldset> 
+		</form>  
         </div>
       </div>
       
@@ -436,22 +482,4 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="<%= ctxPath %>/login.action">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
 

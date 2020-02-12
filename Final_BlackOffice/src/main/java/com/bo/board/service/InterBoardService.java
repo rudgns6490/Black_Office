@@ -5,10 +5,12 @@ import java.util.List;
 
 import com.bo.board.model.BoardVO;
 import com.bo.board.model.CommentVO;
+import com.bo.member.model.MemberVO;
 
 
 public interface InterBoardService {
  
+	MemberVO getLoginMember(HashMap<String, String> paraMap); // 로그인 처리하
 
 	int add(BoardVO boardvo);  // 글쓰기(파일첨부가 없는것) 
 
@@ -24,17 +26,22 @@ public interface InterBoardService {
 
 	int getTotalCountWithNOsearch(); // 검색조건이 없을 경우의 총 게시물 건수(totalCount)
 	
-	int getTotalCountWithsearch(HashMap<String, String> paraMap); // 검색조건이 있을 경우의 총 게시물 건수(totalCount)
+	int getTotalCountWithSearch(HashMap<String, String> paraMap); // 검색조건이 있을 경우의 총 게시물 건수(totalCount)
 
 	List<BoardVO> boardListWithPaging(HashMap<String, String> paraMap); // 페이징 처리한 글목록 가겨오기(검색이 있든지, 검색이 없든지 모두 다 포함한것)
 	
-	int del(BoardVO boardvo); // 1개글 삭제하기(댓글쓰기가 없는게시판)
-
-	int addComment(CommentVO commentvo) throws Throwable; // 댓글쓰기 (Ajax 로 처리)
-		
-	List<CommentVO> getCommentList(String parentSeq); // 원게시물에 딸린 댓글들을 조회하는것
-
+	int del(String seq); // 1개글 삭제하기(댓글쓰기가 없는게시판)
+/*
+	int addComment(CommentVO commentvo) throws Throwable ; // 댓글쓰기(tblComment 테이블에 insert)
+	int updateCommentCount(String parentSeq); // tblBoard 테이블에 commentCount 컬럼의 값을 1증가(update)  
+	
+	List<CommentVO> getCommentList(String parentSeq); // 원게시물에 딸린 댓글 보여주기 
+	*/
+	List<String> wordSearchShow(HashMap<String, String> paraMap); // 검색어 입력시 자동글 완성하기 
+	
 	List<BoardVO> boardListSearch(HashMap<String, String> paraMap); // 페이징 처리를 안한 검색어가 있는 전체 글목록 보여주기 
+
+	int add_withFile(BoardVO boardvo); // 글쓰기(첨부파일이 있는 경우의 글쓰기) 
 
 }
 

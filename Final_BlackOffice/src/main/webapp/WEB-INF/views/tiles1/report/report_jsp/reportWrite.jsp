@@ -64,6 +64,7 @@
 		background: url('<%= request.getContextPath() %>/resources/images/체크이미지.png') no-repeat 3px center;
 		padding-left: 20px;	  
 	}
+
 	
 	
 	
@@ -73,6 +74,70 @@
 	.save { float: right; margin-right: 90px; }
 	.saveBtn { border: solid 1px #0099cc; border-radius:3px; padding: 5px 20px; background-color: #0099cc; color: #fff; }
 	.saveBtn2 {padding: 5px 20px; border: solid 1px #bfbfbf; border-radius:3px; }  
+	
+	/*---  Modal -------------------------------------------------------------------------------------------  */
+	#modal { display: inline-block; }
+	#modalTableDiv { display: inline-block; position: relative; top: 4px;}
+	#modalTable {border: solid 0px gray;}
+	#modalTable tr,td{ border-collapse: collapse; }
+	.modalTd { border:none; height:0px; position: relative; top: 5px;}
+	
+	/* 	결재라인추가 modal css	  */ 
+	.add_search {background: white; width: 97%; margin-bottom: 10px;}
+	
+	.add_search_table {border: none; width: 100%}
+	
+	.add_search th {
+		font-family: 'Malgun Gothic', '맑은 고딕', 'Dotum', '돋움', sans-serif;
+		background: #639c9c;
+	    min-width: 50px;
+	    width: 100px;
+	    padding: 10px;
+	    font-size: 15px;
+	    line-height: 17px;
+	    color: #fff;
+	    vertical-align: middle;
+	    text-align: center; 
+	}
+		
+	.add_search td {padding: 10px; vertical-align: text-top;}
+	
+	.add_search_name {font-size: 12pt; width: 220px; margin-right: 12px;}
+	
+	.add_search_btn {
+		width: 80px;
+		height: 30px;
+		border: solid 1px #639c9c;
+	    border-radius: 3px;
+	    box-sizing: border-box;
+	    background: #639c9c;      /* #0083e7 */
+	    color: #fff;
+	    font-size: 12pt;
+	}
+	
+	.add_result_List {background: white; border: 1px solid #e6e6e6; width: 97%;}
+	
+	.add_result_List_title {
+		border-bottom: 1px solid #e6e6e6;
+	    background: #0000b3;
+	    font-weight: bold;
+	    font-size: 15px;
+	    line-height: 15px;
+	    color: #fff;
+	    text-align: center;
+	}
+	.add_result_List th {padding: 15px 0;}
+	
+	.add_result_List_contents td {
+		padding: 7px 0;
+	    background: #fff;
+	    font-size: 14px;
+	    line-height: 17px;
+	    color: #777777;
+	    text-align: center;
+	}
+	
+	.modalAddEmployees { cursor: pointer; } /* Modal 안에 td  */
 	
 </style>
 
@@ -100,6 +165,127 @@
 			
 		});
 		
+		/* -----------------------------------------------------------------------------------------------------  */
+		
+		// 결재라인 추가시 <select> <option> 부서 넣어주기
+		$(".addApproval").append("");
+		$.ajax({
+			url:"<%= ctxPath%>/addAprroval.action",
+			type:"GET",
+			dataType:"JSON",
+			success:function(json){
+				var html = "";
+				$.each(json,function(index, item){
+					html += "<option>"+item.departmentname+"</option>"			
+				}); 
+				$(".addApproval").append(html); 
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		}); // end of ajax({})-------------------------------------------------
+		
+		
+		/* ---------------------------------------------------------------------------------------------------- */
+		// 결재라인 부서에 따른 사원 select 
+		$(".addApproval").on('change',function(event){ 
+		//	alert( $(this).val() );	
+			if($(this).val() != null && $(this).val() != "0") {
+				
+				$.ajax({
+					url:"<%= ctxPath%>/addModalVal.action",
+					type:"GET",
+					data:{"modalDepartmentName":$(this).val()},
+					dataType:"JSON",
+					success:function(json){
+						var html = "";
+						$.each(json,function(index, item){
+							html += "<tr class='modalAddEmployees' class='close'>"
+							html += "<td class='DEPARTMENTNAME'>"+item.DEPARTMENTNAME+"</td>";
+							html += "<td class='NAME'>"+item.NAME+"</td>";
+							html += "<td class='POSITIONNAME'>"+item.POSITIONNAME+"<input class='employeeno' type='hidden' value='"+item.EMPLOYEENO+"' /></td>";
+							html += "</tr>";	
+						}); 
+						$(".modalTrLength").html(html);
+						
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				}); // end of ajax({})-------------------------------------------------
+			}
+			
+		});// end of $(".addApproval").on('change',function(event){})--------------------------------
+		
+		
+		/* ---------------------------------------------------------------------------------------------------- */
+	
+		
+		$(document).on("click",".modalAddEmployees",function(){
+			var valHtml = ""; 
+			var valHidden = "";
+			var employeeno = $(this).find('.employeeno').val();
+		    
+		    var html = $(this).html();
+	     // <td class="DEPARTMENTNAME">개발2팀</td><td class="NAME">박시준</td><td class="POSITIONNAME">부장</td>
+	        var index = html.indexOf('class="NAME"');
+	        html = html.substring(index);
+	     // console.log(html);
+	     // class="NAME">박시준</td><td class="POSITIONNAME">부장</td>
+	        	        
+	        index = html.indexOf(">");
+	        html = html.substring(index);
+	     // console.log(html);
+	     // >박시준</td><td class="POSITIONNAME">부장</td>
+	        
+	        index = html.indexOf(">");
+	        html = html.substring(index);
+	     // console.log(html);
+	     // >박시준</td><td class="POSITIONNAME">부장</td>
+	        
+	        index2 = html.indexOf("<");
+	        // index2 ==> 4
+	        
+	     //   console.log(html.substring(1,4));
+	        var name = html.substring(1,4);
+
+	// ----------------------------- 수신인 추가 -------------------------------------- //	
+			 
+		//	var count = $(this).index();
+			var length = $(".modalEmployeeAdd").length;
+			if(length < 3){				
+				valHtml += "<td class='modalTd'>&nbsp;&nbsp;수신자: <input class='modalEmployeeAdd modalEmployeeAdd"+length+"' value='"+name+"' style='width:60px; border:none;' /><img class='minus"+length+" minus' style='width:20px; height:20px; position: relative; top: -2.5px;'  src='<%= ctxPath%>/resources/images/빼기이미지.png'></td>";
+				$("#modalAddList").append(valHtml);
+				valHidden += "<input type='text' class='approverhidden"+length+"' name='approverhidden"+length+"' value='"+employeeno+"' />";
+				$("#formHidden").append(valHidden);
+			}
+			else {
+				alert("더이상 추가할 수 없습니다.");
+			}
+			
+	// --------------------------------------------------------------------------- //
+		}); // $(document).on("click",".modalAddEmployees",function(){})-----------------------
+		
+		
+		
+		$(document).on("click",".minus",function(){
+			var idx = $(this).parents().index();
+			var approvalHtml = $(this).parents().html();
+		//	console.log(approvalHtml);
+		//	&nbsp;&nbsp;수신자: <input class="modalEmployeeAdd modalEmployeeAdd0" value="박시준" style="width:60px; border:none;"><img class="minus0 minus" style="width:20px; height:20px; position: relative; top: -2.5px;" src="/controller/resources/images/빼기이미지.png">
+			var str_appHtml = approvalHtml.indexOf('modalEmployeeAdd');
+			approvalHtml = approvalHtml.substring(str_appHtml);
+		//	console.log(approvalHtml);
+		//	modalEmployeeAdd modalEmployeeAdd0" value="박시준" style="width:60px; border:none;"><img class="minus0 minus" style="width:20px; height:20px; position: relative; top: -2.5px;" src="/controller/resources/images/빼기이미지.png">	
+
+			var count = approvalHtml.substring(33,34);
+		//	alert(count);
+			
+			$(this).parent().remove();
+			$(".approverhidden"+count+"").remove();
+		});
+			
 		
 		
 	});// end of $(document).ready(function(){})------------------------------------
@@ -180,7 +366,7 @@
 	     popWin.document.write("</td>"); */
 		
 	     
-	     popWin.document.write("</body></html>");
+	    // popWin.document.write("</body></html>");
 	     
 	//     popWin.document.close(); // 팝업윈도창 문서를 클로즈
 	 //    popWin.print(); // 팝업윈도창에 대한 인쇄 창 띄우고
@@ -266,20 +452,95 @@
 		 				
 		 				<tr>
 		 					<td class="title2Td1">제출자</td>
-		 					<td class="title2Td"><input id="" name="" readonly style="border: none;" value="${sessionScope.loginuser.name}" />
-		 					<input type="hidden" id="" name="fk_employeeno" readonly style="border: none;" value="${sessionScope.loginuser.employeeno}" /></td>
+		 					<td class="title2Td"><input id="" name="" value="${requestScope.userName}" readonly style="border: none; margin-left: 10px;" />
+		 					<input type="hidden" id="" name="fk_employeeno" readonly style="border: none;" value="${requestScope.employeeno}" /></td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">소속</td>
-		 					<td class="title2Td"><input id="" name="departmentname" readonly style="border: none;" /></td>
+		 					<td class="title2Td"><input id="" name="departmentname" value="${requestScope.deptName}" readonly style="border: none; margin-left: 10px;" /></td>
 		 				</tr>
 		 				
 		 				<tr>
 		 					<td class="title2Td1">수신직원</td>
-		 					<td class="title2Td">
-		 						&nbsp;&nbsp;<button type="button" name="" style="border-radius:3px; background-color: #0099cc; color: #fff; border: solid 1px #0099cc;">수신자 추가</button> 
-		 						&nbsp;&nbsp;<input type="text" class="" name="addressee" value="" readonly style="border: none;"/> 
+		 					<td class="title2Td" style="height: 60px;">
+		 						<!-- &nbsp;&nbsp;<button type="button" name="" style="border-radius:3px; background-color: #0099cc; color: #fff; border: solid 1px #0099cc;">수신자 추가</button> 
+		 						&nbsp;&nbsp;<input type="text" class="" name="addressee" value="" readonly style="border: none;"/>  -->
+		 						
+		 						<!------ 	결재라인추가 modal 시작	-------------------------------	 -->
+								<div class="container" id="modal" > 
+									<!-- Trigger the modal with a button -->
+									<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" style="background-color: #0099cc; font-size: 13pt; padding: 3px;">수신자 추가</button>
+									
+									<!-- Modal -->
+									<div class="modal fade" id="myModal" role="dialog">
+										<div class="modal-dialog">
+										
+										<!-- Modal content-->
+										<div class="modal-content">
+											<div class="modal-header">
+												<h4 class="modal-title" style="font-weight: bold;">수신자 추가</h4>
+												<button type="button" class="close" data-dismiss="modal" >&times;</button><%--	x로 닫기 버튼   --%>
+											</div>
+											<div class="modal-body" style="background-color: #e6e6e6;">
+											
+												<div class="add_search">
+														<table class="add_search_table">
+															<tr>
+																<th>부서</th>
+																<td>
+																	<select class="addApproval">
+																		<option value="0"> -- 부서 선택 -- </option> 
+																	</select>
+																</td>
+															</tr>
+															
+															<tr>
+																<th>성명</th>
+																<td>
+																	<input type="text" name="name" class="add_search_name" />
+																	<button type="button" class="add_search_btn">검색</button>
+																	<input type="text" style="display: none;" />
+																	
+																</td>
+															</tr>
+														</table>
+												</div>
+												
+												<div class="add_result_List">
+													<table style="width: 100%;">
+														<thead>
+															<tr class="add_result_List_title"  style=' height: 20px; overflow: auto;'>
+																<th>부서</th>
+																<th>성명</th>
+																<th>직위</th>
+															</tr>
+														</thead>
+														<tbody class="add_result_List_contents modalTrLength">
+				
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											</div>
+										</div>
+										  
+										</div>
+									</div>
+								  	<div id="modalTableDiv">
+								  		<table id="modalTable">
+								  			<tr id="modalAddList">
+								  				
+								  			</tr>
+								  		</table>
+								  	</div>
+								</div>
+								
+								
+						<!-- -----------	결재라인추가 modal 끝	------------------------------------------------------------	 -->
+		 						
 		 					</td>
 		 				</tr>
 		 				
@@ -329,6 +590,10 @@
 		 		<table class="title3">
 		
 		 		</table>  
+		 		
+		 		<div id="formHidden"> <!-- 수신자 td 개수를 가지고 넘어가기 위해 숨겨둔다. -->
+					<input type="hidden" id="tdCount" name="tdCount" value="" />
+				</div>
 		 		</form>
 	<!--  --------------------------------------------------------------------------------------------------------------------                    -->	 		
 	    	</div>	

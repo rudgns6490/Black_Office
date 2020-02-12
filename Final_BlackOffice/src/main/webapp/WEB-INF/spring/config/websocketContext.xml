@@ -12,9 +12,9 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
  
     
-    <beans:bean id="echoHandler" class="com.bo.spring.chatting.WebsocketEchoHandler" init-method="init" />
+    <beans:bean id="echoHandler" class="com.bo.chatting.controller.WebsocketEchoHandler" init-method="init" />
     <websocket:handlers>
-        <websocket:mapping path="/chatting.action" handler="echoHandler" />
+        <websocket:mapping path="/chatting/multichatstart.action" handler="echoHandler" />
         <!-- websocket:handlers 태그안의 websocket:handshake-interceptors에
              HttpSessionHandshakeInterceptor를 추가해주면
              WebSocketHandler에 접근하기 전에 
